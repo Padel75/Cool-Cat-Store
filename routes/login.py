@@ -1,21 +1,17 @@
-from flask import Flask, render_template, request
-import pymysql, pymysql.cursors
+from flask import render_template, request
+import pymysql
+from secrets import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT
+from . import login_bp
 
-app = Flask(__name__)
 ProfileUtilisateur = {}
 
-@app.route("/")
-def main():
-    return render_template('login.html')
- 
-
-@app.route("/login", methods=['POST'])
+@login_bp.route("/login", methods=['POST'])
 def login():
-    
+
     courriel = '"'+request.form.get('courriel')+'"'
     passe = request.form.get('motpasse')
 
-    conn= pymysql.connect(host='localhost',user='root',                                                                 password='sirius3',db='testdb')
+    conn= pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD,db=MYSQL_DB, port=MYSQL_PORT)
     cmd='SELECT motpasse FROM utilisateurs WHERE courriel='+courriel+';'
     cur=conn.cursor()
     cur.execute(cmd)
@@ -35,9 +31,5 @@ def login():
         return render_template('bienvenu.html', profile=ProfileUtilisateur)
 
     return render_template('login.html', message="Informations invalides!")
-    
-
-if __name__ == "__main__":
-    app.run()
 
 
