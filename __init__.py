@@ -1,8 +1,9 @@
 from flask import Flask, render_template
 from routes import login_bp, signup_bp, signout_bp
-from database import init_db
+from database import Database
 
-init_db()
+database = Database()
+database.init_db()
 
 app = Flask(__name__)
 app.register_blueprint(login_bp)

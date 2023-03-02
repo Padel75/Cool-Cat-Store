@@ -1,20 +1,26 @@
 import pymysql
-from secrets import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT
+from config import Config
 
-def init_db():
-    # Connect to the MySQL database
-    connection = pymysql.connect(
-        host=MYSQL_HOST,
-        user=MYSQL_USER,
-        password=MYSQL_PASSWORD,
-        db=MYSQL_DB,
-        port=MYSQL_PORT
-    )
+class Database:
+    def __init__(self):
+        self.connection = pymysql.connect(
+            host=Config.MYSQL_HOST,
+            user=Config.MYSQL_USER,
+            password=Config.MYSQL_PASSWORD,
+            db=Config.MYSQL_DB,
+            port=Config.MYSQL_PORT
+        )
+        self.commands_file = Config.DATABASE_COMMANDS_FILE
 
-    cursor = connection.cursor()
-    for line in open("commandes.sql"):
-        cursor.execute(line)
+    def init_db(self):
+        cursor = self.connection.cursor()
+        for line in open(self.commands_file):
+            cursor.execute(line)
 
-    # Commit the changes and close the connection
-    connection.commit()
-    connection.close()
+        self.connection.commit()
+        self.connection.close()
+
+    def query_one(self, query):
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchone()
