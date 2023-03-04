@@ -4,7 +4,7 @@ USE GLO2005_TP;
 CREATE TABLE IF NOT EXISTS humans (id INT NOT NULL AUTO_INCREMENT,
 PRIMARY KEY (id)); /* Est ce que le nom et le password iraient pas dans cette table?*/
 
-/* Est ce que la notion de privilège serait ici pertinente?*/
+/* Est ce que la notion de privilÃ¨ge serait ici pertinente?*/
 CREATE TABLE IF NOT EXISTS admins (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(100), password VARCHAR(100),
                                    PRIMARY KEY (id), FOREIGN KEY (id) REFERENCES humans(id));
 /*Creer contrainte pour addresse?*/
