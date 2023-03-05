@@ -1,31 +1,36 @@
-from flask import render_template, request
+from flask import render_template, request, session, redirect, url_for, jsonify
 from database import Database
+from exceptions.missingParameterException import MissingParameterException
+from exceptions.invalidParameterException import InvalidParameterException
 from . import login_bp
-
-ProfileUtilisateur = {}
 
 @login_bp.route("/login", methods=['POST'])
 def login():
-
-    courriel = '"'+request.form.get('courriel')+'"'
-    passe = request.form.get('motpasse')
-
     database = Database()
+    login_infos = request.get_json()
+    for key in ["username", "password"]:
+        if key not in login_infos:
+            raise MissingParameterException(key)
+    username = login_infos["username"]
+    password = login_infos["password"]
 
-    cmd='SELECT motpasse FROM utilisateurs WHERE courriel='+courriel+';'
-    passeVrai = database.query_one(cmd)
+    if not __check_credentials(username, password):
+        raise InvalidParameterException("username ou password")
 
-    if (passeVrai!=None) and (passe==passeVrai[0]):
+    user_id = database.get_user_id(username)
+    session['logged_in'] = True
+    session['id'] = user_id
 
-        cmd='SELECT * FROM utilisateurs WHERE courriel='+courriel+';'
-        info = database.query_one(cmd)
+    response = {
+        "user_id": user_id
+    }
+    return jsonify(response), 200
 
-        global ProfileUtilisateur
-        ProfileUtilisateur["courriel"]=courriel
-        ProfileUtilisateur["nom"]=info[2]
-        ProfileUtilisateur["avatar"]=info[3]
-        return render_template('bienvenu.html', profile=ProfileUtilisateur)
-
-    return render_template('login.html', message="Informations invalides!")
+def __check_credentials(username, password):
+    database = Database()
+    validPassword = database.get_user_password(username)
+    if validPassword is None:
+        return False
+    return validPassword == password #À sécuriser
 
 
