@@ -94,6 +94,17 @@ CREATE TABLE IF NOT EXISTS customer_use_payment_system (
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (payment_system_id) REFERENCES payment_systems(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
+/*----------------------------------------------------- Triggers -----------------------------------------------------*/
+
+CREATE TRIGGER update_total_cost
+    AFTER INSERT ON carts_contains_products
+    FOR EACH ROW
+    BEGIN
+        UPDATE carts
+        SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
+        WHERE id = NEW.cart_id;
+    END;
+
 /*------------------------------ INSÉRER CI-DESSOUS LE CODE À SUPPRIMER AVANT LA REMISE ------------------------------*/
 
 DROP DATABASE IF EXISTS GLO2005_TP;
