@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 import os
-from exceptions import errors_bp
-from routes import login_bp, signup_bp, signout_bp
-from database import Database
+from api.exceptions import errors_bp
+from api.routes import login_bp, signup_bp, signout_bp
+from infrastructure.database import Database
 
 database = Database()
 database.init_db()
