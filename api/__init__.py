@@ -1,11 +1,17 @@
 from flask import Flask, render_template
-from routes import login_bp, signup_bp, signout_bp
-from database import Database
+import os
+from api.exceptions import errors_bp
+from api.routes import login_bp, signup_bp, signout_bp
+from infrastructure.database import Database
 
 database = Database()
 database.init_db()
 
 app = Flask(__name__)
+#set a key for session(logged in user)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "supersekrit")
+
+app.register_blueprint(errors_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(signup_bp)
 app.register_blueprint(signout_bp)

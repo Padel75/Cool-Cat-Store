@@ -1,5 +1,5 @@
 import pymysql
-from config import Config
+from infrastructure.config import Config
 
 class Database:
     def __init__(self):
@@ -20,7 +20,15 @@ class Database:
         self.connection.commit()
         self.connection.close()
 
-    def query_one(self, query):
+    def select_one_query(self, query: str, values: tuple) -> tuple:
         cursor = self.connection.cursor()
-        cursor.execute(query)
+        cursor.execute(query, values)
         return cursor.fetchone()
+
+    def insert_query(self, query: str, values: tuple) -> int:
+        cursor = self.connection.cursor()
+        cursor.execute(query, values)
+        self.connection.commit()
+        return cursor.lastrowid
+
+
