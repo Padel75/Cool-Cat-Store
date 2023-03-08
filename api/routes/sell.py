@@ -1,7 +1,8 @@
 from flask import request, session, jsonify
 from . import sell_bp
 from domain.factories.product_factory import ProductFactory
-from infrastructure.database import Database
+from infrastructure.database.product_database import ProductDatabase
+from infrastructure.database.user_database import UserDatabase
 from exceptions.missingParameterException import MissingParameterException
 from exceptions.invalidParameterException import InvalidParameterException
 
@@ -27,7 +28,7 @@ def sell(vendor_id):
 
     product_factory = ProductFactory()
     product = product_factory.create_product(product_infos)
-    database = Database()
+    database = ProductDatabase()
     product_id = database.create_product(product)
 
     response = {
@@ -36,15 +37,15 @@ def sell(vendor_id):
 
     return jsonify(response), 201
 
-def __validate_vendor_id(vendor_id: str) -> None:
-    database = Database()
+def __validate_vendor_id(vendor_id: int) -> None:
+    database = UserDatabase()
     vendor = database.get_user(vendor_id)
     if vendor is None:
         raise InvalidParameterException("Le ID du vendeur est invalide")
     return
 
 
-def __validate_vendor_is_logged_in(vendor_id: str) -> None:
+def __validate_vendor_is_logged_in(vendor_id: int) -> None:
     if "id" not in session:
         raise InvalidParameterException("Vous devez vous connecter pour vendre un produit")
     if session.get('id') != vendor_id:

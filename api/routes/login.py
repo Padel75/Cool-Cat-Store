@@ -1,7 +1,7 @@
 from flask import request, session, jsonify
 import bcrypt
 from . import login_bp
-from infrastructure.database import Database
+from infrastructure.database.user_database import UserDatabase
 from exceptions.missingParameterException import MissingParameterException
 from exceptions.invalidParameterException import InvalidParameterException
 
@@ -16,7 +16,7 @@ def login():
 
     __validate_user_password(username, password)
 
-    database = Database()
+    database = UserDatabase()
     user_id = database.get_user_id(username)
     session['logged_in'] = True
     session['id'] = user_id
@@ -27,7 +27,7 @@ def login():
     return jsonify(response), 200
 
 def __validate_user_password(username: str, password: str) -> None:
-    database = Database()
+    database = UserDatabase()
     encrypted_password = database.get_user_password(username)
     if encrypted_password is None:
         raise InvalidParameterException("username est invalide")

@@ -1,45 +1,11 @@
-import pymysql
 from pymysql.err import OperationalError
-from infrastructure.config import Config
+from infrastructure.database.database import Database
 from domain.models.customer import Customer
 from domain.models.vendor import Vendor
-from domain.models.product import Product
 from exceptions.invalidParameterException import InvalidParameterException
 
 
-class Database:
-    def __init__(self):
-        self.connection = pymysql.connect(
-            host=Config.MYSQL_HOST,
-            user=Config.MYSQL_USER,
-            password=Config.MYSQL_PASSWORD,
-            db=Config.MYSQL_DB,
-            port=Config.MYSQL_PORT
-        )
-        self.commands_file = Config.DATABASE_COMMANDS_FILE
-
-    @staticmethod
-    def init_db():
-        connection = pymysql.connect(
-            host=Config.MYSQL_HOST,
-            user=Config.MYSQL_USER,
-            password=Config.MYSQL_PASSWORD,
-            port=Config.MYSQL_PORT
-        )
-        cursor = connection.cursor()
-        file = open(Config.DATABASE_COMMANDS_FILE, 'r')
-        sql_file = file.read()
-        file.close()
-        sql_commands = sql_file.split(';')
-
-        for commands in sql_commands:
-            try:
-                cursor.execute(commands)
-            except Exception as e:
-                print("Command skipped: ", commands)
-
-        connection.commit()
-        connection.close()
+class UserDatabase(Database):
 
     def create_customer(self, customer: Customer) -> int:
         first_name = customer.get_first_name()
@@ -52,6 +18,7 @@ class Database:
 
         human_id = self.__add_human(username, password)
         user_id = self.__add_customer(first_name, last_name, address, phone_number, email, human_id)
+        self.__add_cart(user_id)
         return user_id
 
     def create_vendor(self, vendor: Vendor) -> Vendor:
@@ -66,21 +33,10 @@ class Database:
         human_id = self.__add_human(username, password)
         user_id = self.__add_vendor(name, description, address, phone_number, email, human_id)
         return user_id
-
-    def create_product(self, product: Product) -> int:
-        name = product.get_name()
-        description = product.get_description()
-        price = product.get_price()
-        category_id = product.get_category_id()
-        vendor_id = product.get_vendor_id()
-
-        product_id = self.__add_product(name, description, price, category_id, vendor_id)
-        return product_id
-
     def get_user_password(self, username: str) -> str:
         query = "SELECT password FROM humans WHERE username = %s"
         values = (username,)
-        password = self.__select_one_query(query, values)
+        password = self.select_one_query(query, values)
         if password is None:
             return None
         return password[0]
@@ -88,7 +44,7 @@ class Database:
     def get_user_id(self, username: str) -> int:
         query = "SELECT id FROM humans WHERE username = %s"
         values = (username,)
-        user_id = self.__select_one_query(query, values)
+        user_id = self.select_one_query(query, values)
         if user_id is None:
             return None
         return user_id[0]
@@ -96,7 +52,7 @@ class Database:
     def get_user(self, user_id: int) -> tuple:
         query = "SELECT * FROM humans WHERE id = %s"
         values = (user_id,)
-        user = self.__select_one_query(query, values)
+        user = self.select_one_query(query, values)
         if user is None:
             return None
         return user
@@ -104,7 +60,7 @@ class Database:
     def __add_human(self, username: str, password: str) -> int:
         query = "INSERT INTO humans (username, password) VALUES (%s, %s)"
         values = (username, password)
-        return self.__insert_query(query, values)
+        return self.insert_query(query, values)
 
     def __add_customer(self, first_name: str, last_name: str, address: str, phone_number: str, email: str, human_id: int) -> int:
         query = "INSERT INTO customers (first_name, last_name, address, phone_number, email, id) " \
@@ -122,7 +78,7 @@ class Database:
 
     def __insert_user(self, query: str, values: tuple, human_id: int) -> int:
         try:
-            user_id = self.__insert_query(query, values)
+            user_id = self.insert_query(query, values)
         except OperationalError as err:
             self.__delete_human(human_id)
             if "phone_number_invalid" in str(err):
@@ -131,24 +87,6 @@ class Database:
                 raise InvalidParameterException("Email est invalide")
             raise InvalidParameterException(err)
         return user_id
-
-    def __add_product(self, name: str, description: str, price: float, category_id: int, vendor_id: int) -> int:
-        query = "INSERT INTO products (name, description, price, category_id) " \
-                "VALUES (%s, %s, %s, %s)"
-        values = (name, description, price, category_id)
-        product_id = self.__insert_query(query, values)
-
-        query = "INSERT INTO vendors_adds_products (product_id, vendor_id) " \
-                "VALUES (%s, %s)"
-        values = (product_id, vendor_id)
-        self.__insert_query(query, values)
-        return product_id
-
-    def __insert_query(self, query: str, values: tuple) -> int:
-        cursor = self.connection.cursor()
-        cursor.execute(query, values)
-        self.connection.commit()
-        return cursor.lastrowid
 
     def __delete_human(self, human_id: int):
         cursor = self.connection.cursor()
@@ -161,7 +99,12 @@ class Database:
         self.connection.commit()
         return
 
-    def __select_one_query(self, query: str, values: tuple) -> tuple:
-        cursor = self.connection.cursor()
-        cursor.execute(query, values)
-        return cursor.fetchone()
+    def __add_cart(self, customer_id: int) -> None:
+        query = "INSERT INTO carts (total_cost) VALUES (%s)"
+        values = (0,)
+        cart_id = self.insert_query(query, values)
+
+        query = "INSERT INTO customers_own_carts (customer_id, cart_id) VALUES (%s, %s)"
+        values = (customer_id, cart_id)
+        self.insert_query(query, values)
+        return
