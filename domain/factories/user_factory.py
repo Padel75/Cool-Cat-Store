@@ -1,9 +1,7 @@
-from infrastructure.database import Database
 from domain.models.customer import Customer
+from domain.models.vendor import Vendor
 import bcrypt
 class UserFactory:
-    def __init__(self):
-        self.database = Database()
 
     def create_customer(self, customer_infos: {}) -> Customer:
         first_name = customer_infos['first_name']
@@ -19,6 +17,21 @@ class UserFactory:
         customer = Customer(username, encrypted_password, first_name, last_name, address, phone_number, email)
 
         return customer
+
+    def create_vendor(self, vendor_infos: {}) -> Vendor:
+        name = vendor_infos['name']
+        description = vendor_infos['description']
+        username = vendor_infos['username']
+        password = vendor_infos['password']
+        address = vendor_infos['address']
+        phone_number = vendor_infos['phone_number']
+        email = vendor_infos['email']
+
+        encrypted_password = self.__encrypt_password(password)
+
+        vendor = Vendor(username, encrypted_password, name, description, address, phone_number, email)
+
+        return vendor
 
     def __encrypt_password(self, password):
         salt = bcrypt.gensalt()

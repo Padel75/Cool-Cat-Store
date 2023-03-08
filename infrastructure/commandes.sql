@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS vendors (
     name VARCHAR(100),
     description VARCHAR(500),
     address VARCHAR(100),
-    phone_number VARCHAR(100) CHECK ( phone_number REGEXP '^[0-9]{3}-[0-9]{3}-[0-9]{4}$' ),
-    email VARCHAR(100) CHECK ( email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$' ),
+    phone_number VARCHAR(100), CONSTRAINT vendor_phone_number_invalid CHECK ( phone_number REGEXP '^[0-9]{3}-[0-9]{3}-[0-9]{4}$' ),
+    email VARCHAR(100), CONSTRAINT vendor_email_invalid CHECK ( email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$' ),
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES humans(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS customers (
     first_name VARCHAR(100),
     last_name VARCHAR(100),
     address VARCHAR(100),
-    phone_number VARCHAR(100) CHECK ( phone_number REGEXP '^[0-9]{3}-[0-9]{3}-[0-9]{4}$' ),
-    email VARCHAR(100) CHECK ( email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$' ),
+    phone_number VARCHAR(100), CONSTRAINT customer_phone_number_invalid CHECK ( phone_number REGEXP '^[0-9]{3}-[0-9]{3}-[0-9]{4}$' ),
+    email VARCHAR(100), CONSTRAINT customer_email_invalid CHECK ( email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$' ),
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES humans(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
@@ -107,4 +107,4 @@ CREATE TRIGGER update_total_cost
 
 /*------------------------------ INSÉRER CI-DESSOUS LE CODE À SUPPRIMER AVANT LA REMISE ------------------------------*/
 
-DROP DATABASE IF EXISTS GLO2005_TP;
+# DROP DATABASE IF EXISTS GLO2005_TP;

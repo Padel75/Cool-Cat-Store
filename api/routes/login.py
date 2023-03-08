@@ -2,8 +2,8 @@ from flask import request, session, jsonify
 import bcrypt
 from . import login_bp
 from infrastructure.database import Database
-from api.exceptions.missingParameterException import MissingParameterException
-from api.exceptions.invalidParameterException import InvalidParameterException
+from exceptions.missingParameterException import MissingParameterException
+from exceptions.invalidParameterException import InvalidParameterException
 
 @login_bp.route("/login", methods=['POST'])
 def login():
