@@ -1,11 +1,10 @@
 from flask import Flask, render_template
 import os
-from api.exceptions import errors_bp
+from exceptions import errors_bp
 from api.routes import login_bp, signup_bp, signout_bp
 from infrastructure.database import Database
 
-database = Database()
-database.init_db()
+Database.init_db()
 
 app = Flask(__name__)
 #set a key for session(logged in user)
