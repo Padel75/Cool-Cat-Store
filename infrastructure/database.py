@@ -3,6 +3,7 @@ from pymysql.err import OperationalError
 from infrastructure.config import Config
 from domain.models.customer import Customer
 from domain.models.vendor import Vendor
+from domain.models.product import Product
 from exceptions.invalidParameterException import InvalidParameterException
 
 
@@ -66,6 +67,16 @@ class Database:
         user_id = self.__add_vendor(name, description, address, phone_number, email, human_id)
         return user_id
 
+    def create_product(self, product: Product) -> int:
+        name = product.get_name()
+        description = product.get_description()
+        price = product.get_price()
+        category_id = product.get_category_id()
+        vendor_id = product.get_vendor_id()
+
+        product_id = self.__add_product(name, description, price, category_id, vendor_id)
+        return product_id
+
     def get_user_password(self, username: str) -> str:
         query = "SELECT password FROM humans WHERE username = %s"
         values = (username,)
@@ -81,6 +92,14 @@ class Database:
         if user_id is None:
             return None
         return user_id[0]
+
+    def get_user(self, user_id: int) -> tuple:
+        query = "SELECT * FROM humans WHERE id = %s"
+        values = (user_id,)
+        user = self.__select_one_query(query, values)
+        if user is None:
+            return None
+        return user
 
     def __add_human(self, username: str, password: str) -> int:
         query = "INSERT INTO humans (username, password) VALUES (%s, %s)"
@@ -112,6 +131,18 @@ class Database:
                 raise InvalidParameterException("Email est invalide")
             raise InvalidParameterException(err)
         return user_id
+
+    def __add_product(self, name: str, description: str, price: float, category_id: int, vendor_id: int) -> int:
+        query = "INSERT INTO products (name, description, price, category_id) " \
+                "VALUES (%s, %s, %s, %s)"
+        values = (name, description, price, category_id)
+        product_id = self.__insert_query(query, values)
+
+        query = "INSERT INTO vendors_adds_products (product_id, vendor_id) " \
+                "VALUES (%s, %s)"
+        values = (product_id, vendor_id)
+        self.__insert_query(query, values)
+        return product_id
 
     def __insert_query(self, query: str, values: tuple) -> int:
         cursor = self.connection.cursor()

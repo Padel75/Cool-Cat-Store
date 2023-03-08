@@ -1,5 +1,6 @@
 .idea
 .idea/
+infrastructure/config.py
 
 ui/.DS_Store
 ui/node_modules
