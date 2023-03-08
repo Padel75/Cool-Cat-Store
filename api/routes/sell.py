@@ -39,15 +39,13 @@ def sell(vendor_id):
 
 def __validate_vendor_id(vendor_id: int) -> None:
     database = UserDatabase()
-    vendor = database.get_user(vendor_id)
+    vendor = database.get_user("vendors", vendor_id)
     if vendor is None:
         raise InvalidParameterException("Le ID du vendeur est invalide")
     return
 
 
 def __validate_vendor_is_logged_in(vendor_id: int) -> None:
-    if "id" not in session:
-        raise InvalidParameterException("Vous devez vous connecter pour vendre un produit")
     if session.get('id') != vendor_id:
-        raise InvalidParameterException("Vous ne pouvez pas vendre un produit pour un autre vendeur")
+        raise InvalidParameterException("Vous devez vous connecter pour vendre un produit")
     return

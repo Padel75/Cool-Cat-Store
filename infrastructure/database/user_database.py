@@ -49,8 +49,8 @@ class UserDatabase(Database):
             return None
         return user_id[0]
 
-    def get_user(self, user_id: int) -> tuple:
-        query = "SELECT * FROM humans WHERE id = %s"
+    def get_user(self, type: str, user_id: int) -> tuple:
+        query = f"SELECT * FROM {type} WHERE id = %s"
         values = (user_id,)
         user = self.select_one_query(query, values)
         if user is None:

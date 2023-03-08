@@ -13,13 +13,12 @@ class ProductDatabase(Database):
         product_id = self.__add_product(name, description, price, category_id, vendor_id)
         return product_id
 
-    def add_product_to_cart(self, product_id: int, customer_id: int) -> int:
+    def add_product_to_cart(self, product_id: int, customer_id: int, quantity: int) -> int:
         cart_id = self.__get_cart_id(customer_id)
-        self.__add_product_to_cart(cart_id, product_id, customer_id)
-        query = "INSERT INTO carts_contains_products (cart_id, product_id, customer_id) VALUES (%s, %s)"
-        values = (product_id, customer_id)
+        query = "INSERT INTO carts_contains_products (cart_id, product_id, quantity) VALUES (%s, %s, %s)"
+        values = (cart_id, product_id, quantity)
         self.insert_query(query, values)
-        return self.connection.insert_id()
+        return cart_id
 
     def get_product(self, product_id: int) -> tuple:
         query = "SELECT * FROM products WHERE id = %s"
@@ -41,9 +40,8 @@ class ProductDatabase(Database):
         self.insert_query(query, values)
         return product_id
 
-
     def __get_cart_id(self, customer_id: int) -> int:
-        query = "SELECT id FROM carts WHERE customer_id = %s"
+        query = "SELECT cart_id FROM customers_own_carts WHERE customer_id = %s"
         values = (customer_id,)
         cart_id = self.select_one_query(query, values)
         if cart_id is None:
