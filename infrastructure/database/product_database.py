@@ -15,7 +15,7 @@ class ProductDatabase(Database):
 
     def add_product_to_cart(self, product_id: int, customer_id: int, quantity: int) -> int:
         cart_id = self.__get_cart_id(customer_id)
-        query = "INSERT INTO carts_contains_products (cart_id, product_id, quantity) VALUES (%s, %s, %s)"
+        query = "REPLACE INTO carts_contains_products (cart_id, product_id, quantity) VALUES (%s, %s, %s)"
         values = (cart_id, product_id, quantity)
         self.insert_query(query, values)
         return cart_id
