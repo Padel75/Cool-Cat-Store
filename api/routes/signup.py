@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from . import signup_bp
 from domain.factories.user_factory import UserFactory
-from infrastructure.database import Database
+from infrastructure.database.user_database import UserDatabase
 from exceptions.missingParameterException import MissingParameterException
 
 @signup_bp.route("/signup/customer", methods=['POST'])
@@ -25,7 +25,7 @@ def signup_customer():
 
     user_factory = UserFactory()
     customer = user_factory.create_customer(customer_infos)
-    database = Database()
+    database = UserDatabase()
     user_id = database.create_customer(customer)
 
     response = {
@@ -54,7 +54,7 @@ def signup_vendor():
 
     user_factory = UserFactory()
     vendor = user_factory.create_vendor(vendor_infos)
-    database = Database()
+    database = UserDatabase()
     user_id = database.create_vendor(vendor)
 
     response = {
