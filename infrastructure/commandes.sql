@@ -96,6 +96,8 @@ CREATE TABLE IF NOT EXISTS customer_use_payment_system (
 
 /*----------------------------------------------------- Triggers -----------------------------------------------------*/
 
+DELIMITER //
+
 CREATE TRIGGER update_total_cost
     AFTER INSERT ON carts_contains_products
     FOR EACH ROW
@@ -104,6 +106,8 @@ CREATE TRIGGER update_total_cost
         SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
         WHERE id = NEW.cart_id;
     END;
+
+DELIMITER ;
 
 /*------------------------------ INSÉRER CI-DESSOUS LE CODE À SUPPRIMER AVANT LA REMISE ------------------------------*/
 
