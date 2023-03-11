@@ -2,7 +2,9 @@ from domain.models.user import User
 
 
 class Customer(User):
-    def __init__(self, username, password, first_name, last_name, address, phone_number, email):
+    def __init__(
+        self, username, password, first_name, last_name, address, phone_number, email
+    ):
         super().__init__(username, password)
         self.first_name = first_name
         self.last_name = last_name

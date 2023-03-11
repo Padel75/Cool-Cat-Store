@@ -6,7 +6,8 @@ from infrastructure.database.user_database import UserDatabase
 from exceptions.missingParameterException import MissingParameterException
 from exceptions.invalidParameterException import InvalidParameterException
 
-@sell_bp.route("/sell/<vendor_id>", methods=['POST'])
+
+@sell_bp.route("/sell/<vendor_id>", methods=["POST"])
 def sell(vendor_id):
     vendor_id = int(vendor_id)
     sell_infos = request.get_json()
@@ -23,7 +24,7 @@ def sell(vendor_id):
         "description": sell_infos["description"],
         "price": sell_infos["price"],
         "category_id": sell_infos["category_id"],
-        "vendor_id": vendor_id
+        "vendor_id": vendor_id,
     }
 
     product_factory = ProductFactory()
@@ -31,11 +32,10 @@ def sell(vendor_id):
     database = ProductDatabase()
     product_id = database.create_product(product)
 
-    response = {
-        "product_id": product_id
-    }
+    response = {"product_id": product_id}
 
     return jsonify(response), 201
+
 
 def __validate_vendor_id(vendor_id: int) -> None:
     database = UserDatabase()
@@ -46,6 +46,8 @@ def __validate_vendor_id(vendor_id: int) -> None:
 
 
 def __validate_vendor_is_logged_in(vendor_id: int) -> None:
-    if session.get('id') != vendor_id:
-        raise InvalidParameterException("Vous devez vous connecter pour vendre un produit")
+    if session.get("id") != vendor_id:
+        raise InvalidParameterException(
+            "Vous devez vous connecter pour vendre un produit"
+        )
     return
