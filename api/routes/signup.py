@@ -4,12 +4,20 @@ from domain.factories.user_factory import UserFactory
 from infrastructure.database.user_database import UserDatabase
 from exceptions.missingParameterException import MissingParameterException
 
-@signup_bp.route("/signup/customer", methods=['POST'])
-def signup_customer():
 
+@signup_bp.route("/signup/customer", methods=["POST"])
+def signup_customer():
     signup_infos = request.get_json()
 
-    for key in ["username", "password", "first_name", "last_name", "address", "phone_number", "email"]:
+    for key in [
+        "username",
+        "password",
+        "first_name",
+        "last_name",
+        "address",
+        "phone_number",
+        "email",
+    ]:
         if key not in signup_infos:
             raise MissingParameterException(f"{key} est manquant")
 
@@ -20,7 +28,7 @@ def signup_customer():
         "last_name": signup_infos["last_name"],
         "address": signup_infos["address"],
         "phone_number": signup_infos["phone_number"],
-        "email": signup_infos["email"]
+        "email": signup_infos["email"],
     }
 
     user_factory = UserFactory()
@@ -28,17 +36,24 @@ def signup_customer():
     database = UserDatabase()
     user_id = database.create_customer(customer)
 
-    response = {
-        "user_id": user_id
-    }
+    response = {"user_id": user_id}
 
     return jsonify(response), 201
 
-@signup_bp.route("/signup/vendor", methods=['POST'])
+
+@signup_bp.route("/signup/vendor", methods=["POST"])
 def signup_vendor():
     signup_infos = request.get_json()
 
-    for key in ["username", "password", "name", "description", "address", "phone_number", "email"]:
+    for key in [
+        "username",
+        "password",
+        "name",
+        "description",
+        "address",
+        "phone_number",
+        "email",
+    ]:
         if key not in signup_infos:
             raise MissingParameterException(f"{key} est manquant")
 
@@ -49,7 +64,7 @@ def signup_vendor():
         "description": signup_infos["description"],
         "address": signup_infos["address"],
         "phone_number": signup_infos["phone_number"],
-        "email": signup_infos["email"]
+        "email": signup_infos["email"],
     }
 
     user_factory = UserFactory()
@@ -57,8 +72,6 @@ def signup_vendor():
     database = UserDatabase()
     user_id = database.create_vendor(vendor)
 
-    response = {
-        "user_id": user_id
-    }
+    response = {"user_id": user_id}
 
     return jsonify(response), 201

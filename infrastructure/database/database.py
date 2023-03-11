@@ -45,3 +45,8 @@ class Database:
         cursor = self.connection.cursor()
         cursor.execute(query, values)
         return cursor.fetchone()
+
+    def select_all_query(self, query: str) -> list:
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
