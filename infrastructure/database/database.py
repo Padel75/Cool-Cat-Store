@@ -8,7 +8,8 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
-            database=Config.MYSQL_DB
+            database=Config.MYSQL_DB,
+            port = Config.MYSQL_PORT
         )
         self.commands_file = Config.DATABASE_COMMANDS_FILE
 

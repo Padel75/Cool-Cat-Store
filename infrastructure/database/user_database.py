@@ -1,4 +1,4 @@
-from pymysql.err import OperationalError
+import mysql.connector
 from infrastructure.database.database import Database
 from domain.models.customer import Customer
 from domain.models.vendor import Vendor
@@ -79,7 +79,7 @@ class UserDatabase(Database):
     def __insert_user(self, query: str, values: tuple, human_id: int) -> int:
         try:
             user_id = self.insert_query(query, values)
-        except OperationalError as err:
+        except mysql.connector.Error as err:
             self.__delete_human(human_id)
             if "phone_number_invalid" in str(err):
                 raise InvalidParameterException("Numéro de téléphone doit avoir le format 418-123-4567")
