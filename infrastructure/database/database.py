@@ -8,6 +8,7 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
+            port=Config.MYSQL_PORT,
             database=Config.MYSQL_DB
         )
         self.commands_file = Config.DATABASE_COMMANDS_FILE
@@ -18,6 +19,7 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
+            port=Config.MYSQL_PORT,
             database=Config.MYSQL_DB
         )
         cursor = connection.cursor(dictionary=True)
@@ -44,3 +46,8 @@ class Database:
         cursor = self.connection.cursor()
         cursor.execute(query, values)
         return cursor.fetchone()
+
+    def select_all_query(self, query: str) -> list:
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()

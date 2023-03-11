@@ -26,7 +26,29 @@ class ProductDatabase(Database):
         product = self.select_one_query(query, values)
         if product is None:
             return None
-        return product
+        product_dto = {
+            "id": product[0],
+            "name": product[1],
+            "description": product[2],
+            "price": product[3],
+            "category": product[4]
+        }
+        return product_dto
+
+    def get_products(self) -> list:
+        query = "SELECT * FROM products"
+        products = self.select_all_query(query)
+        product_list = []
+        for product in products:
+            product_dto = {
+                "id": product[0],
+                "name": product[1],
+                "description": product[2],
+                "price": product[3],
+                "category": product[4]
+            }
+            product_list.append(product_dto)
+        return product_list
 
     def __add_product(self, name: str, description: str, price: float, category_id: int, vendor_id: int) -> int:
         query = "INSERT INTO products (name, description, price, category_id) " \
