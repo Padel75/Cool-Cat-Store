@@ -2,7 +2,9 @@ from domain.models.user import User
 
 
 class Vendor(User):
-    def __init__(self, username, password, name, description, address, phone_number, email):
+    def __init__(
+        self, username, password, name, description, address, phone_number, email
+    ):
         super().__init__(username, password)
         self.name = name
         self.description = description
@@ -24,7 +26,3 @@ class Vendor(User):
 
     def get_email(self):
         return self.email
-
-
-
-

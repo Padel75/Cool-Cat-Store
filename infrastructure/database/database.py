@@ -9,7 +9,7 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             db=Config.MYSQL_DB,
-            port=Config.MYSQL_PORT
+            port=Config.MYSQL_PORT,
         )
         self.commands_file = Config.DATABASE_COMMANDS_FILE
 
@@ -19,13 +19,13 @@ class Database:
             host=Config.MYSQL_HOST,
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
-            port=Config.MYSQL_PORT
+            port=Config.MYSQL_PORT,
         )
         cursor = connection.cursor()
-        file = open(Config.DATABASE_COMMANDS_FILE, 'r')
+        file = open(Config.DATABASE_COMMANDS_FILE, "r")
         sql_file = file.read()
         file.close()
-        sql_commands = sql_file.split(';')
+        sql_commands = sql_file.split(";")
 
         for commands in sql_commands:
             try:
