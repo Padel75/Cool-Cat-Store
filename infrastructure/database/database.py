@@ -8,8 +8,8 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
-            port=Config.MYSQL_PORT,
             database=Config.MYSQL_DB,
+            port = Config.MYSQL_PORT
         )
         self.commands_file = Config.DATABASE_COMMANDS_FILE
 
@@ -19,20 +19,17 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
-            port=Config.MYSQL_PORT,
-            database=Config.MYSQL_DB,
+            database=Config.MYSQL_DB
         )
         cursor = connection.cursor(dictionary=True)
-        file = open(Config.DATABASE_COMMANDS_FILE, "r")
+        file = open(Config.DATABASE_COMMANDS_FILE, 'r')
 
         result_iterator = cursor.execute(file.read(), multi=True)
 
         file.close()
 
         for res in result_iterator:
-            print(
-                "Running query: ", res
-            )  # Will print out a short representation of the query
+            print("Running query: ", res)  # Will print out a short representation of the query
             print(f"Affected {res.rowcount} rows")
 
         connection.commit()

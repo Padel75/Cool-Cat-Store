@@ -2,7 +2,7 @@
 class Config:
     MYSQL_HOST = 'localhost'
     MYSQL_USER = 'root'
-    MYSQL_PASSWORD = 'Willy006'
+    MYSQL_PASSWORD = 'MDP'
     MYSQL_DB = 'GLO2005_TP'
     MYSQL_PORT = 1433
-    DATABASE_COMMANDS_FILE = 'infrastructure/commandes.sql'
+    DATABASE_COMMANDS_FILE = '../infrastructure/commandes.sql'
