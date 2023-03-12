@@ -8,6 +8,7 @@ from api.routes import (
     sell_bp,
     add_to_cart_bp,
     products_bp,
+    product_by_name_bp,
 )
 from infrastructure.database.database import Database
 
@@ -24,6 +25,7 @@ app.register_blueprint(signout_bp)
 app.register_blueprint(sell_bp)
 app.register_blueprint(add_to_cart_bp)
 app.register_blueprint(products_bp)
+app.register_blueprint(product_by_name_bp)
 print(app.url_map)
 
 
