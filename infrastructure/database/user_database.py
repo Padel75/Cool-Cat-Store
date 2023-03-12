@@ -6,7 +6,6 @@ from exceptions.invalidParameterException import InvalidParameterException
 
 
 class UserDatabase(Database):
-
     def create_customer(self, customer: Customer) -> int:
         first_name = customer.get_first_name()
         last_name = customer.get_last_name()
@@ -17,7 +16,9 @@ class UserDatabase(Database):
         email = customer.get_email()
 
         human_id = self.__add_human(username, password)
-        user_id = self.__add_customer(first_name, last_name, address, phone_number, email, human_id)
+        user_id = self.__add_customer(
+            first_name, last_name, address, phone_number, email, human_id
+        )
         self.__add_cart(user_id)
         return user_id
 
@@ -31,8 +32,11 @@ class UserDatabase(Database):
         email = vendor.get_email()
 
         human_id = self.__add_human(username, password)
-        user_id = self.__add_vendor(name, description, address, phone_number, email, human_id)
+        user_id = self.__add_vendor(
+            name, description, address, phone_number, email, human_id
+        )
         return user_id
+
     def get_user_password(self, username: str) -> str:
         query = "SELECT password FROM humans WHERE username = %s"
         values = (username,)
@@ -62,16 +66,36 @@ class UserDatabase(Database):
         values = (username, password)
         return self.insert_query(query, values)
 
-    def __add_customer(self, first_name: str, last_name: str, address: str, phone_number: str, email: str, human_id: int) -> int:
-        query = "INSERT INTO customers (first_name, last_name, address, phone_number, email, id) " \
-                "VALUES (%s, %s, %s, %s, %s, %s)"
+    def __add_customer(
+        self,
+        first_name: str,
+        last_name: str,
+        address: str,
+        phone_number: str,
+        email: str,
+        human_id: int,
+    ) -> int:
+        query = (
+            "INSERT INTO customers (first_name, last_name, address, phone_number, email, id) "
+            "VALUES (%s, %s, %s, %s, %s, %s)"
+        )
         values = (first_name, last_name, address, phone_number, email, human_id)
 
         return self.__insert_user(query, values, human_id)
 
-    def __add_vendor(self, name: str, description: str, address: str, phone_number: str, email: str, human_id: int) -> int:
-        query = "INSERT INTO vendors (name, description, address, phone_number, email, id) " \
-                "VALUES (%s, %s, %s, %s, %s, %s)"
+    def __add_vendor(
+        self,
+        name: str,
+        description: str,
+        address: str,
+        phone_number: str,
+        email: str,
+        human_id: int,
+    ) -> int:
+        query = (
+            "INSERT INTO vendors (name, description, address, phone_number, email, id) "
+            "VALUES (%s, %s, %s, %s, %s, %s)"
+        )
         values = (name, description, address, phone_number, email, human_id)
 
         return self.__insert_user(query, values, human_id)
@@ -82,7 +106,9 @@ class UserDatabase(Database):
         except OperationalError as err:
             self.__delete_human(human_id)
             if "phone_number_invalid" in str(err):
-                raise InvalidParameterException("Numéro de téléphone doit avoir le format 418-123-4567")
+                raise InvalidParameterException(
+                    "Numéro de téléphone doit avoir le format 418-123-4567"
+                )
             elif "email_invalid" in str(err):
                 raise InvalidParameterException("Email est invalide")
             raise InvalidParameterException(err)
