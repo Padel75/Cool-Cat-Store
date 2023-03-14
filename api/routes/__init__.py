@@ -6,6 +6,6 @@ signout_bp = Blueprint("signout", __name__)
 sell_bp = Blueprint("sell", __name__)
 add_to_cart_bp = Blueprint("add_to_cart", __name__)
 products_bp = Blueprint("products", __name__)
-products_by_name_bp = Blueprint("products_by_name", __name__)
+products_filtered_bp = Blueprint("products_by_name", __name__)
 
 from . import login, signup, signout, sell, add_to_cart, products, products_by_name

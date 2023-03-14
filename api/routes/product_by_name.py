@@ -1,17 +1,12 @@
 from flask import jsonify
 
-from exceptions.invalidParameterException import InvalidParameterException
-from . import products_by_name_bp
+from . import products_filtered_bp
 from infrastructure.database.product_database import ProductDatabase
 
 
-@products_by_name_bp.route("/product_by_name/<name>", methods=["GET"])
-def get_products_by_name(name: str):
+@products_filtered_bp.route("/product_filtered/<search_filter>", methods=["GET"])
+def get_products_filtered(search_filter: str):
     database: ProductDatabase = ProductDatabase()
-    products: list = database.get_products()
-    product = [product for product in products if product["name"] == name][0]
+    products: list = database.get_products_filtered(search_filter)
 
-    if product is None:
-        raise InvalidParameterException("Le ID du produit est invalide")
-
-    return jsonify(product), 200
+    return jsonify(products), 200
