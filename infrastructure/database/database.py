@@ -1,4 +1,4 @@
-import mysql.connector
+import pymysql
 from infrastructure.config import Config
 
 
@@ -20,13 +20,12 @@ class Database:
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
             database=Config.MYSQL_DB,
+            port=Config.MYSQL_PORT,
         )
         cursor = connection.cursor(dictionary=True)
         file = open(Config.DATABASE_COMMANDS_FILE, "r")
 
         result_iterator = cursor.execute(file.read(), multi=True)
-
-        file.close()
 
         for res in result_iterator:
             print(
