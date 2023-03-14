@@ -10,7 +10,6 @@ class Database:
             host=Config.MYSQL_HOST,
             database=Config.MYSQL_DB,
             port=Config.MYSQL_PORT,
-            db=Config.MYSQL_DB,
         )
         self.commands_file = Config.DATABASE_COMMANDS_FILE
 
