@@ -7,4 +7,4 @@ sell_bp = Blueprint("sell", __name__)
 add_to_cart_bp = Blueprint("add_to_cart", __name__)
 get_cart_bp = Blueprint("get_cart", __name__)
 
-from . import login, signup, signout, sell, add_to_cart
+from . import login, signup, signout, sell, add_to_cart, get_cart
