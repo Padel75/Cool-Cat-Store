@@ -41,6 +41,29 @@ class ProductDatabase(Database):
         }
         return product_dto
 
+    def __add_product(
+            self,
+            name: str,
+            description: str,
+            price: float,
+            category_id: int,
+            vendor_id: int,
+    ) -> int:
+        query = (
+            "INSERT INTO products (name, description, price, category_id) "
+            "VALUES (%s, %s, %s, %s)"
+        )
+        values = (name, description, price, category_id)
+        product_id = self.insert_query(query, values)
+
+        query = (
+            "INSERT INTO vendors_adds_products (product_id, vendor_id) "
+            "VALUES (%s, %s)"
+        )
+        values = (product_id, vendor_id)
+        self.insert_query(query, values)
+        return product_id
+
     def get_products(self) -> list:
         query = "SELECT * FROM products"
         products = self.select_all_query(query)
