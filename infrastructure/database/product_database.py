@@ -26,7 +26,7 @@ class ProductDatabase(Database):
         self.insert_query(query, values)
         return cart_id
 
-    def get_product(self, product_id: int) -> dict[str, Any] | None:
+    def get_product(self, product_id: int) -> tuple:
         query = "SELECT * FROM products WHERE id = %s"
         values = (product_id,)
         product = self.select_one_query(query, values)
@@ -107,10 +107,15 @@ class ProductDatabase(Database):
         self.insert_query(query, values)
         return product_id
 
-    def __get_cart_id(self, customer_id: int) -> int:
-        query = "SELECT cart_id FROM customers_own_carts WHERE customer_id = %s"
+    def __get_cart_id(self, customer_id: int) -> int | None:
+        query: str = "SELECT cart_id FROM customers_own_carts WHERE customer_id = %s"
         values = (customer_id,)
         cart_id = self.select_one_query(query, values)
         if cart_id is None:
             return None
         return cart_id[0]
+
+    def get_cart(self, cart_id: int) -> list:
+        query = f"SELECT product_id, quantity FROM carts_contains_products c where c.cart_id = {cart_id}"
+        cart = self.select_all_query(query)
+        return cart
