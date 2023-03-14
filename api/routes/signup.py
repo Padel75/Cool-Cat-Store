@@ -7,7 +7,6 @@ from exceptions.missingParameterException import MissingParameterException
 
 @signup_bp.route("/signup/customer", methods=["POST"])
 def signup_customer():
-
     signup_infos = request.get_json()
 
     for key in [

@@ -32,11 +32,6 @@ class ProductDatabase(Database):
             return None
         return product
 
-    def get_products_in_cart(self, cart_id) -> list:
-        query = f"SELECT product_id, quantity FROM carts_contains_products c where c.cart_id = {cart_id}"
-        products = self.select_all_query(query)  # to merge
-        return products
-
     def __add_product(
         self,
         name: str,
@@ -67,3 +62,8 @@ class ProductDatabase(Database):
         if cart_id is None:
             return None
         return cart_id[0]
+
+    def get_cart(self, cart_id: int) -> list:
+        query = f"SELECT product_id, quantity FROM carts_contains_products c where c.cart_id = {cart_id}"
+        cart = self.select_all_query(query)
+        return cart
