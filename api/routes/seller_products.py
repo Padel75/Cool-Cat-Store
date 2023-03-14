@@ -11,6 +11,6 @@ def get_seller_products(seller_id: str) -> tuple[Response, int]:
     database: ProductDatabase = ProductDatabase()
     products_id: list = database.get_seller_products_id(int(seller_id))
     seller_products: list = [
-        database.get_product(product_id) for product_id in products_id
+        database.get_product(product_id[0]) for product_id in products_id
     ]
     return jsonify(seller_products), 200
