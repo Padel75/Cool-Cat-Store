@@ -4,34 +4,35 @@ from infrastructure.config import Config
 
 class Database:
     def __init__(self):
-        self.connection = pymysql.connect(
-            host=Config.MYSQL_HOST,
+        self.connection = mysql.connector.connect(
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
-            db=Config.MYSQL_DB,
+            host=Config.MYSQL_HOST,
+            database=Config.MYSQL_DB,
             port=Config.MYSQL_PORT,
+            db=Config.MYSQL_DB,
         )
         self.commands_file = Config.DATABASE_COMMANDS_FILE
 
     @staticmethod
     def init_db():
-        connection = pymysql.connect(
-            host=Config.MYSQL_HOST,
+        connection = mysql.connector.connect(
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
+            host=Config.MYSQL_HOST,
+            database=Config.MYSQL_DB,
             port=Config.MYSQL_PORT,
         )
-        cursor = connection.cursor()
+        cursor = connection.cursor(dictionary=True)
         file = open(Config.DATABASE_COMMANDS_FILE, "r")
-        sql_file = file.read()
-        file.close()
-        sql_commands = sql_file.split(";")
 
-        for commands in sql_commands:
-            try:
-                cursor.execute(commands)
-            except Exception as e:
-                print("Command skipped: ", commands)
+        result_iterator = cursor.execute(file.read(), multi=True)
+
+        for res in result_iterator:
+            print(
+                "Running query: ", res
+            )  # Will print out a short representation of the query
+            print(f"Affected {res.rowcount} rows")
 
         connection.commit()
         connection.close()
@@ -46,3 +47,8 @@ class Database:
         cursor = self.connection.cursor()
         cursor.execute(query, values)
         return cursor.fetchone()
+
+    def select_all_query(self, query: str) -> list:
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
