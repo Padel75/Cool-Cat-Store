@@ -13,9 +13,9 @@ class UserFactory:
         phone_number = customer_infos["phone_number"]
         email = customer_infos["email"]
 
-        encrypted_password = self.__encrypt_password(password)
+        encrypted_password: bytes = self.__encrypt_password(password)
 
-        customer = Customer(
+        customer: Customer = Customer(
             username,
             encrypted_password,
             first_name,
@@ -36,11 +36,11 @@ class UserFactory:
         phone_number = vendor_infos["phone_number"]
         email = vendor_infos["email"]
 
-        encrypted_password = self.__encrypt_password(password)
+        encrypted_password: bytes = self.__encrypt_password(password)
 
-        vendor = Vendor(
+        vendor: Vendor = Vendor(
             username,
-            encrypted_password,
+            str(encrypted_password),
             name,
             description,
             address,
@@ -50,7 +50,7 @@ class UserFactory:
 
         return vendor
 
-    def __encrypt_password(self, password):
+    def __encrypt_password(self, password: str) -> bytes:
         salt = bcrypt.gensalt()
         encrypted_password = bcrypt.hashpw(password.encode("utf-8"), salt)
         return encrypted_password
