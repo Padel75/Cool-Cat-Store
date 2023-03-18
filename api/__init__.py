@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-import os
+from .token_manager import TokenManager
 from exceptions import errors_bp
 from api.routes import (
     login_bp,
@@ -17,9 +17,9 @@ from infrastructure.database.database import Database
 
 Database.init_db()
 
-app = Flask(__name__)
-# set a key for session(logged in user)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "supersekrit")
+app: Flask = Flask(__name__)
+token_manager: TokenManager = TokenManager(app)
+app.config["TOKEN_MANAGER"] = token_manager
 
 app.register_blueprint(errors_bp)
 app.register_blueprint(login_bp)

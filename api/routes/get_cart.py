@@ -1,13 +1,15 @@
-from flask import request, session, jsonify, Response
+from flask import jsonify, Response
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import get_cart_bp
 from infrastructure.database.product_database import ProductDatabase
 from infrastructure.database.user_database import UserDatabase
 from exceptions.invalidParameterException import InvalidParameterException
 
 
-@get_cart_bp.route("/<customer_id>/cart", methods=["GET"])
-def get_cart(customer_id: str) -> (Response, int):
-    customer_id: int = int(customer_id)
+@get_cart_bp.route("/cart", methods=["GET"])
+@jwt_required()
+def get_cart() -> (Response, int):
+    customer_id: int = get_jwt_identity()
     __validate_user_id(customer_id)
 
     database: ProductDatabase = ProductDatabase()
