@@ -36,7 +36,7 @@ print(app.url_map)
 
 
 @app.route("/")
-def main():
+def main() -> str:
     return render_template("login.html")
 
 

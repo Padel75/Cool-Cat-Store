@@ -1,4 +1,7 @@
-from flask import request, jsonify
+from flask import request, jsonify, Response
+
+from domain.models.customer import Customer
+from domain.models.vendor import Vendor
 from . import signup_bp
 from domain.factories.user_factory import UserFactory
 from infrastructure.database.user_database import UserDatabase
@@ -6,7 +9,7 @@ from exceptions.missingParameterException import MissingParameterException
 
 
 @signup_bp.route("/signup/customer", methods=["POST"])
-def signup_customer():
+def signup_customer() -> (Response, int):
     signup_infos = request.get_json()
 
     for key in [
@@ -31,18 +34,18 @@ def signup_customer():
         "email": signup_infos["email"],
     }
 
-    user_factory = UserFactory()
-    customer = user_factory.create_customer(customer_infos)
-    database = UserDatabase()
-    user_id = database.create_customer(customer)
+    user_factory: UserFactory = UserFactory()
+    customer: Customer = user_factory.create_customer(customer_infos)
+    database: UserDatabase = UserDatabase()
+    user_id: int = database.create_customer(customer)
 
-    response = {"user_id": user_id}
+    response: dict[str, int] = {"user_id": user_id}
 
     return jsonify(response), 201
 
 
 @signup_bp.route("/signup/vendor", methods=["POST"])
-def signup_vendor():
+def signup_vendor() -> (Response, int):
     signup_infos = request.get_json()
 
     for key in [
@@ -67,11 +70,11 @@ def signup_vendor():
         "email": signup_infos["email"],
     }
 
-    user_factory = UserFactory()
-    vendor = user_factory.create_vendor(vendor_infos)
-    database = UserDatabase()
-    user_id = database.create_vendor(vendor)
+    user_factory: UserFactory = UserFactory()
+    vendor: Vendor = user_factory.create_vendor(vendor_infos)
+    database: UserDatabase = UserDatabase()
+    user_id: int = database.create_vendor(vendor)
 
-    response = {"user_id": user_id}
+    response: dict[str, int] = {"user_id": user_id}
 
     return jsonify(response), 201

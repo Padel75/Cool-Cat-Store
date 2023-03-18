@@ -1,9 +1,11 @@
 import mysql.connector
+from mysql.connector.cursor import MySQLCursor
+
 from infrastructure.config import Config
 
 
 class Database:
-    def __init__(self):
+    def __init__(self) -> None:
         self.connection = mysql.connector.connect(
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
@@ -11,10 +13,10 @@ class Database:
             database=Config.MYSQL_DB,
             port=Config.MYSQL_PORT,
         )
-        self.commands_file = Config.DATABASE_COMMANDS_FILE
+        self.commands_file: str = Config.DATABASE_COMMANDS_FILE
 
     @staticmethod
-    def init_db():
+    def init_db() -> None:
         connection = mysql.connector.connect(
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
@@ -22,7 +24,7 @@ class Database:
             database=Config.MYSQL_DB,
             port=Config.MYSQL_PORT,
         )
-        cursor = connection.cursor(dictionary=True)
+        cursor: MySQLCursor = connection.cursor(dictionary=True)
         file = open(Config.DATABASE_COMMANDS_FILE, "r")
 
         result_iterator = cursor.execute(file.read(), multi=True)
@@ -33,21 +35,26 @@ class Database:
             )  # Will print out a short representation of the query
             print(f"Affected {res.rowcount} rows")
 
+        cursor.close()
         connection.commit()
         connection.close()
 
     def insert_query(self, query: str, values: tuple) -> int:
-        cursor = self.connection.cursor()
+        cursor: MySQLCursor = self.connection.cursor()
+
         cursor.execute(query, values)
         self.connection.commit()
+
         return cursor.lastrowid
 
     def select_one_query(self, query: str, values: tuple) -> tuple:
         cursor = self.connection.cursor()
         cursor.execute(query, values)
+
         return cursor.fetchone()
 
     def select_all_query(self, query: str) -> list:
         cursor = self.connection.cursor()
         cursor.execute(query)
+
         return cursor.fetchall()
