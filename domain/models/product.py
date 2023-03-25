@@ -5,13 +5,13 @@ class Product:
         description: str,
         price: float,
         category_id: int,
-        vendor_id: int,
+        seller_id: int,
     ) -> None:
         self.name: str = name
         self.description: str = description
         self.price: float = price
         self.category_id: int = category_id
-        self.vendor_id: int = vendor_id
+        self.seller_id: int = seller_id
 
     def get_name(self) -> str:
         return self.name
@@ -25,5 +25,5 @@ class Product:
     def get_category_id(self) -> int:
         return self.category_id
 
-    def get_vendor_id(self) -> int:
-        return self.vendor_id
+    def get_seller_id(self) -> int:
+        return self.seller_id
