@@ -12,21 +12,21 @@ from exceptions.invalidParameterException import InvalidParameterException
 @sell_bp.route("/sell", methods=["POST"])
 @jwt_required()
 def sell() -> (Response, int):
-    vendor_id: int = get_jwt_identity()
+    seller_id: int = get_jwt_identity()
     sell_infos: dict = request.get_json()
 
     for key in ["name", "description", "price", "category_id"]:
         if key not in sell_infos:
             raise MissingParameterException(f"{key} est manquant")
 
-    __validate_vendor_id(vendor_id)
+    __validate_seller_id(seller_id)
 
     product_infos: dict[str, str | int] = {
         "name": sell_infos["name"],
         "description": sell_infos["description"],
         "price": sell_infos["price"],
         "category_id": sell_infos["category_id"],
-        "vendor_id": vendor_id,
+        "seller_id": seller_id,
     }
 
     product_factory: ProductFactory = ProductFactory()
@@ -39,10 +39,10 @@ def sell() -> (Response, int):
     return jsonify(response), 201
 
 
-def __validate_vendor_id(vendor_id: int) -> None:
+def __validate_seller_id(seller_id: int) -> None:
     database: UserDatabase = UserDatabase()
-    vendor: tuple = database.get_user("vendors", vendor_id)
+    seller: tuple = database.get_user("sellers", seller_id)
 
-    if vendor is None:
+    if seller is None:
         raise InvalidParameterException("Le ID du vendeur est invalide")
     return

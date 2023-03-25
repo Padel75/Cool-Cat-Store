@@ -1,7 +1,7 @@
 from domain.models.user import User
 
 
-class Vendor(User):
+class Seller(User):
     def __init__(
         self,
         username: str,

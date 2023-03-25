@@ -1,7 +1,7 @@
 from flask import request, jsonify, Response
 import secrets
 from domain.models.customer import Customer
-from domain.models.vendor import Vendor
+from domain.models.seller import Seller
 from . import signup_bp
 from domain.factories.user_factory import UserFactory
 from infrastructure.database.user_database import UserDatabase
@@ -47,8 +47,8 @@ def signup_customer() -> (Response, int):
     return jsonify(response), 201
 
 
-@signup_bp.route("/signup/vendor", methods=["POST"])
-def signup_vendor() -> (Response, int):
+@signup_bp.route("/signup/seller", methods=["POST"])
+def signup_seller() -> (Response, int):
     signup_infos = request.get_json()
 
     for key in [
@@ -63,7 +63,7 @@ def signup_vendor() -> (Response, int):
         if key not in signup_infos:
             raise MissingParameterException(f"{key} est manquant")
 
-    vendor_infos = {
+    seller_infos = {
         "username": signup_infos["username"],
         "password": signup_infos["password"],
         "name": signup_infos["name"],
@@ -74,12 +74,12 @@ def signup_vendor() -> (Response, int):
     }
 
     user_factory: UserFactory = UserFactory()
-    vendor: Vendor = user_factory.create_vendor(vendor_infos)
+    seller: Seller = user_factory.create_seller(seller_infos)
     database: UserDatabase = UserDatabase()
     user_id: int = secrets.randbits(16)
     while database.get_user("humans", user_id) is not None:
         user_id = secrets.randbits(16)
-    database.create_vendor(vendor, user_id)
+    database.create_seller(seller, user_id)
 
     response: dict[str, int] = {"user_id": user_id}
 

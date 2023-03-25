@@ -7,7 +7,7 @@ class ProductFactory:
         description = product_infos["description"]
         price = product_infos["price"]
         category_id = product_infos["category_id"]
-        vendor_id = product_infos["vendor_id"]
+        seller_id = product_infos["seller_id"]
 
-        product: Product = Product(name, description, price, category_id, vendor_id)
+        product: Product = Product(name, description, price, category_id, seller_id)
         return product

@@ -16,9 +16,9 @@ def get_user_infos() -> (Response, int):
     if customer is not None:
         return jsonify(customer), 200
 
-    vendor: tuple = user_database.get_user("vendors", user_id)
-    if vendor is not None:
-        return jsonify(vendor), 200
+    seller: tuple = user_database.get_user("sellers", user_id)
+    if seller is not None:
+        return jsonify(seller), 200
 
     admin: tuple = user_database.get_user("admins", user_id)
     if admin is not None:
