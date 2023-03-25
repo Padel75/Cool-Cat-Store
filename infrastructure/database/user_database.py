@@ -5,7 +5,7 @@ from mysql.connector.cursor import MySQLCursor
 
 from infrastructure.database.database import Database
 from domain.models.customer import Customer
-from domain.models.vendor import Vendor
+from domain.models.seller import seller
 from exceptions.invalidParameterException import InvalidParameterException
 
 
@@ -27,17 +27,17 @@ class UserDatabase(Database):
 
         return user_id
 
-    def create_vendor(self, vendor: Vendor) -> int:
-        name: str = vendor.get_name()
-        description: str = vendor.get_description()
-        username: str = vendor.get_username()
-        password: str = vendor.get_password()
-        address: str = vendor.get_address()
-        phone_number: str = vendor.get_phone_number()
-        email: str = vendor.get_email()
+    def create_seller(self, seller: seller) -> int:
+        name: str = seller.get_name()
+        description: str = seller.get_description()
+        username: str = seller.get_username()
+        password: str = seller.get_password()
+        address: str = seller.get_address()
+        phone_number: str = seller.get_phone_number()
+        email: str = seller.get_email()
 
         human_id: int = self.__add_human(username, password)
-        user_id: int = self.__add_vendor(
+        user_id: int = self.__add_seller(
             name, description, address, phone_number, email, human_id
         )
         return user_id
@@ -95,7 +95,7 @@ class UserDatabase(Database):
 
         return self.__insert_user(query, values, human_id)
 
-    def __add_vendor(
+    def __add_seller(
         self,
         name: str,
         description: str,
@@ -105,7 +105,7 @@ class UserDatabase(Database):
         human_id: int,
     ) -> int:
         query: str = (
-            "INSERT INTO vendors (name, description, address, phone_number, email, id) "
+            "INSERT INTO sellers (name, description, address, phone_number, email, id) "
             "VALUES (%s, %s, %s, %s, %s, %s)"
         )
         values: tuple = (name, description, address, phone_number, email, human_id)

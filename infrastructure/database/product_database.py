@@ -10,10 +10,10 @@ class ProductDatabase(Database):
         description: str = product.get_description()
         price: float = product.get_price()
         category_id: int = product.get_category_id()
-        vendor_id: int = product.get_vendor_id()
+        seller_id: int = product.get_seller_id()
 
         product_id: int = self.__add_product(
-            name, description, price, category_id, vendor_id
+            name, description, price, category_id, seller_id
         )
 
         return product_id
@@ -52,7 +52,7 @@ class ProductDatabase(Database):
         description: str,
         price: float,
         category_id: int,
-        vendor_id: int,
+        seller_id: int,
     ) -> int:
         query: str = (
             "INSERT INTO products (name, description, price, category_id) "
@@ -62,10 +62,10 @@ class ProductDatabase(Database):
         product_id: int = self.insert_query(query, values)
 
         query: str = (
-            "INSERT INTO vendors_adds_products (product_id, vendor_id) "
+            "INSERT INTO sellers_adds_products (product_id, seller_id) "
             "VALUES (%s, %s)"
         )
-        values: tuple = (product_id, vendor_id)
+        values: tuple = (product_id, seller_id)
         self.insert_query(query, values)
 
         return product_id
@@ -99,7 +99,7 @@ class ProductDatabase(Database):
         return product_list
 
     def get_seller_products_id(self, seller_id: int) -> list:
-        query: str = f"SELECT product_id FROM vendors_adds_products WHERE vendor_id = {seller_id}"
+        query: str = f"SELECT product_id FROM sellers_adds_products WHERE seller_id = {seller_id}"
         products: list = self.select_all_query(query)
 
         return products

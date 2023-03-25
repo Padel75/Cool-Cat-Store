@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS admins (
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES humans(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
-CREATE TABLE IF NOT EXISTS vendors (
+CREATE TABLE IF NOT EXISTS sellers (
     id INT UNIQUE NOT NULL AUTO_INCREMENT,
     name VARCHAR(100),
     description VARCHAR(500),
     address VARCHAR(100),
-    phone_number VARCHAR(100), CONSTRAINT vendor_phone_number_invalid CHECK ( phone_number REGEXP '^[0-9]{3}-[0-9]{3}-[0-9]{4}$' ),
-    email VARCHAR(100), CONSTRAINT vendor_email_invalid CHECK ( email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$' ),
+    phone_number VARCHAR(100), CONSTRAINT seller_phone_number_invalid CHECK ( phone_number REGEXP '^[0-9]{3}-[0-9]{3}-[0-9]{4}$' ),
+    email VARCHAR(100), CONSTRAINT seller_email_invalid CHECK ( email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$' ),
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES humans(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
@@ -58,11 +58,11 @@ CREATE TABLE IF NOT EXISTS payment_systems (
 
 /*----------------------------------------------- Tables des relations: ----------------------------------------------*/
 
-CREATE TABLE IF NOT EXISTS vendors_adds_products (
-    vendor_id INT,
+CREATE TABLE IF NOT EXISTS sellers_adds_products (
+    seller_id INT,
     product_id INT,
-    PRIMARY KEY (vendor_id, product_id),
-    FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (seller_id, product_id),
+    FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 CREATE TABLE IF NOT EXISTS customers_own_carts (
