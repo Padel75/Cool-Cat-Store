@@ -1,6 +1,6 @@
-from flask import request, session, jsonify, Response
+from flask import request, jsonify, Response
 import bcrypt
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, set_access_cookies
 from . import login_bp
 from infrastructure.database.user_database import UserDatabase
 from exceptions.missingParameterException import MissingParameterException
@@ -24,8 +24,9 @@ def login() -> (Response, int):
     user_id: int = database.get_user_id(username)
     token = create_access_token(identity=user_id)
 
-    response: dict[str, int | str] = {"access_token": token, "user_id": user_id}
-    return jsonify(response), 200
+    response: Response = jsonify({"access_token": token})
+    set_access_cookies(response, token)
+    return response, 200
 
 
 def __validate_user_password(username: str, password: str) -> None:

@@ -1,5 +1,5 @@
 from flask import request, jsonify, Response
-
+import secrets
 from domain.models.customer import Customer
 from domain.models.vendor import Vendor
 from . import signup_bp
@@ -37,7 +37,10 @@ def signup_customer() -> (Response, int):
     user_factory: UserFactory = UserFactory()
     customer: Customer = user_factory.create_customer(customer_infos)
     database: UserDatabase = UserDatabase()
-    user_id: int = database.create_customer(customer)
+    user_id: int = secrets.randbits(16)
+    while database.get_user("humans", user_id) is not None:
+        user_id = secrets.randbits(16)
+    database.create_customer(customer, user_id)
 
     response: dict[str, int] = {"user_id": user_id}
 
@@ -73,7 +76,10 @@ def signup_vendor() -> (Response, int):
     user_factory: UserFactory = UserFactory()
     vendor: Vendor = user_factory.create_vendor(vendor_infos)
     database: UserDatabase = UserDatabase()
-    user_id: int = database.create_vendor(vendor)
+    user_id: int = secrets.randbits(16)
+    while database.get_user("humans", user_id) is not None:
+        user_id = secrets.randbits(16)
+    database.create_vendor(vendor, user_id)
 
     response: dict[str, int] = {"user_id": user_id}
 

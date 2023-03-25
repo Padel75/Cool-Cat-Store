@@ -1,8 +1,14 @@
 from flask_jwt_extended import JWTManager as JWT
+from flask_jwt_extended import (
+    get_jwt,
+    get_jwt_identity,
+    create_access_token,
+    set_access_cookies,
+)
 from flask import Flask
 import mysql.connector
 from mysql.connector.cursor import MySQLCursor
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 import os
 from infrastructure.config import Config
 
@@ -27,6 +33,19 @@ class TokenManager:
             jti: str = jwt_payload["jti"]
             token_in_redis: tuple = self.__get_token_from_blocklist(jti)
             return token_in_redis is not None
+
+        @app.after_request
+        def refresh_expiring_jwts(response):
+            try:
+                expiration_time = get_jwt()["exp"]
+                now = datetime.now(timezone.utc)
+                target_timestamp = datetime.timestamp(now + timedelta(minutes=20))
+                if target_timestamp > expiration_time:
+                    access_token = create_access_token(identity=get_jwt_identity())
+                    set_access_cookies(response, access_token)
+                return response
+            except (RuntimeError, KeyError):
+                return response
 
     def __set_app_configurations(self) -> None:
         self.app.config["SECRET_KEY"] = os.environ.get(
