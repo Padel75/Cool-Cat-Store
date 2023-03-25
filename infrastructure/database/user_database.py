@@ -5,7 +5,7 @@ from mysql.connector.cursor import MySQLCursor
 
 from infrastructure.database.database import Database
 from domain.models.customer import Customer
-from domain.models.seller import seller
+from domain.models.seller import Seller
 from exceptions.invalidParameterException import InvalidParameterException
 
 
@@ -27,7 +27,7 @@ class UserDatabase(Database):
 
         return user_id
 
-    def create_seller(self, seller: seller) -> int:
+    def create_seller(self, seller: Seller) -> int:
         name: str = seller.get_name()
         description: str = seller.get_description()
         username: str = seller.get_username()

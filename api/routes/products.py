@@ -16,7 +16,7 @@ def get_products() -> (Response, int):
 def get_product(product_id: str) -> (Response, int):
     product_id: int = int(product_id)
     database: ProductDatabase = ProductDatabase()
-    product: tuple = database.get_product(product_id)
+    product: dict = database.get_product(product_id)
 
     if product is None:
         raise InvalidParameterException("Le ID du produit est invalide")
