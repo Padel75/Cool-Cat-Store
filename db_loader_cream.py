@@ -32,9 +32,10 @@ while is_on_page:
 
         prices = driver.find_elements(By.CLASS_NAME, "price")
         for p in range(len(prices)):
-            prices_list.append(prices[p].text)
+            price = prices[p].text.replace("\"", "")
+            prices_list.append(price)
 
-        if no_page < 500:
+        if no_page < 10:
             no_page += 1
         else:
             is_on_page = False
