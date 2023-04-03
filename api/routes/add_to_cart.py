@@ -1,19 +1,20 @@
-from flask import request, session, jsonify, Response
+from flask import request, jsonify, Response
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import add_to_cart_bp
 from infrastructure.database.product_database import ProductDatabase
 from infrastructure.database.user_database import UserDatabase
 from exceptions.invalidParameterException import InvalidParameterException
 
 
-@add_to_cart_bp.route("/add_to_cart/<customer_id>/<product_id>", methods=["POST"])
-def add_to_cart(customer_id: str, product_id: str) -> (Response, int):
-    quantity = request.get_json()["quantity"]
-    customer_id: int = int(customer_id)
+@add_to_cart_bp.route("/add_to_cart/<product_id>", methods=["POST"])
+@jwt_required()
+def add_to_cart(product_id: str) -> (Response, int):
+    quantity: str = request.get_json()["quantity"]
     product_id: int = int(product_id)
+    customer_id: int = get_jwt_identity()
 
-    __validate_user_id(customer_id)
+    __validate_customer_id(customer_id)
     __validate_product_id(product_id)
-    __validate_user_is_logged_in(customer_id)
 
     database: ProductDatabase = ProductDatabase()
     cart_id: int = database.add_product_to_cart(product_id, customer_id, quantity)
@@ -25,7 +26,7 @@ def add_to_cart(customer_id: str, product_id: str) -> (Response, int):
     return jsonify(response), 201
 
 
-def __validate_user_id(user_id: int) -> None:
+def __validate_customer_id(user_id: int) -> None:
     database: UserDatabase = UserDatabase()
     user: tuple = database.get_user("customers", user_id)
     if user is None:
@@ -38,12 +39,4 @@ def __validate_product_id(product_id: int) -> None:
     product: tuple = database.get_product(product_id)
     if product is None:
         raise InvalidParameterException("Le ID du produit est invalide")
-    return
-
-
-def __validate_user_is_logged_in(user_id: int) -> None:
-    if session.get("id") != user_id:
-        raise InvalidParameterException(
-            "Vous devez vous connecter pour ajouter un produit au panier"
-        )
     return

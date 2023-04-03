@@ -1,11 +1,20 @@
-from flask import render_template, request, jsonify, session, Response
+from flask import jsonify, Response, current_app
+from flask_jwt_extended import (
+    get_jwt,
+    unset_jwt_cookies,
+    jwt_required,
+)
+
 from . import signout_bp
 
 
 @signout_bp.route("/signout", methods=["DELETE"])
-def signout() -> Response:
-    user_signed_out_id = session.get("id")
-    session.clear()
-    response = {"user_id": user_signed_out_id}
+@jwt_required()
+def signout() -> (Response, int):
+    token_revoked = get_jwt()["jti"]
+    token_manager = current_app.config["TOKEN_MANAGER"]
+    token_manager.add_token_to_blocklist(token_revoked)
 
-    return jsonify(response)
+    response: Response = jsonify({"msg": "User successfully signed out"})
+    unset_jwt_cookies(response)
+    return response, 200

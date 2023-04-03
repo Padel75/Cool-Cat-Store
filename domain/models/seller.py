@@ -5,7 +5,7 @@ class Seller(User):
     def __init__(
         self,
         username: str,
-        password: str,
+        password: bytes,
         name: str,
         description: str,
         address: str,
