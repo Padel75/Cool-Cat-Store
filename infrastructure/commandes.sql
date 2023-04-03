@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS customers (
 CREATE TABLE IF NOT EXISTS products (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(100),
-    description VARCHAR(100),
+    size VARCHAR(100),
     price FLOAT,
-    category_id INT,
+    category VARCHAR(100),
     PRIMARY KEY (id));
 
 CREATE TABLE IF NOT EXISTS carts (
