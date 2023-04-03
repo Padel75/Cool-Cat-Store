@@ -1,48 +1,60 @@
-import pymysql
+import mysql.connector
+from mysql.connector.cursor import MySQLCursor
+
 from infrastructure.config import Config
 
 
 class Database:
-    def __init__(self):
-        self.connection = pymysql.connect(
-            host=Config.MYSQL_HOST,
+    def __init__(self) -> None:
+        self.connection = mysql.connector.connect(
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
-            db=Config.MYSQL_DB,
-            port=Config.MYSQL_PORT
+            host=Config.MYSQL_HOST,
+            database=Config.MYSQL_DB,
+            port=Config.MYSQL_PORT,
         )
-        self.commands_file = Config.DATABASE_COMMANDS_FILE
+        self.commands_file: str = Config.DATABASE_COMMANDS_FILE
 
     @staticmethod
-    def init_db():
-        connection = pymysql.connect(
-            host=Config.MYSQL_HOST,
+    def init_db() -> None:
+        connection = mysql.connector.connect(
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
-            port=Config.MYSQL_PORT
+            host=Config.MYSQL_HOST,
+            database=Config.MYSQL_DB,
+            port=Config.MYSQL_PORT,
         )
-        cursor = connection.cursor()
-        file = open(Config.DATABASE_COMMANDS_FILE, 'r')
-        sql_file = file.read()
-        file.close()
-        sql_commands = sql_file.split(';')
+        cursor: MySQLCursor = connection.cursor(dictionary=True)
+        file = open(Config.DATABASE_COMMANDS_FILE, "r")
 
-        for commands in sql_commands:
-            try:
-                cursor.execute(commands)
-            except Exception as e:
-                print("Command skipped: ", commands)
+        result_iterator = cursor.execute(file.read(), multi=True)
 
+        for res in result_iterator:
+            print(
+                "Running query: ", res
+            )  # Will print out a short representation of the query
+            print(f"Affected {res.rowcount} rows")
+
+        cursor.close()
         connection.commit()
         connection.close()
 
     def insert_query(self, query: str, values: tuple) -> int:
-        cursor = self.connection.cursor()
+        cursor: MySQLCursor = self.connection.cursor()
+
         cursor.execute(query, values)
         self.connection.commit()
+
         return cursor.lastrowid
 
     def select_one_query(self, query: str, values: tuple) -> tuple:
         cursor = self.connection.cursor()
         cursor.execute(query, values)
+
         return cursor.fetchone()
+
+    def select_all_query(self, query: str) -> list:
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+
+        return cursor.fetchall()

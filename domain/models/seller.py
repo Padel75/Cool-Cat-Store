@@ -1,29 +1,29 @@
 from domain.models.user import User
 
 
-class Customer(User):
+class Seller(User):
     def __init__(
         self,
         username: str,
         password: str,
-        first_name: str,
-        last_name: str,
+        name: str,
+        description: str,
         address: str,
         phone_number: str,
         email: str,
     ) -> None:
         super().__init__(username, password)
-        self.first_name: str = first_name
-        self.last_name: str = last_name
+        self.name: str = name
+        self.description: str = description
         self.address: str = address
         self.phone_number: str = phone_number
         self.email: str = email
 
-    def get_first_name(self) -> str:
-        return self.first_name
+    def get_name(self) -> str:
+        return self.name
 
-    def get_last_name(self) -> str:
-        return self.last_name
+    def get_description(self) -> str:
+        return self.description
 
     def get_address(self) -> str:
         return self.address
