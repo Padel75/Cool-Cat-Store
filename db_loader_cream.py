@@ -42,7 +42,6 @@ while is_on_page:
         is_on_page = False
 
 with open("products.csv", "w") as f:
-    # create the csv writer
     writer = csv.writer(f)
 
     for i in range(len(names_list)):
