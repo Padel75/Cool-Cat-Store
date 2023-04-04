@@ -34,12 +34,12 @@ def __validate_user_password(username: str, password: str) -> None:
     encrypted_password: str = database.get_user_password(username)
 
     if encrypted_password is None:
-        raise InvalidParameterException("username est invalide")
+        raise InvalidParameterException("username or password is invalid")
 
     is_password_valid: bool = bcrypt.checkpw(
         password.encode("utf-8"), encrypted_password.encode("utf-8")
     )
     if not is_password_valid:
-        raise InvalidParameterException("password est invalide")
+        raise InvalidParameterException("username or password is invalid")
 
     return

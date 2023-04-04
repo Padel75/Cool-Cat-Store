@@ -1,11 +1,18 @@
-<script setup>
-import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router";
-const router = useRouter();
-const userStore = useUserStore();
-const login = () => {
-  userStore.login();
-  router.push("/");
+<script>
+import { login } from "@/api/login";
+
+export default {
+  data() {
+    return {
+      username: "",
+      password: "",
+    };
+  },
+  methods: {
+    handleLogin() {
+      login(this.username, this.password,);
+    },
+  },
 };
 </script>
 
@@ -17,14 +24,16 @@ const login = () => {
         <hr class="login-hr" />
         <p class="subtitle has-text-black">Please log in to proceed.</p>
         <div class="box" id="loginBox">
-          <form>
+          <form @submit.prevent="handleLogin">
             <div class="field">
               <div class="control has-icons-left">
                 <input
                   class="input is-medium"
-                  type="email"
-                  placeholder="Email"
+                  type="text"
+                  placeholder="Username"
                   autofocus="true"
+                  v-model="username"
+                  required
                 />
               </div>
             </div>
@@ -34,12 +43,13 @@ const login = () => {
                   class="input is-medium"
                   type="password"
                   placeholder="Password"
+                  v-model="password"
+                  required
                 />
               </div>
             </div>
             <button
               class="button is-block is-info is-medium is-fullwidth"
-              @click="login()"
             >
               Login
             </button>

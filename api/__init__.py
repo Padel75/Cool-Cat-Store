@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask_cors import CORS
 from .token_manager import TokenManager
 from exceptions import errors_bp
 from api.routes import (
@@ -18,6 +19,7 @@ from infrastructure.database.database import Database
 Database.init_db()
 
 app: Flask = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 token_manager: TokenManager = TokenManager(app)
 app.config["TOKEN_MANAGER"] = token_manager
 

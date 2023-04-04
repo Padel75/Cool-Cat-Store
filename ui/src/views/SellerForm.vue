@@ -24,16 +24,17 @@
         </div>
         <div class="form-group">
           <label for="sellerPhone">Phone Number:</label>
-          <input type="tel" id="sellerPhone" v-model="phone" required>
+          <input type="tel" id="sellerPhone" placeholder="418-123-1234" v-model="phone" required>
         </div>
         <button type="submit">Create Seller</button>
       </form>
     </div>
   </template>
-  
+
   <script>
   import axios from 'axios';
-  
+  import { signUpSeller } from "@/api/signUp";
+
   export default {
     name: 'Seller',
     data() {
@@ -48,31 +49,20 @@
     },
     methods: {
       createSeller() {
-        // create a new seller object using form data
-        const newSeller = {
-          name: this.name,
-          description: this.description,
-          image: this.image,
-          address: this.address,
-          email: this.email,
-          phone: this.phone,
-          products: []
-        };
-  
-        // send POST request to API to create new seller
-        axios.post('/api/sellers', newSeller)
-          .then(response => {
-            // navigate to newly created seller page
-            this.$router.push({ name: 'SellerPage', params: { id: response.data.id } });
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        if (this.phone.length !== 10 && !this.phone.match(/\d{3}-\d{3}-\d{4}/)) {
+          alert('Phone number must be 10 digits long or in the format 418-123-1234');
+          return;
+        }
+        if (this.phone.length === 10) {
+          this.phone = this.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+        }
+        console.log(this.phone);
+        signUpSeller(this.name, this.description, this.address, this.email, this.phone)
       }
     }
   }
   </script>
-  
+
   <style scoped>
   .seller-form {
     max-width: 960px;
@@ -82,23 +72,23 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
   }
-  
+
   .form-heading {
     font-size: 2rem;
     margin-top: 0;
     color: #333;
   }
-  
+
   .form-group {
     margin-bottom: 20px;
   }
-  
+
   label {
     display: block;
     margin-bottom: 5px;
     color: #555;
   }
-  
+
   input[type="text"],
   input[type="tel"],
   input[type="email"],
@@ -109,7 +99,7 @@
     font-size: 1.2rem;
     color: #555;
   }
-  
+
   button[type="submit"] {
     background-color: #4CAF50;
     color: white;
@@ -120,19 +110,18 @@
     border-radius: 4px;
     transition: all 0.3s ease-in-out;
   }
-  
+
   button[type="submit"]:hover {
     background-color: #3e8e41;
   }
-  
+
   button[type="submit"]:disabled {
     background-color: #ddd;
     color: #666;
     cursor: not-allowed;
   }
-  
+
   button[type="submit"]:disabled:hover {
     background-color: #ddd;
   }
   </style>
-  
