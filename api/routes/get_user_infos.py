@@ -1,24 +1,26 @@
-from flask import request, session, jsonify
-
+from flask import request, session, jsonify, Response
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from exceptions.invalidParameterException import InvalidParameterException
 from infrastructure.database.database import Database
 from infrastructure.database.user_database import UserDatabase
 from . import get_user_infos_bp
 
 
-@get_user_infos_bp.route("/user_infos/<user_id>", methods=["GET"])
-def get_user_infos(user_id):
+@get_user_infos_bp.route("/user_infos", methods=["GET"])
+@jwt_required()
+def get_user_infos() -> (Response, int):
+    user_id: int = get_jwt_identity()
     user_database: UserDatabase = UserDatabase()
 
-    customer = user_database.get_user("customers", user_id)
+    customer: tuple = user_database.get_user("customers", user_id)
     if customer is not None:
         return jsonify(customer), 200
 
-    vendor = user_database.get_user("vendors", user_id)
-    if vendor is not None:
-        return jsonify(vendor), 200
+    seller: tuple = user_database.get_user("sellers", user_id)
+    if seller is not None:
+        return jsonify(seller), 200
 
-    admin = user_database.get_user("admins", user_id)
+    admin: tuple = user_database.get_user("admins", user_id)
     if admin is not None:
         return jsonify(admin), 200
 

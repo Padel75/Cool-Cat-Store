@@ -4,3 +4,4 @@ mysql-connector-python==8.0.32
 black==23.3.0
 selenium==4.8.3
 pandas==2.0.0
+Flask-JWT-Extended==4.4.4

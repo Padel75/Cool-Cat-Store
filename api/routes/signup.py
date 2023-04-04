@@ -1,4 +1,7 @@
-from flask import request, jsonify
+from flask import request, jsonify, Response
+import secrets
+from domain.models.customer import Customer
+from domain.models.seller import Seller
 from . import signup_bp
 from domain.factories.user_factory import UserFactory
 from infrastructure.database.user_database import UserDatabase
@@ -6,7 +9,7 @@ from exceptions.missingParameterException import MissingParameterException
 
 
 @signup_bp.route("/signup/customer", methods=["POST"])
-def signup_customer():
+def signup_customer() -> (Response, int):
     signup_infos = request.get_json()
 
     for key in [
@@ -31,18 +34,21 @@ def signup_customer():
         "email": signup_infos["email"],
     }
 
-    user_factory = UserFactory()
-    customer = user_factory.create_customer(customer_infos)
-    database = UserDatabase()
-    user_id = database.create_customer(customer)
+    user_factory: UserFactory = UserFactory()
+    customer: Customer = user_factory.create_customer(customer_infos)
+    database: UserDatabase = UserDatabase()
+    user_id: int = secrets.randbits(16)
+    while database.get_user("humans", user_id) is not None:
+        user_id = secrets.randbits(16)
+    database.create_customer(customer, user_id)
 
-    response = {"user_id": user_id}
+    response: dict[str, int] = {"user_id": user_id}
 
     return jsonify(response), 201
 
 
-@signup_bp.route("/signup/vendor", methods=["POST"])
-def signup_vendor():
+@signup_bp.route("/signup/seller", methods=["POST"])
+def signup_seller() -> (Response, int):
     signup_infos = request.get_json()
 
     for key in [
@@ -57,7 +63,7 @@ def signup_vendor():
         if key not in signup_infos:
             raise MissingParameterException(f"{key} est manquant")
 
-    vendor_infos = {
+    seller_infos = {
         "username": signup_infos["username"],
         "password": signup_infos["password"],
         "name": signup_infos["name"],
@@ -67,11 +73,14 @@ def signup_vendor():
         "email": signup_infos["email"],
     }
 
-    user_factory = UserFactory()
-    vendor = user_factory.create_vendor(vendor_infos)
-    database = UserDatabase()
-    user_id = database.create_vendor(vendor)
+    user_factory: UserFactory = UserFactory()
+    seller: Seller = user_factory.create_seller(seller_infos)
+    database: UserDatabase = UserDatabase()
+    user_id: int = secrets.randbits(16)
+    while database.get_user("humans", user_id) is not None:
+        user_id = secrets.randbits(16)
+    database.create_seller(seller, user_id)
 
-    response = {"user_id": user_id}
+    response: dict[str, int] = {"user_id": user_id}
 
     return jsonify(response), 201
