@@ -1,5 +1,3 @@
-from typing import Any
-
 import mysql.connector
 from mysql.connector.cursor import MySQLCursor
 
@@ -10,7 +8,7 @@ from exceptions.invalidParameterException import InvalidParameterException
 
 
 class UserDatabase(Database):
-    def create_customer(self, customer: Customer) -> int:
+    def create_customer(self, customer: Customer, user_id) -> None:
         first_name: str = customer.get_first_name()
         last_name: str = customer.get_last_name()
         username: str = customer.get_username()
@@ -19,15 +17,15 @@ class UserDatabase(Database):
         phone_number: str = customer.get_phone_number()
         email: str = customer.get_email()
 
-        human_id: int = self.__add_human(username, password)
-        user_id: int = self.__add_customer(
-            first_name, last_name, address, phone_number, email, human_id
+        self.__add_human(username, password, user_id)
+        self.__add_customer(
+            first_name, last_name, address, phone_number, email, user_id
         )
         self.__add_cart(user_id)
 
-        return user_id
+        return
 
-    def create_seller(self, seller: Seller) -> int:
+    def create_seller(self, seller: Seller, user_id: int) -> None:
         name: str = seller.get_name()
         description: str = seller.get_description()
         username: str = seller.get_username()
@@ -36,11 +34,9 @@ class UserDatabase(Database):
         phone_number: str = seller.get_phone_number()
         email: str = seller.get_email()
 
-        human_id: int = self.__add_human(username, password)
-        user_id: int = self.__add_seller(
-            name, description, address, phone_number, email, human_id
-        )
-        return user_id
+        self.__add_human(username, password, user_id)
+        self.__add_seller(name, description, address, phone_number, email, user_id)
+        return
 
     def get_user_password(self, username: str) -> str | None:
         query: str = "SELECT password FROM humans WHERE username = %s"
@@ -72,11 +68,11 @@ class UserDatabase(Database):
 
         return user
 
-    def __add_human(self, username: str, password: str) -> int:
-        query: str = "INSERT INTO humans (username, password) VALUES (%s, %s)"
-        values: tuple = (username, password)
-
-        return self.insert_query(query, values)
+    def __add_human(self, username: str, password: str, user_id: int) -> None:
+        query: str = "INSERT INTO humans (id, username, password) VALUES (%s, %s, %s)"
+        values: tuple = (user_id, username, password)
+        self.insert_query(query, values)
+        return
 
     def __add_customer(
         self,
@@ -86,14 +82,14 @@ class UserDatabase(Database):
         phone_number: str,
         email: str,
         human_id: int,
-    ) -> int:
+    ) -> None:
         query: str = (
             "INSERT INTO customers (first_name, last_name, address, phone_number, email, id) "
             "VALUES (%s, %s, %s, %s, %s, %s)"
         )
         values: tuple = (first_name, last_name, address, phone_number, email, human_id)
-
-        return self.__insert_user(query, values, human_id)
+        self.__insert_user(query, values, human_id)
+        return
 
     def __add_seller(
         self,
@@ -103,18 +99,18 @@ class UserDatabase(Database):
         phone_number: str,
         email: str,
         human_id: int,
-    ) -> int:
+    ) -> None:
         query: str = (
             "INSERT INTO sellers (name, description, address, phone_number, email, id) "
             "VALUES (%s, %s, %s, %s, %s, %s)"
         )
         values: tuple = (name, description, address, phone_number, email, human_id)
+        self.__insert_user(query, values, human_id)
+        return
 
-        return self.__insert_user(query, values, human_id)
-
-    def __insert_user(self, query: str, values: tuple, human_id: int) -> int:
+    def __insert_user(self, query: str, values: tuple, human_id: int) -> None:
         try:
-            user_id: int = self.insert_query(query, values)
+            self.insert_query(query, values)
         except mysql.connector.Error as err:
             self.__delete_human(human_id)
             if "phone_number_invalid" in str(err):
@@ -124,7 +120,7 @@ class UserDatabase(Database):
             elif "email_invalid" in str(err):
                 raise InvalidParameterException("Email est invalide")
             raise InvalidParameterException(err)
-        return user_id
+        return
 
     def __delete_human(self, human_id: int) -> None:
         cursor: MySQLCursor = self.connection.cursor()

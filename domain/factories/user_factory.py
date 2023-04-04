@@ -40,7 +40,7 @@ class UserFactory:
 
         seller: Seller = Seller(
             username,
-            str(encrypted_password),
+            encrypted_password,
             name,
             description,
             address,

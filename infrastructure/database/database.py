@@ -21,7 +21,6 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
-            database=Config.MYSQL_DB,
             port=Config.MYSQL_PORT,
         )
         cursor: MySQLCursor = connection.cursor(dictionary=True)

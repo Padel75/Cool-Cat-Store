@@ -1,5 +1,5 @@
-from flask import request, session, jsonify, Response
-
+from flask import request, jsonify, Response
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from domain.models.product import Product
 from . import sell_bp
 from domain.factories.product_factory import ProductFactory
@@ -9,19 +9,19 @@ from exceptions.missingParameterException import MissingParameterException
 from exceptions.invalidParameterException import InvalidParameterException
 
 
-@sell_bp.route("/sell/<seller_id>", methods=["POST"])
-def sell(seller_id: str) -> (Response, int):
-    seller_id = int(seller_id)
-    sell_infos = request.get_json()
+@sell_bp.route("/sell", methods=["POST"])
+@jwt_required()
+def sell() -> (Response, int):
+    seller_id: int = get_jwt_identity()
+    sell_infos: dict = request.get_json()
 
     for key in ["name", "description", "price", "category_id"]:
         if key not in sell_infos:
             raise MissingParameterException(f"{key} est manquant")
 
     __validate_seller_id(seller_id)
-    __validate_seller_is_logged_in(seller_id)
 
-    product_infos = {
+    product_infos: dict[str, str | int] = {
         "name": sell_infos["name"],
         "description": sell_infos["description"],
         "price": sell_infos["price"],
@@ -45,12 +45,4 @@ def __validate_seller_id(seller_id: int) -> None:
 
     if seller is None:
         raise InvalidParameterException("Le ID du vendeur est invalide")
-    return
-
-
-def __validate_seller_is_logged_in(seller_id: int) -> None:
-    if session.get("id") != seller_id:
-        raise InvalidParameterException(
-            "Vous devez vous connecter pour vendre un produit"
-        )
     return

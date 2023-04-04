@@ -5,7 +5,7 @@ class Customer(User):
     def __init__(
         self,
         username: str,
-        password: str,
+        password: bytes,
         first_name: str,
         last_name: str,
         address: str,
