@@ -1,0 +1,349 @@
+{
+    "items": [
+        {
+            "name": "Une biere!",
+            "id": "53ec122d27aafe77d8c37b8",
+            "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
+            "tel": "(418) 522-4373",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    -71.2180951,
+                    46.8178912
+                ]
+            },
+            "opening_hours": {
+                "vendor 1": "near",
+                "vendor 2": "far",
+                "vendor 3": "far far away"
+            },
+            "pictures": [
+                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1600",
+                "https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1600",
+                "https://images.pexels.com/photos/1058277/pexels-photo-1058277.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            ],
+            "genres": [
+                "wiskey",
+                "strong",
+                "local product"
+            ],
+            "price_range": 3,
+            "rating": 4.2
+        },
+        {
+            "name": "Chez Bernie",
+            "id": "53ec122d27aafe77d8c37b7",
+            "address": "5601 Rue Papineau, Lac-Mégantic, QC G6B 0C8",
+            "tel": "(819) 583-4433",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    45.57575628979598,
+                    -70.87980606245787
+                ]
+            },
+            "opening_hours": {
+                "monday": "8h-24h",
+                "tuesday": "8h-24h",
+                "wednesday": "8h-24h",
+                "thursday": "8h-24h",
+                "friday": "8h-24h",
+                "saturday": "8h-24h",
+                "sunday": "8h-24h"
+            },
+            "pictures": [
+                "https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1600",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "casual",
+                "pizza",
+                "fast food"
+            ],
+            "price_range": 2,
+            "rating": 4.1
+        },
+        {
+            "name": "Il Castelo",
+            "id": "53ec122d27aafe77d8c37b6",
+            "address": "1175 Rue King O, Sherbrooke, QC J1H 1S6",
+            "tel": "(819) 823-7001",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    45.399021814041646,
+                    -71.90677524248358
+                ]
+            },
+            "opening_hours": {
+                "monday": "16h-21h",
+                "tuesday": "16h-21h",
+                "wednesday": "16h-21h",
+                "thursday": "16h-21h",
+                "friday": "16h-21h",
+                "saturday": "16h-21h",
+                "sunday": "16h-21h"
+            },
+            "pictures": [
+                "https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1600",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "pizza",
+                "italian",
+                "pasta"
+            ],
+            "price_range": 4,
+            "rating": 4.8
+        },
+        {
+            "name": "Chez Raul",
+            "id": "53ec122d27adfe77dec37b5",
+            "address": "210 Rue Saint-Hubert, Granby, Quebec J2G 5M8",
+            "tel": "(450) 378-3448",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    45.40804606184783,
+                    -72.73082114107618
+                ]
+            },
+            "opening_hours": {
+                "monday": "10h-22h",
+                "tuesday": "10h-22h",
+                "wednesday": "10h-22h",
+                "thursday": "10h-22h",
+                "friday": "10h-22h",
+                "saturday": "10h-22h",
+                "sunday": "10h-22h"
+            },
+            "pictures": [
+                "https://images.pexels.com/photos/1058277/pexels-photo-1058277.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "casual",
+                "asian",
+                "bring your own wine",
+                "thai"
+            ],
+            "price_range": 3,
+            "rating": 3.9
+        },
+        {
+            "name": "St Hubert",
+            "id": "53ec122d27aafe77d8c37b4",
+            "address": "5685 Chem. de la Côte des Neiges, Montréal, QC H3T 1Y8",
+            "tel": "(514) 508-4111",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    45.498772509138504,
+                    -73.6271963736822
+                ]
+            },
+            "opening_hours": {
+                "monday": "12h-13h",
+                "tuesday": "12h-24h",
+                "wednesday": "12h-24h",
+                "thursday": "12h-24h",
+                "friday": "12h-24h",
+                "saturday": "12h-24h",
+                "sunday": "12h-24h"
+            },
+            "pictures": [
+                "https://dynl.mktgcdn.com/p/nSFXFkGUeEVk5pNK7gO8tevbjNtECwez46TG0Ypv4w0/800x800.jpg",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "fast food",
+                "chicken",
+                "casual"
+            ],
+            "price_range": 1,
+            "rating": 3.2
+        },
+        {
+            "name": "Pizza Pizza",
+            "id": "53ec122d27aafe77d8c8837b3",
+            "address": "2660 Ch Ste-Foy, Québec, QC G1V 1V2",
+            "tel": "(418) 659-5555",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    46.782148109171324,
+                    -71.29708226678517
+                ]
+            },
+            "opening_hours": {
+                "monday": "10h-24h",
+                "tuesday": "10h-24h",
+                "wednesday": "10h-24h",
+                "thursday": "10h-24h",
+                "friday": "10h-24h",
+                "saturday": "10h-24h",
+                "sunday": "10h-24h"
+            },
+            "pictures": [
+                "https://brocku.ca/brock-news/wp-content/uploads/2019/01/Pizza-Pizza-RS-1600x1200.jpg?x70330",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "fast food",
+                "pizza"
+            ],
+            "price_range": 2,
+            "rating": 3.6
+        },
+        {
+            "name": "Madame Chose",
+            "id": "53ec122d27aafe77d8c37b2",
+            "address": "4520 Bd des Récollets, Trois-Rivières, QC G9A 4N2",
+            "tel": "(819) 370-1099",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    46.327310949246005,
+                    -72.56670450268508
+                ]
+            },
+            "opening_hours": {
+                "monday": "12h-13h",
+                "tuesday": "12h-24h",
+                "wednesday": "12h-24h",
+                "thursday": "12h-24h",
+                "friday": "12h-24h",
+                "saturday": "12h-24h",
+                "sunday": "12h-24h"
+            },
+            "pictures": [
+                "https://www.quebec-cite.com/sites/otq/files/styles/gallery_desktop/public/simpleview/1_1-7_5AA1932E-2672-4EC9-9CA674F115799245_15a6748f-5beb-4bb0-b4c50794bb2b7c19.jpg?itok=51B_12Dc",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "vegan",
+                "bring your own wine"
+            ],
+            "price_range": 3,
+            "rating": 2.7
+        },
+        {
+            "name": "Chez Vegan",
+            "id": "53ec122d27aafe77d8c37b1",
+            "address": "680 Bd du Séminaire N, Saint-Jean-sur-Richelieu, QC J3B 5M4",
+            "tel": "(450) 348-2275",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    45.3217760746134,
+                    -73.2644413315119
+                ]
+            },
+            "opening_hours": {
+                "monday": "12h-13h",
+                "tuesday": "12h-24h",
+                "wednesday": "12h-24h",
+                "thursday": "12h-24h",
+                "friday": "12h-24h",
+                "saturday": "12h-24h",
+                "sunday": "12h-24h"
+            },
+            "pictures": [
+                "https://images.pexels.com/photos/2253643/pexels-photo-2253643.jpeg?auto=compress&cs=tinysrgb&w=1600",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "vegan",
+                "cafe"
+            ],
+            "price_range": 4,
+            "rating": 3.8
+        },
+        {
+            "name": "Fun Resto",
+            "id": "53ec122d27aafe77d8c37b9",
+            "address": "1845 Bd Lemire, Drummondville, QC J2C 5A6",
+            "tel": "(819) 850-8221",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    45.868629719014784,
+                    -72.50684455611776
+                ]
+            },
+            "opening_hours": {
+                "monday": "12h-13h",
+                "tuesday": "12h-24h",
+                "wednesday": "12h-24h",
+                "thursday": "12h-24h",
+                "friday": "12h-24h",
+                "saturday": "12h-24h",
+                "sunday": "12h-24h"
+            },
+            "pictures": [
+                "https://images.pexels.com/photos/1267315/pexels-photo-1267315.jpeg?auto=compress&cs=tinysrgb&w=1600",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "casual",
+                "cafe",
+                "fast food"
+            ],
+            "price_range": 2,
+            "rating": 4.4
+        },
+        {
+            "name": "Cafe Origine",
+            "id": "53ec122d27aafe77d8c37b0",
+            "address": "101 Rue de l'Aqueduc, Victoriaville, QC G6P 1M2",
+            "tel": "(819) 752-6821",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    -71.2180951,
+                    46.8178912
+                ]
+            },
+            "opening_hours": {
+                "monday": "5h-20h",
+                "tuesday": "5h-20h",
+                "wednesday": "5h-20h",
+                "thursday": "5h-20h",
+                "friday": "5h-20h",
+                "saturday": "5h-20h",
+                "sunday": "5h-20h"
+            },
+            "pictures": [
+                "https://images.pexels.com/photos/1402407/pexels-photo-1402407.jpeg?auto=compress&cs=tinysrgb&w=1600",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "casual",
+                "cafe",
+                "fast food"
+            ],
+            "price_range": 3,
+            "rating": 4.8
+        }
+    ],
+    "total": 10
+}

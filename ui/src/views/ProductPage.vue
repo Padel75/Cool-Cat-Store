@@ -1,0 +1,109 @@
+<template>
+  <div class="product-page">
+    <div class="product-header">
+      <h1 class="product-name">{{ product.name }}</h1>
+      <span class="product-price">{{ product.price }} CAD</span>
+    </div>
+    <div class="product-body">
+      <img :src="product.image" class="product-image" alt="Product Image" />
+      <div class="product-details">
+        <p class="product-category">{{ product.category }}</p>
+        <p class="product-description">{{ product.description }}</p>
+        <router-link :to="{ name: 'Seller', params: { id: product.sellerId } }">
+          <p class="product-seller">Sold by <span class="product-seller-name">{{ product.sellerName }}</span></p>
+        </router-link>
+      </div>
+    </div>
+    <div class="product-footer">
+      <button class="add-to-cart-button">Add to Cart</button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ProductPage',
+  props: {
+    product: {
+      type: Object,
+      required: true
+    }
+  }
+};
+</script>
+
+<style scoped>
+.product-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.product-name {
+  font-size: 2rem;
+  margin-top: 0;
+  color: #333;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.product-details {
+  margin-top: 20px;
+}
+
+.product-category,
+.product-description {
+  margin: 0;
+  color: #555;
+}
+
+.product-seller {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #777;
+}
+
+.product-seller-name {
+  font-weight: bold;
+  color: #000;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.add-to-cart-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+}
+
+.add-to-cart-button:hover {
+  background-color: #3e8e41;
+}
+</style>
