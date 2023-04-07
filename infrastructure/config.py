@@ -5,4 +5,5 @@ class Config:
     MYSQL_PASSWORD: str = 'MDP'
     MYSQL_DB: str = 'GLO2005_TP'
     MYSQL_PORT: int = 1433
-    DATABASE_COMMANDS_FILE: str = '../infrastructure/commandes.sql'
+    DATABASE_COMMANDS_FILE: str = 'infrastructure/commandes.sql'
+    TOKEN_DB: str = 'GLO2005_TP_TOKENS'
