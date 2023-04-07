@@ -11,8 +11,8 @@
         <input class="form-input" type="text" id="category" v-model="product.category" required>
       </div>
       <div class="form-group">
-        <label class="form-label" for="description">Description:</label>
-        <textarea class="form-input" id="description" v-model="product.description" required></textarea>
+        <label class="form-label" for="size">Size:</label>
+        <textarea class="form-input" id="size" v-model="product.size" required></textarea>
       </div>
       <div class="form-group">
         <label class="form-label" for="price">Price:</label>
@@ -43,7 +43,7 @@ export default {
       product: {
         name: '',
         category: '',
-        description: '',
+        size: '',
         price: null,
         image: '',
         sellerId: null,
@@ -59,7 +59,7 @@ export default {
       this.product = {
         name: '',
         category: '',
-        description: '',
+        size: '',
         price: null,
         image: '',
         sellerId: null,

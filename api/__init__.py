@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from .token_manager import TokenManager
 from exceptions import errors_bp
+from flask_cors import CORS
 from api.routes import (
     login_bp,
     signup_bp,
@@ -20,6 +21,7 @@ Database.init_db()
 app: Flask = Flask(__name__)
 token_manager: TokenManager = TokenManager(app)
 app.config["TOKEN_MANAGER"] = token_manager
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.register_blueprint(errors_bp)
 app.register_blueprint(login_bp)
