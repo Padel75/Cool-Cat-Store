@@ -8,12 +8,13 @@ class ProductDatabase(Database):
     def create_product(self, product: Product) -> int:
         name: str = product.get_name()
         description: str = product.get_description()
+        image_src: str = product.get_image_src()
         price: float = product.get_price()
         category_id: int = product.get_category_id()
         seller_id: int = product.get_seller_id()
 
         product_id: int = self.__add_product(
-            name, description, price, category_id, seller_id
+            name, description, image_src, price, category_id, seller_id
         )
 
         return product_id
@@ -50,15 +51,16 @@ class ProductDatabase(Database):
         self,
         name: str,
         description: str,
+        image_src: str,
         price: float,
         category_id: int,
         seller_id: int,
     ) -> int:
         query: str = (
-            "INSERT INTO products (name, description, price, category_id) "
-            "VALUES (%s, %s, %s, %s)"
+            "INSERT INTO products (name, description, image_src, price, category_id) "
+            "VALUES (%s, %s, %s, %s, %s)"
         )
-        values: tuple = (name, description, price, category_id)
+        values: tuple = (name, description, image_src, price, category_id)
         product_id: int = self.insert_query(query, values)
 
         query: str = (
@@ -91,8 +93,9 @@ class ProductDatabase(Database):
                 "id": product[0],
                 "name": product[1],
                 "description": product[2],
-                "price": product[3],
-                "category": product[4],
+                "image_src": product[3],
+                "price": product[4],
+                "category": product[5],
             }
             product_list.append(product_dto)
 
