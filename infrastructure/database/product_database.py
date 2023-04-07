@@ -7,14 +7,14 @@ from domain.models.product import Product
 class ProductDatabase(Database):
     def create_product(self, product: Product) -> int:
         name: str = product.get_name()
-        description: str = product.get_description()
+        size: str = product.get_size()
         image_src: str = product.get_image_src()
         price: float = product.get_price()
-        category_id: int = product.get_category_id()
+        category: str = product.get_category()
         seller_id: int = product.get_seller_id()
 
         product_id: int = self.__add_product(
-            name, description, image_src, price, category_id, seller_id
+            name, size, image_src, price, category, seller_id
         )
 
         return product_id
@@ -41,26 +41,27 @@ class ProductDatabase(Database):
         product_dto: dict[str, Any] = {
             "id": product[0],
             "name": product[1],
-            "description": product[2],
-            "price": product[3],
-            "category": product[4],
+            "size": product[2],
+            "image_src": product[3],
+            "price": product[4],
+            "category": product[5],
         }
         return product_dto
 
     def __add_product(
         self,
         name: str,
-        description: str,
+        size: str,
         image_src: str,
         price: float,
-        category_id: int,
+        category: str,
         seller_id: int,
     ) -> int:
         query: str = (
-            "INSERT INTO products (name, description, image_src, price, category_id) "
+            "INSERT INTO products (name, size, image_src, price, category_id) "
             "VALUES (%s, %s, %s, %s, %s)"
         )
-        values: tuple = (name, description, image_src, price, category_id)
+        values: tuple = (name, size, image_src, price, category)
         product_id: int = self.insert_query(query, values)
 
         query: str = (
@@ -92,7 +93,7 @@ class ProductDatabase(Database):
             product_dto: dict[str, Any] = {
                 "id": product[0],
                 "name": product[1],
-                "description": product[2],
+                "size": product[2],
                 "image_src": product[3],
                 "price": product[4],
                 "category": product[5],
