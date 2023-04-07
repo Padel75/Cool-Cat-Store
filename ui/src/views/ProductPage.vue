@@ -8,7 +8,7 @@
       <img :src="product.image" class="product-image" alt="Product Image" />
       <div class="product-details">
         <p class="product-category">{{ product.category }}</p>
-        <p class="product-description">{{ product.description }}</p>
+        <p class="product-size">{{ product.size }}</p>
         <router-link :to="{ name: 'Seller', params: { id: product.sellerId } }">
           <p class="product-seller">Sold by <span class="product-seller-name">{{ product.sellerName }}</span></p>
         </router-link>
@@ -66,7 +66,7 @@ export default {
 }
 
 .product-category,
-.product-description {
+.product-size {
   margin: 0;
   color: #555;
 }
