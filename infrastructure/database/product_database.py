@@ -1,7 +1,6 @@
 from typing import Dict, Any
 
 from infrastructure.database.database import Database
-from infrastructure.database.user_database import UserDatabase
 from domain.models.product import Product
 
 
@@ -9,12 +8,13 @@ class ProductDatabase(Database):
     def create_product(self, product: Product) -> int:
         name: str = product.get_name()
         size: str = product.get_size()
+        image_src: str = product.get_image_src()
         price: float = product.get_price()
-        category: int = product.get_category()
+        category: str = product.get_category()
         seller_id: int = product.get_seller_id()
 
         product_id: int = self.__add_product(
-            name, size, price, category, seller_id
+            name, size, image_src, price, category, seller_id
         )
 
         return product_id
@@ -42,8 +42,9 @@ class ProductDatabase(Database):
             "id": product[0],
             "name": product[1],
             "size": product[2],
-            "price": product[3],
-            "category": product[4],
+            "image_src": product[3],
+            "price": product[4],
+            "category": product[5],
         }
         return product_dto
 
@@ -51,15 +52,16 @@ class ProductDatabase(Database):
         self,
         name: str,
         size: str,
+        image_src: str,
         price: float,
-        category: int,
+        category: str,
         seller_id: int,
     ) -> int:
         query: str = (
-            "INSERT INTO products (name, size, price, category) "
-            "VALUES (%s, %s, %s, %s)"
+            "INSERT INTO products (name, size, image_src, price, category_id) "
+            "VALUES (%s, %s, %s, %s, %s)"
         )
-        values: tuple = (name, size, price, category)
+        values: tuple = (name, size, image_src, price, category)
         product_id: int = self.insert_query(query, values)
 
         query: str = (
@@ -78,7 +80,7 @@ class ProductDatabase(Database):
         return product_list
 
     def get_products_filtered(self, search_filter: str) -> list:
-        query: str = f"SELECT * FROM products WHERE name LIKE %{search_filter}% OR size LIKE %{search_filter}%"
+        query: str = f"SELECT * FROM products WHERE name LIKE %{search_filter}% OR description LIKE %{search_filter}%"
         product_list: list = self.__create_products_dto(query)
 
         return product_list
@@ -86,19 +88,15 @@ class ProductDatabase(Database):
     def __create_products_dto(self, query: str) -> list:
         products: list = self.select_all_query(query)
         product_list: list = []
-        user_database: UserDatabase = UserDatabase()
 
         for product in products:
-            sellerId: int = self.get_product_seller_id(product[0])
-            sellerName: tuple = user_database.get_user("sellers", sellerId)[1]
             product_dto: dict[str, Any] = {
                 "id": product[0],
                 "name": product[1],
                 "size": product[2],
-                "price": product[3],
-                "category": product[4],
-                "sellerId": sellerId,
-                "sellerName": sellerName
+                "image_src": product[3],
+                "price": product[4],
+                "category": product[5],
             }
             product_list.append(product_dto)
 
@@ -109,13 +107,6 @@ class ProductDatabase(Database):
         products: list = self.select_all_query(query)
 
         return products
-
-    def get_product_seller_id(self, product_id: int) -> int:
-        query: str = f"SELECT seller_id FROM sellers_adds_products WHERE product_id = %s"
-        values: tuple = (product_id,)
-        seller_id: tuple = self.select_one_query(query, values)
-
-        return seller_id[0]
 
     def __get_cart_id(self, customer_id: int) -> int | None:
         query: str = "SELECT cart_id FROM customers_own_carts WHERE customer_id = %s"
