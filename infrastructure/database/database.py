@@ -11,7 +11,7 @@ class Database:
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
             database=Config.MYSQL_DB,
-            port=Config.MYSQL_PORT,
+            # port=Config.MYSQL_PORT,
         )
         self.commands_file: str = Config.DATABASE_COMMANDS_FILE
 
@@ -40,6 +40,19 @@ class Database:
 
     def insert_query(self, query: str, values: tuple) -> int:
         cursor: MySQLCursor = self.connection.cursor()
+
+        cursor.execute(query, values)
+        self.connection.commit()
+
+        return cursor.lastrowid
+
+    def insert_human_query(self, query: str, values: tuple) -> int:
+        cursor: MySQLCursor = self.connection.cursor()
+
+        cursor.execute("SELECT MAX(id) FROM humans")
+        id: int = cursor.fetchone()[0]
+
+        values = (id,) + values
 
         cursor.execute(query, values)
         self.connection.commit()
