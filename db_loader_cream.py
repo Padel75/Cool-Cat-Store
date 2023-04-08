@@ -57,3 +57,17 @@ def scrap_customers_infos():
     emails_list = []
 
     # push here in DB
+
+def scrap_sellers_infos():
+    # Data generated with https://generatedata.com/generator, saved as csv file sellers.csv
+    usernames_list = []
+    passwords_list = []
+    names_list = []
+    descriptions_list = []
+    addresses_list = []
+    phone_numbers_list = []
+    emails_list = []
+
+    # push here in DB
+
+
