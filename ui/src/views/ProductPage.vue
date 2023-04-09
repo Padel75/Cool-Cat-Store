@@ -55,7 +55,7 @@ export default {
 }
 
 .product-image {
-  max-width: 100%;
+  max-width: 200px;
   height: auto;
   margin-bottom: 20px;
   border-radius: 8px;

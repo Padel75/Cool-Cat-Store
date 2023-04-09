@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS products (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(100),
     size VARCHAR(100),
-    image_src VARCHAR(100),
+    image_src VARCHAR(200),
     price FLOAT,
     category VARCHAR(100),
     PRIMARY KEY (id));

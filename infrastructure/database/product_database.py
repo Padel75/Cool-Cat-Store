@@ -1,6 +1,7 @@
 from typing import Dict, Any
 
 from infrastructure.database.database import Database
+from infrastructure.database.user_database import UserDatabase
 from domain.models.product import Product
 
 
@@ -58,7 +59,7 @@ class ProductDatabase(Database):
         seller_id: int,
     ) -> int:
         query: str = (
-            "INSERT INTO products (name, size, image_src, price, category_id) "
+            "INSERT INTO products (name, size, image_src, price, category) "
             "VALUES (%s, %s, %s, %s, %s)"
         )
         values: tuple = (name, size, image_src, price, category)
@@ -88,15 +89,20 @@ class ProductDatabase(Database):
     def __create_products_dto(self, query: str) -> list:
         products: list = self.select_all_query(query)
         product_list: list = []
+        user_database: UserDatabase = UserDatabase()
 
         for product in products:
+            sellerId: int = self.get_product_seller_id(product[0])
+            sellerName: tuple = user_database.get_user("sellers", sellerId)[1]
             product_dto: dict[str, Any] = {
                 "id": product[0],
                 "name": product[1],
                 "size": product[2],
-                "image_src": product[3],
+                "image": product[3],
                 "price": product[4],
                 "category": product[5],
+                "sellerId": sellerId,
+                "sellerName": sellerName
             }
             product_list.append(product_dto)
 
@@ -107,6 +113,13 @@ class ProductDatabase(Database):
         products: list = self.select_all_query(query)
 
         return products
+
+    def get_product_seller_id(self, product_id: int) -> int:
+        query: str = f"SELECT seller_id FROM sellers_adds_products WHERE product_id = %s"
+        values: tuple = (product_id,)
+        seller_id: tuple = self.select_one_query(query, values)
+
+        return seller_id[0]
 
     def __get_cart_id(self, customer_id: int) -> int | None:
         query: str = "SELECT cart_id FROM customers_own_carts WHERE customer_id = %s"
