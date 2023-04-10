@@ -45,14 +45,13 @@ export default {
       if (this.searchQuery) {
         filtered = filtered.filter(product =>
           product.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          product.description.toLowerCase().includes(this.searchQuery.toLowerCase())
+          product.category.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       }
 
       return filtered;
     },
     uniqueCategories() {
-      console.log(this.products);
       const categories = this.products.map(product => product.category);
       return Array.from(new Set(categories));
     }
