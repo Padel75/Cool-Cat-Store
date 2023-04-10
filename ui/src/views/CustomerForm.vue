@@ -19,16 +19,16 @@
         <input class="form-input" type="text" id="lastName" v-model="last_name" required>
       </div>
       <div class="form-group">
+        <label for="address">Address:</label>
+        <textarea class="form-input" id="address" v-model="address" required></textarea>
+      </div>
+      <div class="form-group">
         <label for="phoneNumber">Phone Number:</label>
         <input class="form-input" type="tel" id="phoneNumber" v-model="phone_number" required>
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
         <input class="form-input" type="email" id="email" v-model="email" required>
-      </div>
-      <div class="form-group">
-        <label for="address">Address:</label>
-        <textarea class="form-input" id="address" v-model="address" required></textarea>
       </div>
       <button type="submit" @click="signUp">Create Customer</button>
     </form>
@@ -46,9 +46,9 @@ export default {
       password:"",
       first_name:"",
       last_name:"",
-      email:"",
       address:"",
-      phone_number:""
+      phone_number:"",
+      email:""
     }
   },
   methods: {
@@ -59,9 +59,10 @@ export default {
         this.password,
         this.first_name,
         this.last_name,
-        this.email,
         this.address,
-        this.phone_number
+        this.phone_number,
+        this.email
+
     );
         console.log("response");
         console.log(response);
