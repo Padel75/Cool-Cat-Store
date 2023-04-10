@@ -28,6 +28,10 @@ export default {
       type: Object,
       required: true
     }
+  },
+  mounted() {
+    console.log("this.product");
+    console.log(this.product);
   }
 };
 </script>

@@ -3,13 +3,16 @@ import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 import CartModal from "../views/CartModal.vue";
+import {signOut} from "@/api/signout";
 import { ref } from "vue"
 const router = useRouter();
 const userStore = useUserStore();
 const showCartModal = ref(false);
-const logout = () => {
-  userStore.logout();
-  router.push("/");
+const signout = () => {
+  console.log("signedout")
+  signOut()
+  userStore.signout();
+  router.push("/login");
 };
 const isNotHome = computed(() => {
   return router.currentRoute.value.path != "/";
@@ -32,6 +35,7 @@ const isNotHome = computed(() => {
           >+ Seller</router-link
         >
         <router-link class="navbar-item" to="/customer">+ Customer</router-link>
+
         <div class="navbar-item">
           <button class="button" @click="showCartModal = true">
             <h1 class="fas fa-shopping-cart">View Cart</h1>
@@ -58,15 +62,15 @@ const isNotHome = computed(() => {
             <router-link
               v-show="userStore.isLoggedIn"
               class="button is-light"
-              to="/user"
-            >
+              to="/home"
+            > Home
               {{ userStore.username }}
             </router-link>
             <a
               class="button is-light"
               v-show="userStore.isLoggedIn"
-              @click="logout()"
-            >
+              @click="signout()"
+            > Sign out
             </a>
           </div>
         </div>

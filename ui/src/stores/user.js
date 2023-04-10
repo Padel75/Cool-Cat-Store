@@ -5,13 +5,12 @@ export const useUserStore = defineStore({
   state: () => ({
     isLoggedIn: false,
     username: "username",
-    role: ["fav1", "fav2", "fav3"],
   }),
   actions: {
     login() {
       this.isLoggedIn = true;
     },
-    logout() {
+    signout() {
       this.isLoggedIn = false;
     },
   },

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "@/views/Home";
 import CustomerForm from "@/views/CustomerForm";
 import ProductForm from "@/views/ProductForm";
@@ -26,6 +26,7 @@ const routes = [
     path: "/product/:id",
     name: "Product",
     component: ProductPage,
+    props: true
   },
   {
     path: "/signup/seller",
@@ -51,6 +52,6 @@ const routes = [
 ];
 
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });

@@ -45,7 +45,8 @@
 import { logIn } from "../api/login"
 import { useRouter } from "vue-router";
 const router = useRouter();
-
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 
 export default {
   name: 'LogIn',
@@ -65,6 +66,8 @@ export default {
       console.log(response);
       if (response.status === 200) {
         this.$emit("success-login");
+        userStore.login()
+        userStore.username = this.username
         this.$router.push({ path: "/home" });
       } else {
         alert("Wrong credentials");
