@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home";
 import CustomerForm from "@/views/CustomerForm";
 import ProductForm from "@/views/ProductForm";
@@ -13,7 +13,7 @@ const routes = [
     component: Home,
   },
   {
-    path: "/customer",
+    path: "/signup/customer",
     name: "CustomerForm",
     component: CustomerForm,
   },
@@ -28,7 +28,7 @@ const routes = [
     component: ProductPage,
   },
   {
-    path: "/seller",
+    path: "/signup/seller",
     name: "SellerForm",
     component: SellerForm,
   },
@@ -39,18 +39,18 @@ const routes = [
   },
 
   {
-    path: "/log-in",
-    name: "Log-in",
-    component: () => import("@/views/Log-in"),
+    path: "/login",
+    name: "LogIn",
+    component: () => import("@/views/LogIn"),
   },
   {
-    path: "/sign-up",
-    name: "Sign-up",
-    component: () => import("@/views/Sign-up"),
+    path: "/signup",
+    name: "SignUp",
+    component: () => import("@/views/SignUp"),
   },
 ];
 
 export const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });

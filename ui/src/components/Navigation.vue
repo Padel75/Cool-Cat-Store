@@ -44,14 +44,14 @@ const isNotHome = computed(() => {
             <router-link
               v-show="!userStore.isLoggedIn"
               class="button is-light"
-              to="/log-in"
+              to="/login"
             >
               Log in
             </router-link>
             <router-link
               v-show="!userStore.isLoggedIn"
               class="button is-primary"
-              to="/sign-up"
+              to="/signup"
             >
               Sign-up
             </router-link>

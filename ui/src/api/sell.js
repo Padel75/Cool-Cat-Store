@@ -10,7 +10,7 @@ export function sellProduct(product) {
     price: product.price,
     category: product.category
   };
-  const access_token_cookie = document.cookie.split('; ').find(row => row.startsWith('access_token'));
+  const access_token_cookie = document.cookie.split('; ').find(row => row.startsWith('access-token'));
   if (access_token_cookie === undefined) {
     alert("You need to be logged in as a seller to sell a product");
   }
