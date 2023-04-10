@@ -15,7 +15,6 @@ export const logIn = async (username, password) => {
     console.log("logIn response data:")
     console.log(response.data);
     Cookies.set("access_token", response.data.access_token, { expires: date });
-
     console.log("logIn response:")
     console.log(response);
     return response;
@@ -25,12 +24,6 @@ export const logIn = async (username, password) => {
     return error.response.data;
   }
 };
-
-export const getUserInfos = () => {
-
-  return "None";
-
-}
 
 
 

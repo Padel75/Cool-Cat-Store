@@ -59,13 +59,7 @@ const isNotHome = computed(() => {
             >
               Sign-up
             </router-link>
-            <router-link
-              v-show="userStore.isLoggedIn"
-              class="button is-light"
-              to="/home"
-            > Home
-              {{ userStore.username }}
-            </router-link>
+
             <a
               class="button is-light"
               v-show="userStore.isLoggedIn"

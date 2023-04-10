@@ -16,21 +16,9 @@
 </template>
 
 <script setup>
-import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const userStore = useUserStore();
 
-let userType = "customer";
-
-const setUserType = (type) => {
-  userType = type;
-};
-
-const signUp = () => {
-  userStore.login();
-  router.push("/");
-};
 </script>
 
 <style scoped>
