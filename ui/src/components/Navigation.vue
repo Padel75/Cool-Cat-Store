@@ -25,13 +25,13 @@ const isNotHome = computed(() => {
         <router-link class="navbar-item" to="/home"
           >> Home</router-link
         >
-        <router-link class="navbar-item" to="/product"
+        <router-link class="navbar-item" to="/sell"
           >+ Product</router-link
         >
-        <router-link class="navbar-item" to="/seller"
+        <router-link class="navbar-item" to="/signup/seller"
           >+ Seller</router-link
         >
-        <router-link class="navbar-item" to="/customer">+ Customer</router-link>
+        <router-link class="navbar-item" to="/signup/customer">+ Customer</router-link>
         <div class="navbar-item">
           <button class="button" @click="showCartModal = true">
             <h1 class="fas fa-shopping-cart">View Cart</h1>
@@ -44,14 +44,14 @@ const isNotHome = computed(() => {
             <router-link
               v-show="!userStore.isLoggedIn"
               class="button is-light"
-              to="/log-in"
+              to="/login"
             >
               Log in
             </router-link>
             <router-link
               v-show="!userStore.isLoggedIn"
               class="button is-primary"
-              to="/sign-up"
+              to="/signup"
             >
               Sign-up
             </router-link>

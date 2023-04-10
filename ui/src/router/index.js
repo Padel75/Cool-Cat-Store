@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "@/views/Home";
-import CustomerForm from "@/views/CustomerForm";
-import ProductForm from "@/views/ProductForm";
 import ProductPage from "@/views/ProductPage";
-import SellerForm from "@/views/SellerForm";
+import LogIn from "@/views/LogIn.vue";
+import SignUpCustomer from "@/views/SignUpCustomer.vue";
+import SignUpSeller from "@/views/SignUpSeller";
 import SellerPage from "@/views/SellerPage";
 
 const routes = [
@@ -13,14 +13,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/customer",
-    name: "CustomerForm",
-    component: CustomerForm,
-  },
-  {
-    path: "/product",
-    name: "ProductForm",
-    component: ProductForm,
+    path: "/signup/customer",
+    name: "SignUpCustomer",
+    component: SignUpCustomer,
   },
   {
     path: "/product/:id",
@@ -28,25 +23,25 @@ const routes = [
     component: ProductPage,
   },
   {
-    path: "/seller",
-    name: "SellerForm",
-    component: SellerForm,
+    path: "/signup/seller",
+    name: "SignUpSeller",
+    component: SignUpSeller,
   },
   {
-    path: "/seller/:id",
+    path: "/seller", //seller/:id removed until seller page aviable in backend
     name: "Seller",
     component: SellerPage,
   },
 
   {
-    path: "/log-in",
-    name: "Log-in",
-    component: () => import("@/views/Log-in"),
+    path: "/login",
+    name: "LogIn",
+    component: LogIn,
   },
   {
-    path: "/sign-up",
-    name: "Sign-up",
-    component: () => import("@/views/Sign-up"),
+    path: "/signup",
+    name: "SignUp",
+    component: () => import("@/views/SignUp.vue"),
   },
 ];
 

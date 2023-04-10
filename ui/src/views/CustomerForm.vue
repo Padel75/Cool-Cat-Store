@@ -1,18 +1,26 @@
 <template>
   <div class="customer-form">
     <h2 class="form-heading">Sign up as a Customer</h2>
-    <form @submit.prevent="createCustomer">
+    <form @submit.prevent="signUp">
+      <div class="form-group">
+        <label for="userName">User Name:</label>
+        <input type="text" id="userName" v-model="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password :</label>
+        <input type="text" id="password" v-model="password" required>
+      </div>
       <div class="form-group">
         <label for="firstName">First Name:</label>
-        <input class="form-input" type="text" id="firstName" v-model="firstName" required>
+        <input class="form-input" type="text" id="firstName" v-model="first_name" required>
       </div>
       <div class="form-group">
         <label for="lastName">Last Name:</label>
-        <input class="form-input" type="text" id="lastName" v-model="lastName" required>
+        <input class="form-input" type="text" id="lastName" v-model="last_name" required>
       </div>
       <div class="form-group">
         <label for="phoneNumber">Phone Number:</label>
-        <input class="form-input" type="tel" id="phoneNumber" v-model="phoneNumber" required>
+        <input class="form-input" type="tel" id="phoneNumber" v-model="phone_number" required>
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
@@ -22,53 +30,51 @@
         <label for="address">Address:</label>
         <textarea class="form-input" id="address" v-model="address" required></textarea>
       </div>
-      <button class="form-button" type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'Creating Customer...' : 'Create Customer' }}</button>
+      <button type="submit" @click="signUp">Create Customer</button>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import {signUpCustomer} from "@/api/signup";
 
 export default {
   name: 'CustomerForm',
-  data() {
+  data: function() {
     return {
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-      email: '',
-      address: '',
-      isSubmitting: false
+      username:"",
+      password:"",
+      first_name:"",
+      last_name:"",
+      email:"",
+      address:"",
+      phone_number:""
     }
   },
   methods: {
-    createCustomer() {
+    signUp: async function() {
       // create a new customer object using form data
-      const newCustomer = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        phoneNumber: this.phoneNumber,
-        email: this.email,
-        address: this.address
-      };
-
-      // send POST request to API to create new customer
-      this.isSubmitting = true;
-      axios.post('/api/customers', newCustomer)
-        .then(response => {
-          // navigate to newly created customer page
-          this.$router.push({ name: 'CustomerPage', params: { id: response.data.id } });
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          this.isSubmitting = false;
-        });
+      const response = await signUpCustomer(
+        this.username,
+        this.password,
+        this.first_name,
+        this.last_name,
+        this.email,
+        this.address,
+        this.phone_number
+    );
+        console.log("response");
+        console.log(response);
+        if (response.status === 201) {
+          this.$emit("success-signup");
+           console.log("success-signup");
+          this.$router.push("/login");
+        } else {
+          this.$router.push("/signup/customer");
+        }
+      }
     }
   }
-}
 </script>
 
 <style scoped>
