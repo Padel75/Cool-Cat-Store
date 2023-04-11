@@ -15,12 +15,14 @@
       </div>
     </div>
     <div class="product-footer">
-      <button class="add-to-cart-button">Add to Cart</button>
+      <button class="add-to-cart-button" @click="addToCart">Add to Cart</button>
+      <input class="form-input" type="number" step="1" id="quantity" v-model="quantity" required>
     </div>
   </div>
 </template>
 
 <script>
+import { addToCart } from "@/api/cart";
 export default {
   name: 'ProductPage',
   props: {
@@ -29,9 +31,19 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      quantity: 1
+    };
+  },
   mounted() {
     console.log("this.product");
     console.log(this.product);
+  },
+  methods: {
+    addToCart() {
+      addToCart(this.product.id, this.quantity);
+    }
   }
 };
 </script>
@@ -90,6 +102,11 @@ export default {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
+}
+
+#quantity {
+  width: 50px;
+  margin-right: 10px;
 }
 
 .add-to-cart-button {
