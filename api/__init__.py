@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from token_manager import TokenManager
+from .token_manager import TokenManager
 from exceptions import errors_bp
 from flask_cors import CORS
 from api.routes import (
