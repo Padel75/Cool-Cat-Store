@@ -16,8 +16,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import ProductPage from './ProductPage.vue';
+import { getSeller } from '@/api/seller';
+import { getSellerProducts } from '@/api/products';
 
 export default {
   name: 'Seller',
@@ -27,55 +28,25 @@ export default {
   data() {
     return {
       seller: {
-        name: 'Dummy Seller',
-        description: 'Seller selling description.',
-        products: [
-          {
-            id: 1,
-            name: 'Product 1',
-            category: 'Category 1',
-            description: 'Description product 1',
-            price: 10.99,
-            image: 'https://via.placeholder.com/150',
-            sellerId: 1,
-            sellerName: 'Seller 1'
-          },
-          {
-            id: 2,
-            name: 'Product 2',
-            category: 'Category 2',
-            description: 'Description product 2',
-            price: 14.99,
-            image: 'https://via.placeholder.com/150',
-            sellerId: 1,
-            sellerName: 'Seller 1'
-          },
-          {
-            id: 3,
-            name: 'Product 3',
-            category: 'Category 3',
-            description: 'Description product 3',
-            price: 19.99,
-            image: 'https://via.placeholder.com/150',
-            sellerId: 1,
-            sellerName: 'Seller 1'
-          }
-        ]
+        name: '',
+        description: '',
+        products: getSellerProducts(this.$route.params.id).then(response => {
+          this.seller.products = response.data;
+      }),
       }
     };
   },
   mounted() {
-    // fetch seller data from API and update seller object
-    // example using axios library
-    /** axios
-      .get(`/api/sellers/${this.$route.params.id}`)
-      .then(response => {
-        this.seller = response.data;
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    */
+    this.fetchSeller();
+  },
+  methods: {
+    fetchSeller() {
+      getSeller(this.$route.params.id)
+        .then(response => {
+          this.seller.name = response.data.name;
+          this.seller.description = response.data.description;
+        });
+    }
   }
 };
 </script>
@@ -89,6 +60,7 @@ export default {
 
 .seller-name {
   margin-top: 0;
+  font-size: 3rem;
 }
 
 .seller-description {
@@ -112,22 +84,21 @@ export default {
 }
 
 .product-image {
-  max-width: 
+  max-width:
  150px;
     margin-right: 20px;
   }
-  
+
   .product-details {
     flex: 1;
   }
-  
+
   .product-name {
     margin-top: 0;
   }
-  
+
   .product-price {
     font-weight: bold;
     font-size: 1.2rem;
   }
   </style>
-  

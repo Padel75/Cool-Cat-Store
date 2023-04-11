@@ -2,13 +2,13 @@ from flask import jsonify, Response
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import seller_products_bp
 from infrastructure.database.product_database import ProductDatabase
+from infrastructure.database.user_database import UserDatabase
 from exceptions.invalidParameterException import InvalidParameterException
 
 
-@seller_products_bp.route("/seller/products", methods=["GET"])
-@jwt_required
-def get_seller_products() -> tuple[Response, int]:
-    seller_id: int = get_jwt_identity()
+@seller_products_bp.route("/seller/<seller_id>/products", methods=["GET"])
+def get_seller_products(seller_id: int) -> tuple[Response, int]:
+    __validate_seller_id(seller_id)
     database: ProductDatabase = ProductDatabase()
     products_id: list = database.get_seller_products_id(seller_id)
 
@@ -17,3 +17,11 @@ def get_seller_products() -> tuple[Response, int]:
     ]
 
     return jsonify(seller_products), 200
+
+def __validate_seller_id(seller_id: int) -> None:
+    database: UserDatabase = UserDatabase()
+    seller: tuple = database.get_user("sellers", seller_id)
+
+    if seller is None:
+        raise InvalidParameterException("Le ID du vendeur est invalide")
+    return

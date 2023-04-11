@@ -39,13 +39,18 @@ class ProductDatabase(Database):
         if product is None:
             return None
 
+        user_database: UserDatabase = UserDatabase()
+        sellerId: int = self.get_product_seller_id(product[0])
+        sellerName: tuple = user_database.get_user("sellers", sellerId)[1]
         product_dto: dict[str, Any] = {
             "id": product[0],
             "name": product[1],
             "size": product[2],
-            "image_src": product[3],
+            "image": product[3],
             "price": product[4],
             "category": product[5],
+            "sellerId": sellerId,
+            "sellerName": sellerName
         }
         return product_dto
 
