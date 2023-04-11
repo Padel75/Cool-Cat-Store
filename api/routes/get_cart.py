@@ -14,7 +14,8 @@ def get_cart() -> (Response, int):
 
     database: ProductDatabase = ProductDatabase()
     cart: list = database.get_cart(customer_id)
-    response: dict[str, list] = {"user_id": customer_id, "cart": []}
+    total_cost: float = database.get_cart_total_cost(customer_id)
+    response: dict[str, list] = {"user_id": customer_id, "cart": [], "total_cost": total_cost}
 
     for product in cart:
         response["cart"].append(

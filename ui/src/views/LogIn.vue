@@ -1,14 +1,3 @@
-<script setup>
-import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router";
-const router = useRouter();
-const userStore = useUserStore();
-const login = () => {
-  userStore.login();
-  router.push("/");
-};
-</script>
-
 <template>
   <section class="hero">
     <div class="hero-body has-text-centered">
@@ -22,9 +11,10 @@ const login = () => {
               <div class="control has-icons-left">
                 <input
                   class="input is-medium"
-                  type="email"
-                  placeholder="Email"
+                  type="text"
+                  placeholder="Username"
                   autofocus="true"
+                  v-model="username" require
                 />
               </div>
             </div>
@@ -34,6 +24,7 @@ const login = () => {
                   class="input is-medium"
                   type="password"
                   placeholder="Password"
+                  v-model="password" required
                 />
               </div>
             </div>
@@ -49,6 +40,42 @@ const login = () => {
     </div>
   </section>
 </template>
+
+<script>
+import { logIn } from "../api/login"
+import { useRouter } from "vue-router";
+const router = useRouter();
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
+
+export default {
+  name: 'LogIn',
+  data: function() {
+    return {
+      username:"",
+      password:"",
+    }
+  },
+  methods: {
+    login: async function() {
+      const response = await logIn(
+        this.username,
+        this.password,
+      );
+      console.log("response");
+      console.log(response);
+      if (response.status === 200) {
+        this.$emit("success-login");
+        userStore.login()
+        userStore.username = this.username
+        this.$router.push({ path: "/home" });
+      } else {
+        alert("Wrong credentials");
+      }
+    }
+  }
+}
+</script>
 
 <style scoped>
 #loginBox {

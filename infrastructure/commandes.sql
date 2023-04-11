@@ -102,6 +102,10 @@ CREATE TRIGGER update_total_cost
     FOR EACH ROW
     BEGIN
         UPDATE carts
+        SET total_cost = 0
+        WHERE id = NEW.cart_id;
+
+        UPDATE carts
         SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
         WHERE id = NEW.cart_id;
     END;

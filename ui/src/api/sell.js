@@ -30,7 +30,10 @@ export function sellProduct(product) {
   })
     .then(response => {
       if (response.status === 201) {
-        router.push({ name: "Product", params: { id: response.data.product_id } });
+        router.push({ name: "Product", params: { id: response.data.product_id },
+         props: {
+          product:  data
+      } });
       }
     })
 }

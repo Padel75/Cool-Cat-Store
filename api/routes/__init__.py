@@ -10,6 +10,7 @@ products_bp = Blueprint("products", __name__)
 products_filtered_bp = Blueprint("products_filtered", __name__)
 seller_products_bp = Blueprint("seller_products", __name__)
 get_cart_bp = Blueprint("get_cart", __name__)
+get_public_seller_bp = Blueprint("get_public_seller", __name__)
 
 from . import (
     login,
@@ -22,4 +23,5 @@ from . import (
     seller_products,
     get_user_infos,
     products_filtered,
+    get_public_seller,
 )

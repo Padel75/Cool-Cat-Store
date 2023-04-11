@@ -13,6 +13,7 @@ from api.routes import (
     products_filtered_bp,
     seller_products_bp,
     get_cart_bp,
+    get_public_seller_bp,
 )
 from infrastructure.database.database import Database
 
@@ -34,6 +35,7 @@ app.register_blueprint(products_bp)
 app.register_blueprint(seller_products_bp)
 app.register_blueprint(get_cart_bp)
 app.register_blueprint(products_filtered_bp)
+app.register_blueprint(get_public_seller_bp)
 print(app.url_map)
 
 

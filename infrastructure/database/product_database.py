@@ -26,9 +26,9 @@ class ProductDatabase(Database):
         cart_id: int = self.__get_cart_id(customer_id)
         query: str = "REPLACE INTO carts_contains_products (cart_id, product_id, quantity) VALUES (%s, %s, %s)"
         values: tuple = (cart_id, product_id, quantity)
-
         self.insert_query(query, values)
-
+        if quantity == 0:
+            self.__remove_product_from_cart(cart_id, product_id)
         return cart_id
 
     def get_product(self, product_id: int) -> dict[str, Any] | None:
@@ -39,13 +39,18 @@ class ProductDatabase(Database):
         if product is None:
             return None
 
+        user_database: UserDatabase = UserDatabase()
+        sellerId: int = self.get_product_seller_id(product[0])
+        sellerName: tuple = user_database.get_user("sellers", sellerId)[1]
         product_dto: dict[str, Any] = {
             "id": product[0],
             "name": product[1],
             "size": product[2],
-            "image_src": product[3],
+            "image": product[3],
             "price": product[4],
             "category": product[5],
+            "sellerId": sellerId,
+            "sellerName": sellerName
         }
         return product_dto
 
@@ -131,8 +136,21 @@ class ProductDatabase(Database):
 
         return cart_id[0]
 
-    def get_cart(self, cart_id: int) -> list:
-        query: str = f"SELECT product_id, quantity FROM carts_contains_products c where c.cart_id = {cart_id}"
+    def get_cart(self, customer_id: int) -> list:
+        query: str = f"SELECT product_id, quantity FROM carts_contains_products cart, customers_own_carts c" \
+                     f" where c.customer_id = {customer_id} and c.cart_id = cart.cart_id"
         cart: list = self.select_all_query(query)
 
         return cart
+
+    def get_cart_total_cost(self, customer_id: int) -> float:
+        query: str = f"SELECT total_cost FROM carts cart, customers_own_carts c" \
+                     f" where c.customer_id = %s and c.cart_id = cart.id"
+        values: tuple = (customer_id,)
+        total_cost: tuple = self.select_one_query(query, values)
+        return total_cost[0]
+
+    def __remove_product_from_cart(self, cart_id: int, product_id: int):
+        query: str = "DELETE FROM carts_contains_products WHERE cart_id = %s AND product_id = %s"
+        values: tuple = (cart_id, product_id)
+        self.insert_query(query, values)
