@@ -1,7 +1,7 @@
 <template>
     <div class="seller-form">
       <h2 class="form-heading">Sign up as a Seller</h2>
-      <form @submit.prevent="createSeller">
+      <form @submit.prevent="signUp">
         <div class="form-group">
           <label for="sellerUserName">User Name:</label>
           <input type="text" id="sellerUserName" v-model="username" required>
@@ -30,7 +30,7 @@
           <label for="sellerEmail">Email:</label>
           <input type="email" id="sellerEmail" v-model="email" required>
         </div>
-        <button type="submit" @click="signUp">Create Seller</button>
+        <button type="submit">Create Seller</button>
       </form>
     </div>
   </template>

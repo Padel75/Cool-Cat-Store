@@ -22,7 +22,8 @@ export const signOut = async () => {
     })
       .then(response => {
         if (response.status === 200) {
-          Cookies.remove("access_token" , { path: '/' }); //fonctionne pas.......
+          Cookies.remove("access_token" , { path: '/' });
+          Cookies.remove("role" , { path: '/' });
           router.push({
             name: "Login",
             params: {

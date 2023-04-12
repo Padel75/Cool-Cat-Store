@@ -30,7 +30,7 @@
         <label for="email">Email:</label>
         <input class="form-input" type="email" id="email" v-model="email" required>
       </div>
-      <button type="submit" @click="signUp">Create Customer</button>
+      <button type="submit">Create Customer</button>
     </form>
   </div>
 </template>

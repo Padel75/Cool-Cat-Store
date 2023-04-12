@@ -62,8 +62,6 @@ export default {
         this.username,
         this.password,
       );
-      console.log("response");
-      console.log(response);
       if (response.status === 200) {
         this.$emit("success-login");
         userStore.login()

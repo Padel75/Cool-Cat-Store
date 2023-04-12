@@ -36,6 +36,7 @@
   <script>
   import { getCart } from "@/api/cart";
   import { removeFromCart } from "@/api/cart";
+  import { useUserStore} from "@/stores/user";
 
   export default {
     name: "CartModal",
@@ -56,11 +57,13 @@
     },
     methods: {
       fetchCart() {
-        getCart()
-          .then((response) => {
+        const userStore = useUserStore();
+        if (userStore.isCustomer){
+          getCart().then((response) => {
             this.cartItems = response.data.cart;
             this.totalCost = response.data.total_cost;
           });
+        }
       },
       closeModal() {
         this.$emit("close");

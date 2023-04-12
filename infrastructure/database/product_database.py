@@ -41,7 +41,7 @@ class ProductDatabase(Database):
 
         user_database: UserDatabase = UserDatabase()
         sellerId: int = self.get_product_seller_id(product[0])
-        sellerName: tuple = user_database.get_user("sellers", sellerId)[1]
+        sellerName: tuple = user_database.get_user("sellers", sellerId)["name"]
         product_dto: dict[str, Any] = {
             "id": product[0],
             "name": product[1],
@@ -98,7 +98,7 @@ class ProductDatabase(Database):
 
         for product in products:
             sellerId: int = self.get_product_seller_id(product[0])
-            sellerName: tuple = user_database.get_user("sellers", sellerId)[1]
+            sellerName: tuple = user_database.get_user("sellers", sellerId)["name"]
             product_dto: dict[str, Any] = {
                 "id": product[0],
                 "name": product[1],

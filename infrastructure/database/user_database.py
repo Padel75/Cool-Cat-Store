@@ -58,7 +58,7 @@ class UserDatabase(Database):
 
         return user_id[0]
 
-    def get_user(self, type: str, user_id: int) -> tuple | None:
+    def get_user(self, type: str, user_id: int) -> dict | None:
         query: str = f"SELECT * FROM {type} WHERE id = %s"
         values: tuple = (user_id,)
         user: tuple = self.select_one_query(query, values)
@@ -66,7 +66,35 @@ class UserDatabase(Database):
         if user is None:
             return None
 
-        return user
+        user_dto: dict[str, str] = self.__get_user_dto(type, user)
+        return user_dto
+
+    def __get_user_dto(self, type: str, user: tuple) -> dict[str, str]:
+        user_dto: dict[str, str] = {}
+        if type == "customers":
+            user_dto: dict[str, str] = {
+                "id": user[0],
+                "first_name": user[1],
+                "last_name": user[2],
+                "address": user[3],
+                "phone_number": user[4],
+                "email": user[5],
+            }
+        elif type == "sellers":
+            user_dto: dict[str, str] = {
+                "id": user[0],
+                "name": user[1],
+                "description": user[2],
+                "address": user[3],
+                "phone_number": user[4],
+                "email": user[5],
+            }
+        elif type == "admins":
+            user_dto: dict[str, str] = {
+                "id": user[0],
+                "name": user[1],
+            }
+        return user_dto
 
     def __add_human(self, username: str, password: str, user_id: int) -> None:
         query: str = "INSERT INTO humans (id, username, password) VALUES (%s, %s, %s)"
@@ -148,3 +176,31 @@ class UserDatabase(Database):
         self.insert_query(query, values)
 
         return
+
+    def get_user_role(self, user_id: int) -> str | None:
+        if self.__is_admin(user_id):
+            return "admin"
+        elif self.__is_seller(user_id):
+            return "seller"
+        elif self.__is_customer(user_id):
+            return "customer"
+        else:
+            return None
+
+    def __is_admin(self, user_id: int) -> bool:
+        query: str = "SELECT id FROM admins WHERE id = %s"
+        values: tuple = (user_id,)
+        result: tuple = self.select_one_query(query, values)
+        return result is not None
+
+    def __is_seller(self, user_id: int) -> bool:
+        query: str = "SELECT id FROM sellers WHERE id = %s"
+        values: tuple = (user_id,)
+        result: tuple = self.select_one_query(query, values)
+        return result is not None
+
+    def __is_customer(self, user_id: int) -> bool:
+        query: str = "SELECT id FROM customers WHERE id = %s"
+        values: tuple = (user_id,)
+        result: tuple = self.select_one_query(query, values)
+        return result is not None
