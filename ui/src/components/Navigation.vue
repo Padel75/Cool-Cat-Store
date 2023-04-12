@@ -28,18 +28,15 @@ const isNotHome = computed(() => {
         <router-link class="navbar-item" to="/home"
           >> Home</router-link
         >
-        <router-link class="navbar-item" to="/product"
-          >+ Product</router-link
-        >
-        <router-link class="navbar-item" to="/seller"
-          >+ Seller</router-link
-        >
-        <router-link class="navbar-item" to="/customer">+ Customer</router-link>
-
-        <div class="navbar-item">
-          <button class="button" v-show="userStore.isLoggedIn" @click="showCartModal = true">
+        <div class="navbar-item" v-if="userStore.isLoggedIn && userStore.isCustomer">
+          <button class="button" @click="showCartModal = true">
             <h1 class="fas fa-shopping-cart">View Cart</h1>
           </button>
+        </div>
+        <div class="navbar-item" v-if="userStore.isLoggedIn && userStore.isSeller">
+          <router-link class="navbar-item button" to="/product">
+            <h1 class="fas fa-shopping-cart">Sell a new product</h1>
+          </router-link>
         </div>
       </div>
       <div class="navbar-end">
@@ -59,7 +56,13 @@ const isNotHome = computed(() => {
             >
               Sign-up
             </router-link>
-
+            <router-link
+              v-show="userStore.isLoggedIn"
+              class="button is-primary"
+              to="/user"
+            >
+              My Account
+            </router-link>
             <a
               class="button is-light"
               v-show="userStore.isLoggedIn"

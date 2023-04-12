@@ -5,6 +5,7 @@ import ProductForm from "@/views/ProductForm";
 import ProductPage from "@/views/ProductPage";
 import SellerForm from "@/views/SellerForm";
 import SellerPage from "@/views/SellerPage";
+import UserPage from "@/views/UserPage";
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     path: "/seller/:id",
     name: "Seller",
     component: SellerPage,
+  },
+  {
+    path: "/user",
+    name: "User",
+    component: UserPage,
   },
 
   {
