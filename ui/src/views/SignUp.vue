@@ -6,8 +6,8 @@
         <hr class="login-hr" />
         <p class="subtitle has-text-black">Please select your user type:</p>
         <div class="buttons has-addons">
-          <router-link class="navbar-item" to="/seller">Seller</router-link>
-          <router-link class="navbar-item" to="/customer">Customer</router-link>
+          <router-link class="navbar-item" to="/signup/seller">Seller</router-link>
+          <router-link class="navbar-item" to="/signup/customer">Customer</router-link>
         </div>
 
       </div>
@@ -16,21 +16,9 @@
 </template>
 
 <script setup>
-import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const userStore = useUserStore();
 
-let userType = "customer";
-
-const setUserType = (type) => {
-  userType = type;
-};
-
-const signUp = () => {
-  userStore.login();
-  router.push("/");
-};
 </script>
 
 <style scoped>

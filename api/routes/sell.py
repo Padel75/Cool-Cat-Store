@@ -15,7 +15,7 @@ def sell() -> (Response, int):
     seller_id: int = get_jwt_identity()
     sell_infos: dict = request.get_json()
 
-    for key in ["name", "size", "price", "category"]:
+    for key in ["name", "size", "image_src", "price", "category"]:
         if key not in sell_infos:
             raise MissingParameterException(f"{key} est manquant")
 
@@ -24,6 +24,7 @@ def sell() -> (Response, int):
     product_infos: dict[str, str | int] = {
         "name": sell_infos["name"],
         "size": sell_infos["size"],
+        "image_src": sell_infos["image_src"],
         "price": sell_infos["price"],
         "category": sell_infos["category"],
         "seller_id": seller_id,

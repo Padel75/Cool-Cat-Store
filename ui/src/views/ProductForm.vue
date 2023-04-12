@@ -22,20 +22,13 @@
         <label class="form-label" for="image">Image URL:</label>
         <input class="form-input" type="url" id="image" v-model="product.image" required>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="sellerId">Seller ID:</label>
-        <input class="form-input" type="text" id="sellerId" v-model="product.sellerId" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="sellerName">Seller Name:</label>
-        <input class="form-input" type="text" id="sellerName" v-model="product.sellerName" required>
-      </div>
       <button class="form-button" type="submit">Add Product</button>
     </form>
   </div>
 </template>
 
 <script>
+import { sellProduct } from '@/api/sell';
 export default {
   name: 'ProductForm',
   data() {
@@ -46,15 +39,12 @@ export default {
         size: '',
         price: null,
         image: '',
-        sellerId: null,
-        sellerName: ''
       }
     };
   },
   methods: {
     handleSubmit() {
-      // Do something with the submitted product data
-      console.log(this.product);
+      sellProduct(this.product);
       // Reset the form
       this.product = {
         name: '',

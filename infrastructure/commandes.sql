@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS products (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(100),
     size VARCHAR(100),
-    image_src VARCHAR(100),
+    image_src VARCHAR(200),
     price FLOAT,
     category VARCHAR(100),
     PRIMARY KEY (id));
@@ -101,6 +101,10 @@ CREATE TRIGGER update_total_cost
     AFTER INSERT ON carts_contains_products
     FOR EACH ROW
     BEGIN
+        UPDATE carts
+        SET total_cost = 0
+        WHERE id = NEW.cart_id;
+
         UPDATE carts
         SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
         WHERE id = NEW.cart_id;

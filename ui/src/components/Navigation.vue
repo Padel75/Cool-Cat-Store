@@ -3,13 +3,16 @@ import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 import CartModal from "../views/CartModal.vue";
+import {signOut} from "@/api/signout";
 import { ref } from "vue"
 const router = useRouter();
 const userStore = useUserStore();
 const showCartModal = ref(false);
-const logout = () => {
-  userStore.logout();
-  router.push("/");
+const signout = () => {
+  console.log("signedout")
+  signOut()
+  userStore.signout();
+  router.push("/login");
 };
 const isNotHome = computed(() => {
   return router.currentRoute.value.path != "/";
@@ -25,17 +28,15 @@ const isNotHome = computed(() => {
         <router-link class="navbar-item" to="/home"
           >> Home</router-link
         >
-        <router-link class="navbar-item" to="/product"
-          >+ Product</router-link
-        >
-        <router-link class="navbar-item" to="/seller"
-          >+ Seller</router-link
-        >
-        <router-link class="navbar-item" to="/customer">+ Customer</router-link>
-        <div class="navbar-item">
+        <div class="navbar-item" v-if="userStore.isLoggedIn && userStore.isCustomer">
           <button class="button" @click="showCartModal = true">
             <h1 class="fas fa-shopping-cart">View Cart</h1>
           </button>
+        </div>
+        <div class="navbar-item" v-if="userStore.isLoggedIn && userStore.isSeller">
+          <router-link class="navbar-item button" to="/product">
+            <h1 class="fas fa-shopping-cart">Sell a new product</h1>
+          </router-link>
         </div>
       </div>
       <div class="navbar-end">
@@ -44,29 +45,29 @@ const isNotHome = computed(() => {
             <router-link
               v-show="!userStore.isLoggedIn"
               class="button is-light"
-              to="/log-in"
+              to="/login"
             >
               Log in
             </router-link>
             <router-link
               v-show="!userStore.isLoggedIn"
               class="button is-primary"
-              to="/sign-up"
+              to="/signup"
             >
               Sign-up
             </router-link>
             <router-link
               v-show="userStore.isLoggedIn"
-              class="button is-light"
+              class="button is-primary"
               to="/user"
             >
-              {{ userStore.username }}
+              My Account
             </router-link>
             <a
               class="button is-light"
               v-show="userStore.isLoggedIn"
-              @click="logout()"
-            >
+              @click="signout()"
+            > Sign out
             </a>
           </div>
         </div>

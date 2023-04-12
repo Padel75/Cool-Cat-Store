@@ -5,6 +5,7 @@ import ProductForm from "@/views/ProductForm";
 import ProductPage from "@/views/ProductPage";
 import SellerForm from "@/views/SellerForm";
 import SellerPage from "@/views/SellerPage";
+import UserPage from "@/views/UserPage";
 
 const routes = [
   {
@@ -13,7 +14,7 @@ const routes = [
     component: Home,
   },
   {
-    path: "/customer",
+    path: "/signup/customer",
     name: "CustomerForm",
     component: CustomerForm,
   },
@@ -26,9 +27,10 @@ const routes = [
     path: "/product/:id",
     name: "Product",
     component: ProductPage,
+    props: true
   },
   {
-    path: "/seller",
+    path: "/signup/seller",
     name: "SellerForm",
     component: SellerForm,
   },
@@ -37,16 +39,21 @@ const routes = [
     name: "Seller",
     component: SellerPage,
   },
+  {
+    path: "/user",
+    name: "User",
+    component: UserPage,
+  },
 
   {
-    path: "/log-in",
-    name: "Log-in",
-    component: () => import("@/views/Log-in"),
+    path: "/login",
+    name: "LogIn",
+    component: () => import("@/views/LogIn"),
   },
   {
-    path: "/sign-up",
-    name: "Sign-up",
-    component: () => import("@/views/Sign-up"),
+    path: "/signup",
+    name: "SignUp",
+    component: () => import("@/views/SignUp"),
   },
 ];
 
