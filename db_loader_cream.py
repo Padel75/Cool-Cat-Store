@@ -250,6 +250,7 @@ class DbLoader:
     def __customer_buy_product(self):
         # TODO: add a product to the cart
         # TODO: pay for the product
+        # C'est plutot optionnel imo!
         pass
 
 
