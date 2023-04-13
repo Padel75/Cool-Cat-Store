@@ -9,6 +9,7 @@ from random import randint
 from domain.factories.product_factory import ProductFactory
 from domain.models.product import Product
 from domain.models.seller import Seller
+from infrastructure.database.database import Database
 from infrastructure.database.product_database import ProductDatabase
 from infrastructure.database.user_database import UserDatabase
 from domain.models.customer import Customer
@@ -20,10 +21,13 @@ def format_phone_number(phone_number: str) -> str:
     formatted_phone_number = formatted_phone_number.replace(")", "")
     formatted_phone_number = formatted_phone_number.replace("-", "")
     formatted_phone_number = formatted_phone_number.replace(" ", "")
+
     while len(formatted_phone_number) < 10:
         formatted_phone_number = "0" + formatted_phone_number
+
     while len(formatted_phone_number) > 10:
         formatted_phone_number = formatted_phone_number[1:]
+
     formatted_phone_number = (
         formatted_phone_number[:3]
         + "-"
@@ -35,21 +39,23 @@ def format_phone_number(phone_number: str) -> str:
 
 
 class DbLoader:
-    def loadDb(self):
+    def loadDb(self) -> None:
         self.__store_sellers_infos()
         self.__store_customers_infos()
         self.__store_products_infos()
+        self.__store_payment_systems()
+        self.__store_sellers_products()
 
-    def __scrap_products_infos(self):
+    def __scrap_products_infos(self) -> None:
         """Scrap products infos from SAQ website and save them in a csv file"""
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-        names_list = []
-        description_list = []
-        categories_list = []
-        size_list = []
-        prices_list = []
-        image_list = []
+        names_list: list = []
+        description_list: list = []
+        categories_list: list = []
+        size_list: list = []
+        prices_list: list = []
+        image_list: list = []
 
         for no_page in range(10):
             try:
@@ -106,7 +112,7 @@ class DbLoader:
             writer = csv.writer(f)
 
             for no_page in range(len(names_list)):
-                row = [
+                row: list = [
                     names_list[no_page],
                     size_list[no_page],
                     image_list[no_page],
@@ -115,24 +121,26 @@ class DbLoader:
                 ]
                 writer.writerow(row)
 
-    def __store_products_infos(self):
-        """Store products infos in DB"""
-        # Data generated with https://generatedata.com/generator, saved as csv file products.csv
+    def __store_products_infos(self) -> None:
+        """Store products infos in DB,
+        Data generated with https://generatedata.com/generator, saved as csv file products.csv
+        """
 
-        self.__scrap_products_infos()
+        # self.__scrap_products_infos()
 
-        database: ProductDatabase = ProductDatabase()
+        productDatabase: ProductDatabase = ProductDatabase()
+        database: Database = Database()
         factory: ProductFactory = ProductFactory()
 
         with open("products.csv", "r") as f:
             reader = csv.reader(f)
             for row in reader:
                 if row:
-                    name = row[0]
-                    size = row[1]
-                    image = row[2]
-                    price = row[3]
-                    category = row[4]
+                    name: str = row[0]
+                    size: str = row[1]
+                    image: str = row[2]
+                    price: str = row[3]
+                    category: str = row[4]
 
                     product_infos = {
                         "name": name,
@@ -140,16 +148,22 @@ class DbLoader:
                         "image_src": image,
                         "price": price,
                         "category": category,
-                        "seller_id": randint(1, 200),
+                        "seller_id": randint(
+                            1,
+                            database.select_one_query(
+                                "SELECT COUNT(*) FROM sellers", ()
+                            )[0],
+                        ),
                     }
 
                     product: Product = factory.create_product(product_infos)
 
-                    database.create_product(product)
+                    productDatabase.create_product(product)
 
-    def __store_customers_infos(self):
-        """Store customers infos in DB"""
-        # Data generated with https://generatedata.com/generator, saved as csv file customers.csv
+    def __store_customers_infos(self) -> None:
+        """Store customers infos in DB,
+        Data generated with https://generatedata.com/generator, saved as csv file customers.csv
+        """
 
         database: UserDatabase = UserDatabase()
         factory: UserFactory = UserFactory()
@@ -158,14 +172,14 @@ class DbLoader:
             reader = csv.reader(f)
             next(reader)
             for row in reader:
-                password = row[0]
-                name = row[1]
-                last_name = row[2]
-                address = row[3]
-                phone_number = row[4]
-                email = row[5]
+                password: str = row[0]
+                name: str = row[1]
+                last_name: str = row[2]
+                address: str = row[3]
+                phone_number: str = row[4]
+                email: str = row[5]
 
-                username = name.lower() + last_name.lower()
+                username: str = name.lower() + last_name.lower()
 
                 phone_number: str = format_phone_number(phone_number)
 
@@ -183,9 +197,10 @@ class DbLoader:
 
                 database.create_customer(customer)
 
-    def __store_sellers_infos(self):
-        """Store sellers infos in DB"""
-        # Data generated with https://generatedata.com/generator, saved as csv file sellers.csv
+    def __store_sellers_infos(self) -> None:
+        """Store sellers infos in DB,
+        Data generated with https://generatedata.com/generator, saved as csv file sellers.csv
+        """
 
         database: UserDatabase = UserDatabase()
         factory: UserFactory = UserFactory()
@@ -194,19 +209,18 @@ class DbLoader:
             reader = csv.reader(f)
             next(reader)
             for row in reader:
-                # password,name,description,address,phone,email
-                password = row[0]
-                name = row[1]
-                description = row[2]
-                address = row[3]
-                phone_number = row[4]
-                email = row[5]
+                password: str = row[0]
+                name: str = row[1]
+                description: str = row[2]
+                address: str = row[3]
+                phone_number: str = row[4]
+                email: str = row[5]
 
-                username = name.lower().replace(" ", "")
+                username: str = name.lower().replace(" ", "")
 
                 phone_number: str = format_phone_number(phone_number)
 
-                seller_infos = {
+                seller_infos: dict = {
                     "name": name,
                     "description": description,
                     "username": username,
@@ -220,11 +234,18 @@ class DbLoader:
 
                 database.create_seller(seller)
 
-    def __store_paiement_system(self):
-        pass
+    def __store_payment_systems(self) -> None:
+        database: Database = Database()
 
-    def __store_sellers_products(self):
-        pass
+        query: str = "INSERT INTO payment_systems (id, payment_type) VALUES (%s, %s)"
+
+        values: list = [
+            (1, "Credit Card"),
+            (2, "Paypal"),
+        ]
+
+        for value in values:
+            database.insert_query(query, value)
 
     def __customer_buy_product(self):
         # TODO: add a product to the cart

@@ -112,6 +112,14 @@ CREATE TRIGGER update_total_cost
         WHERE id = NEW.cart_id;
     END;
 
+CREATE TRIGGER create_cart_for_customer
+    AFTER INSERT ON customers
+    FOR EACH ROW
+    BEGIN
+        INSERT INTO carts (total_cost) VALUES (0);
+        INSERT INTO customers_own_carts (customer_id, cart_id) VALUES (NEW.id, LAST_INSERT_ID());
+    END;
+
 /*------------------------------ INSÉRER CI-DESSOUS LE CODE À SUPPRIMER AVANT LA REMISE ------------------------------*/
 
 # DROP DATABASE IF EXISTS GLO2005_TP;

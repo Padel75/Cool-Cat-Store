@@ -19,7 +19,6 @@ class UserDatabase(Database):
 
         self.__add_human(username, password)
         self.__add_customer(first_name, last_name, address, phone_number, email)
-        # self.__add_cart(user_id) # faire ca dans la bd? TODO
 
         return
 
@@ -148,19 +147,6 @@ class UserDatabase(Database):
     def __insert_human(self, values: tuple) -> None:
         query: str = "INSERT INTO humans (username, password) VALUES (%s, %s)"
         self.insert_query(query, values)
-
-    def __add_cart(self, customer_id: int) -> None:
-        query: str = "INSERT INTO carts (total_cost) VALUES (%s)"
-        values: tuple = (0,)
-        cart_id: int = self.insert_query(query, values)
-
-        query: str = (
-            "INSERT INTO customers_own_carts (customer_id, cart_id) VALUES (%s, %s)"
-        )
-        values: tuple = (customer_id, cart_id)
-        self.insert_query(query, values)
-
-        return
 
     def get_user_role(self, user_id: int) -> str | None:
         if self.__is_admin(user_id):
