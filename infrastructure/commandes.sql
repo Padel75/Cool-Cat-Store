@@ -1,7 +1,7 @@
 
 DROP DATABASE IF EXISTS GLO2005_TP;
 
-CREATE DATABASE IF NOT EXISTS GLO2005_TP;
+CREATE DATABASE GLO2005_TP;
 USE GLO2005_TP;
 
 /*------------------------------------------------ Tables des objets: ------------------------------------------------*/
@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS humans (
     username VARCHAR(100),
     password VARCHAR(100),
     PRIMARY KEY (id));
+
+ALTER TABLE humans AUTO_INCREMENT = 1;
 
 CREATE TABLE IF NOT EXISTS admins (
     id INT UNIQUE NOT NULL,

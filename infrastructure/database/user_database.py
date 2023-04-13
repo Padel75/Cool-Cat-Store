@@ -19,11 +19,11 @@ class UserDatabase(Database):
 
         self.__add_human(username, password)
         self.__add_customer(first_name, last_name, address, phone_number, email)
-        # self.__add_cart(user_id)
+        # self.__add_cart(user_id) # faire ca dans la bd? TODO
 
         return
 
-    def create_seller(self, seller: Seller, user_id: int) -> None:
+    def create_seller(self, seller: Seller) -> None:
         name: str = seller.get_name()
         description: str = seller.get_description()
         username: str = seller.get_username()
@@ -33,7 +33,7 @@ class UserDatabase(Database):
         email: str = seller.get_email()
 
         self.__add_human(username, password)
-        self.__add_seller(name, description, address, phone_number, email, user_id)
+        self.__add_seller(name, description, address, phone_number, email)
         return
 
     def get_user_password(self, username: str) -> str | None:
@@ -123,7 +123,6 @@ class UserDatabase(Database):
         address: str,
         phone_number: str,
         email: str,
-        human_id: int,
     ) -> None:
         query: str = (
             "INSERT INTO sellers (id, name, description, address, phone_number, email) "
