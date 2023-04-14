@@ -9,7 +9,7 @@ import "../styles/style.css";
 const pinia = createPinia();
 const app = createApp(App);
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "https://127.0.0.1:5000";
 
 app.use(router);
 app.use(pinia);

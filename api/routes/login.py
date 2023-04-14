@@ -1,6 +1,6 @@
 from flask import request, jsonify, Response
 import bcrypt
-from flask_jwt_extended import create_access_token, set_access_cookies
+from flask_jwt_extended import create_access_token
 from . import login_bp
 from infrastructure.database.user_database import UserDatabase
 from exceptions.missingParameterException import MissingParameterException
@@ -31,7 +31,6 @@ def login() -> (Response, int):
     role: str = database.get_user_role(user_id)
 
     response: Response = jsonify({"access_token": token, "role": role})
-    set_access_cookies(response, token)
     return response, 200
 
 
