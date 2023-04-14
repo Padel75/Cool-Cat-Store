@@ -57,6 +57,9 @@ CREATE TABLE IF NOT EXISTS carts (
 CREATE TABLE IF NOT EXISTS payment_systems (
     id INT NOT NULL AUTO_INCREMENT,
     payment_type VARCHAR(100),
+    number VARCHAR(100),
+    expiration_date VARCHAR(100),
+    ccv VARCHAR(100),
     PRIMARY KEY (id));
 
 /*----------------------------------------------- Tables des relations: ----------------------------------------------*/
@@ -83,19 +86,29 @@ CREATE TABLE IF NOT EXISTS carts_contains_products (
     FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
-CREATE TABLE IF NOT EXISTS carts_pay_with_payment_systems (
-    cart_id INT,
-    payment_system_id INT,
-    PRIMARY KEY (cart_id, payment_system_id),
-    FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (payment_system_id) REFERENCES payment_systems(id) ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS customer_use_payment_system (
+CREATE TABLE IF NOT EXISTS customer_own_payment_system (
     customer_id INT,
     payment_system_id INT,
     PRIMARY KEY (customer_id, payment_system_id),
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (payment_system_id) REFERENCES payment_systems(id) ON DELETE CASCADE ON UPDATE CASCADE);
+
+CREATE TABLE invoices (
+    id INT NOT NULL AUTO_INCREMENT,
+    customer_id INT,
+    total_cost INT,
+    date DATETIME,
+    PRIMARY KEY (id),
+    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE);
+
+CREATE TABLE invoice_contains_products (
+    invoice_id INT,
+    product_id INT,
+    quantity INT,
+    PRIMARY KEY (invoice_id, product_id),
+    FOREIGN KEY (invoice_id) REFERENCES invoices(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE);
+;
 
 /*----------------------------------------------------- Triggers -----------------------------------------------------*/
 

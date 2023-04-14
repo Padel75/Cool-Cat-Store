@@ -239,8 +239,9 @@ class DbLoader:
         query: str = "INSERT INTO payment_systems (id, payment_type) VALUES (%s, %s)"
 
         values: list = [
-            (1, "Credit Card"),
-            (2, "Paypal"),
+            (1, "VISA"),
+            (2, "MASTERCARD"),
+            (3, "AMEX"),
         ]
 
         for value in values:
