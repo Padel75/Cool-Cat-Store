@@ -28,7 +28,7 @@ def add_to_cart(product_id: str) -> (Response, int):
 
 def __validate_customer_id(user_id: int) -> None:
     database: UserDatabase = UserDatabase()
-    user: tuple = database.get_user("customers", user_id)
+    user: dict = database.get_user("customers", user_id)
     if user is None:
         raise InvalidParameterException("Le ID du client est invalide")
     return
