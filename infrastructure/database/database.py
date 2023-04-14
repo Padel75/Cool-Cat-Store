@@ -65,6 +65,20 @@ class Database:
 
         return cursor.fetchone()
 
+    def delete_query(self, query: str, values: tuple) -> None:
+        cursor = self.connection.cursor()
+        cursor.execute(query, values)
+        self.connection.commit()
+
+        return
+
+    def update_query(self, query: str, values: tuple) -> None:
+        cursor = self.connection.cursor()
+        cursor.execute(query, values)
+        self.connection.commit()
+
+        return
+
     def select_all_query(self, query: str) -> list:
         cursor = self.connection.cursor()
         cursor.execute(query)

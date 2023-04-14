@@ -140,8 +140,8 @@ class ProductDatabase(Database):
 
     def get_cart(self, customer_id: int) -> list:
         query: str = (
-            f"SELECT product_id, quantity FROM carts_contains_products cart, customers_own_carts c"
-            f" where c.customer_id = {customer_id} and c.cart_id = cart.cart_id"
+            f"SELECT product_id, quantity FROM carts_contains_products cart, customers_own_carts c "
+            f"where c.customer_id = {customer_id} and c.cart_id = cart.cart_id"
         )
         cart: list = self.select_all_query(query)
 
