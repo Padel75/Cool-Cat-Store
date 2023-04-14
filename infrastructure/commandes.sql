@@ -108,7 +108,6 @@ CREATE TABLE invoice_contains_products (
     PRIMARY KEY (invoice_id, product_id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE);
-;
 
 /*----------------------------------------------------- Triggers -----------------------------------------------------*/
 
