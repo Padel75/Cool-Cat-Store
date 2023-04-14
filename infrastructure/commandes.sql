@@ -97,14 +97,31 @@ CREATE TABLE IF NOT EXISTS customer_use_payment_system (
 
 /*----------------------------------------------------- Triggers -----------------------------------------------------*/
 
-CREATE TRIGGER update_total_cost
+CREATE TRIGGER update_total_cost_after_insert
     AFTER INSERT ON carts_contains_products
     FOR EACH ROW
     BEGIN
         UPDATE carts
-        SET total_cost = 0
+        SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
         WHERE id = NEW.cart_id;
+    END;
 
+CREATE TRIGGER update_total_cost_after_delete
+    AFTER DELETE ON carts_contains_products
+    FOR EACH ROW
+    BEGIN
+        UPDATE carts
+        SET total_cost = total_cost - (SELECT price FROM products WHERE id = OLD.product_id) * OLD.quantity
+        WHERE id = OLD.cart_id;
+    END;
+
+CREATE TRIGGER update_total_cost_after_update
+    AFTER UPDATE ON carts_contains_products
+    FOR EACH ROW
+    BEGIN
+        UPDATE carts
+        SET total_cost = total_cost - (SELECT price FROM products WHERE id = OLD.product_id) * OLD.quantity
+        WHERE id = OLD.cart_id;
         UPDATE carts
         SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
         WHERE id = NEW.cart_id;
