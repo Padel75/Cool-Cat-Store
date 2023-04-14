@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from .token_manager import TokenManager
+from api.token_manager import TokenManager
 from exceptions import errors_bp
 from flask_cors import CORS
 from api.routes import (
@@ -16,8 +16,11 @@ from api.routes import (
     get_public_seller_bp,
 )
 from infrastructure.database.database import Database
+from db_loader_cream import DbLoader
 
 Database.init_db()
+# db_loader = DbLoader()
+# db_loader.loadDb()
 
 app: Flask = Flask(__name__)
 token_manager: TokenManager = TokenManager(app)
@@ -45,4 +48,4 @@ def main() -> str:
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(ssl_context=("certificates/cert.pem", "certificates/key.pem"))

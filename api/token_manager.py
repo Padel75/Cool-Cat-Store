@@ -3,7 +3,6 @@ from flask_jwt_extended import (
     get_jwt,
     get_jwt_identity,
     create_access_token,
-    set_access_cookies,
 )
 from flask import Flask
 import mysql.connector
@@ -67,7 +66,6 @@ class TokenManager:
                 target_timestamp = datetime.timestamp(now + timedelta(minutes=20))
                 if target_timestamp > expiration_time:
                     access_token = create_access_token(identity=get_jwt_identity())
-                    set_access_cookies(response, access_token)
                 return response
             except (RuntimeError, KeyError):
                 return response
