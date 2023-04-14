@@ -1,5 +1,5 @@
 from flask import request, jsonify, Response
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_current_user
 from . import add_to_cart_bp
 from infrastructure.database.product_database import ProductDatabase
 from infrastructure.database.user_database import UserDatabase
@@ -11,7 +11,7 @@ from exceptions.invalidParameterException import InvalidParameterException
 def add_to_cart(product_id: str) -> (Response, int):
     quantity: str = request.get_json()["quantity"]
     product_id: int = int(product_id)
-    customer_id: int = get_jwt_identity()
+    customer_id: int = get_current_user()
 
     __validate_customer_id(customer_id)
     __validate_product_id(product_id)
