@@ -3,17 +3,22 @@ from exceptions.invalidParameterException import InvalidParameterException
 
 class PaymentSystem:
     def __init__(
-        self, customer_id: int, type: str, number: int, expiration_date: str, cvv: int
+        self,
+        customer_id: int,
+        payment_type: str,
+        number: int,
+        expiration_date: str,
+        cvv: int,
     ):
         self.__validate(type, number, expiration_date, cvv)
-
-        self.type: str = type
+        self.customer_id: int = customer_id
+        self.payment_type: str = payment_type
         self.number: int = number
         self.expiration_date: str = expiration_date
         self.cvv: int = cvv
 
-    def get_type(self) -> str:
-        return self.type
+    def get_payment_type(self) -> str:
+        return self.payment_type
 
     def get_number(self) -> int:
         return self.number
@@ -24,8 +29,11 @@ class PaymentSystem:
     def get_cvv(self) -> int:
         return self.cvv
 
-    def __validate_type(self, type: str) -> None:
-        if type not in ["Visa", "Mastercard", "American Express"]:
+    def get_customer_id(self) -> int:
+        return self.customer_id
+
+    def __validate_payment_type(self, payment_type: str) -> None:
+        if payment_type not in ["Visa", "Mastercard", "American Express"]:
             raise InvalidParameterException("Le type de carte de crédit est invalide")
         return
 
@@ -47,7 +55,7 @@ class PaymentSystem:
     def __validate(
         self, type: str, number: int, expiration_date: str, cvv: int
     ) -> None:
-        self.__validate_type(type)
+        self.__validate_payment_type(type)
         self.__validate_number(number)
         self.__validate_expiration_date(expiration_date)
         self.__validate_cvv(cvv)

@@ -38,9 +38,9 @@ class TokenManager:
 
         @jwt.user_identity_loader
         def user_identity_loader(user: dict) -> str:
-            id : str = user["id"]
-            username : str = user["username"]
-            password : str = user["password"]
+            id: str = user["id"]
+            username: str = user["username"]
+            password: str = user["password"]
             return f"{id}:{username}:{password}"
 
         @jwt.user_lookup_loader
@@ -50,12 +50,13 @@ class TokenManager:
             if id is None or username is None or password is None:
                 return None
             user_database: UserDatabase = UserDatabase()
-            user_id : int = user_database.get_user_id(username)
+            user_id: int = user_database.get_user_id(username)
             if user_id is None or user_id != int(id):
                 return None
             encrypted_user_password: str = user_database.get_user_password(username)
-            if encrypted_user_password is None \
-                    or not bcrypt.checkpw(password.encode("utf-8"), encrypted_user_password.encode("utf-8")):
+            if encrypted_user_password is None or not bcrypt.checkpw(
+                password.encode("utf-8"), encrypted_user_password.encode("utf-8")
+            ):
                 return None
             return id
 
