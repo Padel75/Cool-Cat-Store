@@ -44,7 +44,6 @@ class DbLoader:
         self.__store_customers_infos()
         self.__store_products_infos()
         self.__store_payment_systems()
-        self.__store_sellers_products()
 
     def __scrap_products_infos(self) -> None:
         """Scrap products infos from SAQ website and save them in a csv file"""
@@ -126,7 +125,7 @@ class DbLoader:
         Data generated with https://generatedata.com/generator, saved as csv file products.csv
         """
 
-        # self.__scrap_products_infos()
+        self.__scrap_products_infos()
 
         productDatabase: ProductDatabase = ProductDatabase()
         database: Database = Database()
@@ -246,13 +245,3 @@ class DbLoader:
 
         for value in values:
             database.insert_query(query, value)
-
-    def __customer_buy_product(self):
-        # TODO: add a product to the cart
-        # TODO: pay for the product
-        # C'est plutot optionnel imo!
-        pass
-
-
-loader = DbLoader()
-loader.loadDb()
