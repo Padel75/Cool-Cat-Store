@@ -46,6 +46,19 @@ class Database:
 
         return cursor.lastrowid
 
+    def insert_human_query(self, query: str, values: tuple) -> int:
+        cursor: MySQLCursor = self.connection.cursor()
+
+        cursor.execute("SELECT MAX(id) FROM humans")
+        id: int = cursor.fetchone()[0]
+
+        values = (id,) + values
+
+        cursor.execute(query, values)
+        self.connection.commit()
+
+        return cursor.lastrowid
+
     def select_one_query(self, query: str, values: tuple) -> tuple:
         cursor = self.connection.cursor()
         cursor.execute(query, values)

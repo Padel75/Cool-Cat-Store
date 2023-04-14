@@ -1,7 +1,7 @@
 
 DROP DATABASE IF EXISTS GLO2005_TP;
 
-CREATE DATABASE IF NOT EXISTS GLO2005_TP;
+CREATE DATABASE GLO2005_TP;
 USE GLO2005_TP;
 
 /*------------------------------------------------ Tables des objets: ------------------------------------------------*/
@@ -12,14 +12,16 @@ CREATE TABLE IF NOT EXISTS humans (
     password VARCHAR(100),
     PRIMARY KEY (id));
 
+ALTER TABLE humans AUTO_INCREMENT = 1;
+
 CREATE TABLE IF NOT EXISTS admins (
-    id INT UNIQUE NOT NULL AUTO_INCREMENT,
+    id INT UNIQUE NOT NULL,
     name VARCHAR(100),
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES humans(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 CREATE TABLE IF NOT EXISTS sellers (
-    id INT UNIQUE NOT NULL AUTO_INCREMENT,
+    id INT UNIQUE NOT NULL,
     name VARCHAR(100),
     description VARCHAR(500),
     address VARCHAR(100),
@@ -29,7 +31,7 @@ CREATE TABLE IF NOT EXISTS sellers (
     FOREIGN KEY (id) REFERENCES humans(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 CREATE TABLE IF NOT EXISTS customers (
-    id INT UNIQUE NOT NULL AUTO_INCREMENT,
+    id INT UNIQUE NOT NULL,
     first_name VARCHAR(100),
     last_name VARCHAR(100),
     address VARCHAR(100),
@@ -125,6 +127,14 @@ CREATE TRIGGER update_total_cost_after_update
         UPDATE carts
         SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
         WHERE id = NEW.cart_id;
+    END;
+
+CREATE TRIGGER create_cart_for_customer
+    AFTER INSERT ON customers
+    FOR EACH ROW
+    BEGIN
+        INSERT INTO carts (total_cost) VALUES (0);
+        INSERT INTO customers_own_carts (customer_id, cart_id) VALUES (NEW.id, LAST_INSERT_ID());
     END;
 
 /*------------------------------ INSÉRER CI-DESSOUS LE CODE À SUPPRIMER AVANT LA REMISE ------------------------------*/

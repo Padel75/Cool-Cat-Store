@@ -18,6 +18,7 @@ def get_seller_products(seller_id: int) -> tuple[Response, int]:
 
     return jsonify(seller_products), 200
 
+
 def __validate_seller_id(seller_id: int) -> None:
     database: UserDatabase = UserDatabase()
     seller: tuple = database.get_user("sellers", seller_id)

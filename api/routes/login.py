@@ -25,7 +25,7 @@ def login() -> (Response, int):
     token = create_access_token(identity=user_id)
     role: str = database.get_user_role(user_id)
 
-    response: Response = jsonify({"access_token": token, 'role': role})
+    response: Response = jsonify({"access_token": token, "role": role})
     set_access_cookies(response, token)
     return response, 200
 
