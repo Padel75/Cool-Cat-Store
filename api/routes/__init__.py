@@ -11,6 +11,8 @@ products_filtered_bp = Blueprint("products_filtered", __name__)
 seller_products_bp = Blueprint("seller_products", __name__)
 get_cart_bp = Blueprint("get_cart", __name__)
 get_public_seller_bp = Blueprint("get_public_seller", __name__)
+add_payment_system_bp = Blueprint("add_payment_system", __name__)
+get_payment_systems_bp = Blueprint("get_payment_systems", __name__)
 
 from . import (
     login,
@@ -24,4 +26,6 @@ from . import (
     get_user_infos,
     products_filtered,
     get_public_seller,
+    add_payment_system,
+    get_payment_systems,
 )

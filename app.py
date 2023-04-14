@@ -14,6 +14,8 @@ from api.routes import (
     seller_products_bp,
     get_cart_bp,
     get_public_seller_bp,
+    add_payment_system_bp,
+    get_payment_systems_bp,
 )
 from infrastructure.database.database import Database
 from db_loader_cream import DbLoader
@@ -39,6 +41,8 @@ app.register_blueprint(seller_products_bp)
 app.register_blueprint(get_cart_bp)
 app.register_blueprint(products_filtered_bp)
 app.register_blueprint(get_public_seller_bp)
+app.register_blueprint(add_payment_system_bp)
+app.register_blueprint(get_payment_systems_bp)
 print(app.url_map)
 
 

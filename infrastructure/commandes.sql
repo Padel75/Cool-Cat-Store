@@ -59,8 +59,16 @@ CREATE TABLE IF NOT EXISTS payment_systems (
     payment_type VARCHAR(100),
     number VARCHAR(100),
     expiration_date VARCHAR(100),
-    ccv VARCHAR(100),
+    cvv VARCHAR(100),
     PRIMARY KEY (id));
+
+CREATE TABLE IF NOT EXISTS invoices (
+    id INT NOT NULL AUTO_INCREMENT,
+    customer_id INT,
+    total_cost INT,
+    date varchar(100),
+    PRIMARY KEY (id),
+    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 /*----------------------------------------------- Tables des relations: ----------------------------------------------*/
 
@@ -92,14 +100,6 @@ CREATE TABLE IF NOT EXISTS customer_own_payment_system (
     PRIMARY KEY (customer_id, payment_system_id),
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (payment_system_id) REFERENCES payment_systems(id) ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE invoices (
-    id INT NOT NULL AUTO_INCREMENT,
-    customer_id INT,
-    total_cost INT,
-    date DATETIME,
-    PRIMARY KEY (id),
-    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 CREATE TABLE invoice_contains_products (
     invoice_id INT,
