@@ -1,5 +1,5 @@
 from flask import request, jsonify, Response
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_current_user
 from domain.models.product import Product
 from . import sell_bp
 from domain.factories.product_factory import ProductFactory
@@ -12,7 +12,7 @@ from exceptions.invalidParameterException import InvalidParameterException
 @sell_bp.route("/sell", methods=["POST"])
 @jwt_required()
 def sell() -> (Response, int):
-    seller_id: int = get_jwt_identity()
+    seller_id: int = get_current_user()
     sell_infos: dict = request.get_json()
 
     for key in ["name", "size", "image_src", "price", "category"]:

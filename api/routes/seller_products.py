@@ -1,5 +1,4 @@
 from flask import jsonify, Response
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import seller_products_bp
 from infrastructure.database.product_database import ProductDatabase
 from infrastructure.database.user_database import UserDatabase

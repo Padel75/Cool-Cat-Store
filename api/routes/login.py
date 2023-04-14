@@ -22,7 +22,12 @@ def login() -> (Response, int):
 
     database: UserDatabase = UserDatabase()
     user_id: int = database.get_user_id(username)
-    token = create_access_token(identity=user_id)
+    identity: dict = {
+        "id": user_id,
+        "username": username,
+        "password": password,
+    }
+    token = create_access_token(identity=identity)
     role: str = database.get_user_role(user_id)
 
     response: Response = jsonify({"access_token": token, 'role': role})
