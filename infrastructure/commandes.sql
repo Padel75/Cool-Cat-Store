@@ -57,8 +57,8 @@ CREATE TABLE IF NOT EXISTS carts (
 CREATE TABLE IF NOT EXISTS payment_systems (
     id INT NOT NULL AUTO_INCREMENT,
     payment_type VARCHAR(100),
-    number VARCHAR(100),
-    expiration_date VARCHAR(100),
+    number BIGINT UNSIGNED,
+    expiration_date DATE,
     cvv VARCHAR(100),
     PRIMARY KEY (id));
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS invoices (
     id INT NOT NULL AUTO_INCREMENT,
     customer_id INT,
     total_cost FLOAT,
-    date DATETIME,
+    date DATE,
     PRIMARY KEY (id),
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
