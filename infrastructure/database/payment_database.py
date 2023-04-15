@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, List, Dict
 
 from domain.models.payment_system import PaymentSystem
@@ -59,3 +60,96 @@ class PaymentDatabase(Database):
             "cvv": payment[4],
         }
         return payment_dto
+
+    def pay(self, cart_id: int, customer_id: int) -> bool:
+        query: str = (
+            f"SELECT product_id, quantity FROM carts_contains_products cart, customers_own_carts c"
+            f" where c.customer_id = {customer_id} and c.cart_id = cart.cart_id"
+        )
+        cart: list = self.select_all_query(query)
+
+        query: str = f"Select total_cost FROM carts WHERE id = {cart_id}"
+        total_cost: float = self.select_one_query(query)[0]
+
+        if cart is None:
+            return False
+
+        invoice_id: int = self.__create_invoice(customer_id, total_cost)
+
+        for product in cart:
+            product_id: int = product[0]
+            quantity: int = product[1]
+
+            query: str = f"SELECT price FROM products WHERE id = (%s)"
+            price: float = self.select_one_query(query, (product_id,))[0]
+
+            query: str = (
+                "INSERT INTO invoices_contains_products (invoice_id, product_id, quantity, price)"
+                " VALUES (%s, %s, %s, %s)"
+            )
+            values: tuple = (invoice_id, product_id, quantity, price)
+            self.insert_query(query, values)
+
+        query: str = "DELETE FROM carts_contains_products WHERE cart_id = %s"
+        values: tuple = (cart_id,)
+        self.delete_query(query, values)
+
+        query: str = "UPDATE carts SET total_cost = 0 WHERE id = %s"
+        values: tuple = (cart_id,)
+        self.update_query(query, values)
+
+        return True
+
+    def __create_invoice(self, customer_id: int, total_cost: float) -> int:
+        query: str = (
+            "INSERT INTO invoices (customer_id, total_cost, date) VALUES (%s, %s, %s)"
+        )
+        values: tuple = (customer_id, total_cost, datetime.now())
+        invoice_id: int = self.insert_query(query, values)
+        return invoice_id
+
+    def get_invoices(self, customer_id: int) -> list[dict[str, Any]] | None:
+        query: str = f"SELECT * FROM invoices WHERE customer_id = {customer_id}"
+        invoices: list = self.select_all_query(query)
+
+        if invoices is None:
+            return None
+
+        invoices_dto: list[dict[str, Any]] = []
+        for invoice in invoices:
+            invoices_dto.append(self.get_invoice(invoice[0]))
+
+        return invoices_dto
+
+    def get_invoice(self, invoice_id: int) -> dict[str, Any] | None:
+        query: str = f"SELECT * FROM invoice_contains_products WHERE id = {invoice_id}"
+        products: list = self.select_all_query(query)
+
+        query: str = f"SELECT total_cost, date FROM invoices WHERE id = {invoice_id}"
+        invoice_data: float = self.select_one_query(query)[0]
+
+        if products is None:
+            return None
+
+        invoice_dto = {
+            "id": invoice_id,
+            "total_cost": invoice_data[0],
+            "date": invoice_data[1],
+            "products": [],
+        }
+
+        for product in products:
+            query: str = f"SELECT name, price FROM products WHERE id = {product[1]}"
+            values: tuple = (product[1],)
+            product_data: str = self.select_one_query(query, values)[0]
+
+            product_dto: dict[str, Any] = {
+                "id": product[1],
+                "name": product_data[0],
+                "quantity": product[2],
+                "price": product_data[1],
+            }
+
+            invoice_dto["products"].append(product_dto)
+
+        return invoice_dto

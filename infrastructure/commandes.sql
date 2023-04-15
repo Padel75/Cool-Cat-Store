@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS payment_systems (
 CREATE TABLE IF NOT EXISTS invoices (
     id INT NOT NULL AUTO_INCREMENT,
     customer_id INT,
-    total_cost INT,
-    date varchar(100),
+    total_cost FLOAT,
+    date DATETIME,
     PRIMARY KEY (id),
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
