@@ -43,8 +43,24 @@ class PaymentSystem:
         return
 
     def __validate_expiration_date(self, date: str) -> None:
-        if len(date) != 5:
-            raise InvalidParameterException("La date d'expiration est invalide")
+        """Format: YYYY-MM-DD"""
+        if len(date) != 10:
+            if date[4] != "-" or date[7] != "-":
+                raise InvalidParameterException(
+                    "La date d'expiration est invalide. Format: YYYY-MM-DD"
+                )
+            if int(date[5:7]) > 12:
+                raise InvalidParameterException(
+                    "La date d'expiration est invalide. Format: YYYY-MM-DD"
+                )
+            if int(date[8:10]) > 31:
+                raise InvalidParameterException(
+                    "La date d'expiration est invalide. Format: YYYY-MM-DD"
+                )
+            if int(date[0:4]) < datetime.now().year:
+                raise InvalidParameterException(
+                    "La date d'expiration est invalide. Format: YYYY-MM-DD"
+                )
         return
 
     def __validate_cvv(self, cvv: int) -> None:
