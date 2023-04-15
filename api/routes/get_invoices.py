@@ -31,7 +31,7 @@ def get_invoices() -> (Response, int):
 
 def __validate_user_id(user_id: int) -> None:
     database: UserDatabase = UserDatabase()
-    user: tuple = database.get_user("customers", user_id)
+    user = database.get_user("customers", user_id)
     if user is None:
         raise InvalidParameterException("Le ID du client est invalide")
     return
