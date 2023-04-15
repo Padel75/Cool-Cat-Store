@@ -23,7 +23,7 @@ class ProductDatabase(Database):
     def add_product_to_cart(
         self, product_id: int, customer_id: int, quantity: int
     ) -> int:
-        cart_id: int = self.__get_cart_id(customer_id)
+        cart_id: int = self.get_cart_id(customer_id)
         query: str = "REPLACE INTO carts_contains_products (cart_id, product_id, quantity) VALUES (%s, %s, %s)"
         values: tuple = (cart_id, product_id, quantity)
         self.insert_query(query, values)
@@ -128,7 +128,7 @@ class ProductDatabase(Database):
 
         return seller_id[0]
 
-    def __get_cart_id(self, customer_id: int) -> int | None:
+    def get_cart_id(self, customer_id: int) -> int | None:
         query: str = "SELECT cart_id FROM customers_own_carts WHERE customer_id = %s"
         values: tuple = (customer_id,)
         cart_id: tuple = self.select_one_query(query, values)
