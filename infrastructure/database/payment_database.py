@@ -104,7 +104,11 @@ class PaymentDatabase(Database):
         query: str = (
             "INSERT INTO invoices (customer_id, total_cost, date) VALUES (%s, %s, %s)"
         )
-        values: tuple = (customer_id, total_cost, datetime.now())
+
+        date_today = datetime.now()
+        formatted_date = date_today.strftime('%Y-%m-%d')
+
+        values: tuple = (customer_id, total_cost, formatted_date)
         invoice_id: int = self.insert_query(query, values)
         return invoice_id
 
