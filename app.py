@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from token_manager import TokenManager
+from api.token_manager import TokenManager
 from exceptions import errors_bp
 from flask_cors import CORS
 from api.routes import (
@@ -14,10 +14,15 @@ from api.routes import (
     seller_products_bp,
     get_cart_bp,
     get_public_seller_bp,
+    add_payment_system_bp,
+    get_payment_systems_bp,
 )
 from infrastructure.database.database import Database
+from db_loader_cream import DbLoader
 
 Database.init_db()
+# db_loader = DbLoader()
+# db_loader.loadDb()
 
 app: Flask = Flask(__name__)
 token_manager: TokenManager = TokenManager(app)
@@ -36,6 +41,8 @@ app.register_blueprint(seller_products_bp)
 app.register_blueprint(get_cart_bp)
 app.register_blueprint(products_filtered_bp)
 app.register_blueprint(get_public_seller_bp)
+app.register_blueprint(add_payment_system_bp)
+app.register_blueprint(get_payment_systems_bp)
 print(app.url_map)
 
 
@@ -45,4 +52,4 @@ def main() -> str:
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(ssl_context=("certificates/cert.pem", "certificates/key.pem"))
