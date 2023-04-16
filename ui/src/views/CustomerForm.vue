@@ -60,7 +60,7 @@ export default {
         this.first_name,
         this.last_name,
         this.address,
-        this.phone_number,
+        this.formatPhoneNumber(this.phone_number),
         this.email
     );
         console.log("response");
@@ -72,6 +72,20 @@ export default {
         } else {
           this.$router.push("/signup/customer");
         }
+      },
+    formatPhoneNumber(phone_number){
+        let phone_number_without_space = phone_number.replace(/\s/g, '')
+        phone_number_without_space = phone_number_without_space.replace(/-/g, '');
+        const is_valid_phone_number = /^\d+$/.test(phone_number_without_space);
+        if(is_valid_phone_number){
+          phone_number_without_space = phone_number_without_space.substr(0, 3) + '-' +
+          phone_number_without_space.substr(3, 1) +
+          phone_number_without_space.substr(4, 2) + '-' +
+          phone_number_without_space.substr(6, 1) +
+          phone_number_without_space.substr(7, 3);
+
+        }
+         return  phone_number_without_space;
       }
     }
   }
