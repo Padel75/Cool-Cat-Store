@@ -3,14 +3,15 @@ from flask_jwt_extended import (
     get_jwt,
     get_jwt_identity,
     create_access_token,
-    set_access_cookies,
 )
 from flask import Flask
 import mysql.connector
 from mysql.connector.cursor import MySQLCursor
 from datetime import timedelta, datetime, timezone
 import os
+import bcrypt
 from infrastructure.config import Config
+from infrastructure.database.user_database import UserDatabase
 
 
 class TokenManager:
@@ -29,10 +30,34 @@ class TokenManager:
 
         # called when a protected endpoint is accessed
         @jwt.token_in_blocklist_loader
-        def check_if_token_is_revoked(jwt_header: dict, jwt_payload: dict) -> bool:
+        def check_if_token_is_revoked(_jwt_header: dict, jwt_payload: dict) -> bool:
             jti: str = jwt_payload["jti"]
             token_in_redis: tuple = self.__get_token_from_blocklist(jti)
             return token_in_redis is not None
+
+        @jwt.user_identity_loader
+        def user_identity_loader(user: dict) -> str:
+            id: str = user["id"]
+            username: str = user["username"]
+            password: str = user["password"]
+            return f"{id}:{username}:{password}"
+
+        @jwt.user_lookup_loader
+        def user_identity_loader(_jwt_header: dict, jwt_data: dict) -> dict | None:
+            identity: str = jwt_data["sub"]
+            id, username, password = identity.split(":")
+            if id is None or username is None or password is None:
+                return None
+            user_database: UserDatabase = UserDatabase()
+            user_id: int = user_database.get_user_id(username)
+            if user_id is None or user_id != int(id):
+                return None
+            encrypted_user_password: str = user_database.get_user_password(username)
+            if encrypted_user_password is None or not bcrypt.checkpw(
+                password.encode("utf-8"), encrypted_user_password.encode("utf-8")
+            ):
+                return None
+            return id
 
         @app.after_request
         def refresh_expiring_jwts(response):
@@ -42,7 +67,6 @@ class TokenManager:
                 target_timestamp = datetime.timestamp(now + timedelta(minutes=20))
                 if target_timestamp > expiration_time:
                     access_token = create_access_token(identity=get_jwt_identity())
-                    set_access_cookies(response, access_token)
                 return response
             except (RuntimeError, KeyError):
                 return response

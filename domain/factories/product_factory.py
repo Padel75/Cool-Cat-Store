@@ -6,7 +6,7 @@ class ProductFactory:
         name = product_infos["name"]
         size = product_infos["size"]
         image_src = product_infos["image_src"]
-        price = product_infos["price"]
+        price = float(product_infos["price"])
         category = product_infos["category"]
         seller_id = product_infos["seller_id"]
 

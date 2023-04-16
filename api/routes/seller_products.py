@@ -1,5 +1,4 @@
 from flask import jsonify, Response
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import seller_products_bp
 from infrastructure.database.product_database import ProductDatabase
 from infrastructure.database.user_database import UserDatabase
@@ -18,9 +17,10 @@ def get_seller_products(seller_id: int) -> tuple[Response, int]:
 
     return jsonify(seller_products), 200
 
+
 def __validate_seller_id(seller_id: int) -> None:
     database: UserDatabase = UserDatabase()
-    seller: tuple = database.get_user("sellers", seller_id)
+    seller: dict = database.get_user("sellers", seller_id)
 
     if seller is None:
         raise InvalidParameterException("Le ID du vendeur est invalide")

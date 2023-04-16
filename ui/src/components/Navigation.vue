@@ -39,11 +39,7 @@ const isNotHome = computed(() => {
           </router-link>
 
         </div>
-        <div>
-        <router-link class="navbar-item button" to="/payment">
-            <h1 class="fas fa-shopping-cart">Payment</h1>
-          </router-link>
-          </div>
+
       </div>
       <div class="navbar-end">
         <div class="navbar-item">

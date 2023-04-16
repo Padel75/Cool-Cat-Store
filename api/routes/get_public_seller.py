@@ -12,6 +12,6 @@ def get_public_seller(seller_id: int) -> (Response, int):
         response: dict = {
             "name": seller["name"],
             "description": seller["description"],
-            }
+        }
         return jsonify(response), 200
     raise InvalidParameterException("Le ID du vendeur est invalide")
