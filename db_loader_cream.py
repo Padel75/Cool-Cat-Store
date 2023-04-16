@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from random import randint
+from random import randint, choice
 
 from domain.factories.product_factory import ProductFactory
 from domain.models.product import Product
@@ -56,7 +56,7 @@ class DbLoader:
         prices_list: list = []
         image_list: list = []
 
-        for no_page in range(10):
+        for no_page in range(100):
             try:
                 driver.get(f"https://www.saq.com/fr/produits?p={no_page}")
 
@@ -236,13 +236,33 @@ class DbLoader:
     def __store_payment_systems(self) -> None:
         database: Database = Database()
 
-        query: str = "INSERT INTO payment_systems (id, payment_type) VALUES (%s, %s)"
+        query: str = "SELECT COUNT(*) FROM customers"
+        nb_customers: int = database.select_one_query(query, ())[0]
 
-        values: list = [
-            (1, "VISA"),
-            (2, "MASTERCARD"),
-            (3, "AMEX"),
-        ]
+        query_id_customer: str = "SELECT id FROM customers LIMIT 1"
+        first_id_customer: int = database.select_one_query(query_id_customer, ())[0]
 
-        for value in values:
-            database.insert_query(query, value)
+        query_payment_systems: str = "INSERT INTO payment_systems (payment_type, number, expiration_date, cvv) VALUES (%s, %s, %s, %s)"
+        customer_own_payment_system: str = "INSERT INTO customer_own_payment_system (customer_id, payment_system_id) VALUES (%s, %s)"
+        payment_types: list = ["VISA", "MASTERCARD", "AMEX"]
+
+        for no_customer in range(first_id_customer, nb_customers + first_id_customer):
+            payment_type: str = choice(payment_types)
+            number: str = str(randint(1000000000000000, 9999999999999999))
+            expiration_date: str = (
+                str(randint(2024, 2030))
+                + "-"
+                + str(randint(1, 12))
+                + "-"
+                + str(randint(1, 28))
+            )
+            cvv: str = str(randint(100, 999))
+
+            values: tuple = (payment_type, number, expiration_date, cvv)
+
+            payment_system_id: int = database.insert_query(
+                query_payment_systems, values
+            )
+            database.insert_query(
+                customer_own_payment_system, (no_customer, payment_system_id)
+            )
