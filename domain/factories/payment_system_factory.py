@@ -9,7 +9,7 @@ from exceptions.invalidParameterException import InvalidParameterException
 class PaymentSystemFactory:
     def create_payment_system(self, payment_system_infos: {}) -> PaymentSystem:
         customer_id = payment_system_infos["customer_id"]
-        payment_type = payment_system_infos["payment_type"]
+        payment_type = payment_system_infos["payment_type"].toUpperCase()
         number = payment_system_infos["number"]
         expiration_date = payment_system_infos["expiration_date"]
         cvv = payment_system_infos["cvv"]
