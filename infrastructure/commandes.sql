@@ -156,6 +156,11 @@ CREATE TRIGGER delete_last_payment_system
     BEGIN
         DELETE FROM payment_systems WHERE id = OLD.payment_system_id;
     END;
-/*------------------------------ INSÉRER CI-DESSOUS LE CODE À SUPPRIMER AVANT LA REMISE ------------------------------*/
 
-# DROP DATABASE IF EXISTS GLO2005_TP;
+/*---------------------------------------------------- Indexation ----------------------------------------------------*/
+
+CREATE INDEX invoice_id ON invoice_contains_products (invoice_id);
+
+CREATE INDEX cart_id ON carts_contains_products (cart_id);
+
+CREATE INDEX seller_id ON sellers_adds_products (seller_id);
