@@ -7,7 +7,7 @@ from infrastructure.database.user_database import UserDatabase
 from exceptions.invalidParameterException import InvalidParameterException
 
 
-@get_payment_systems_bp.route("/get_payment_systems/", methods=["GET"])
+@get_payment_systems_bp.route("/get_payment_systems", methods=["GET"])
 @jwt_required()
 def get_payment_system() -> (Response, int):
     customer_id: int = get_current_user()

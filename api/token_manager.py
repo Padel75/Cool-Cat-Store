@@ -22,7 +22,7 @@ class TokenManager:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
-            # port=Config.MYSQL_PORT,
+            port=Config.MYSQL_PORT,
         )
         self.__init_db()
         jwt: JWT = JWT(app)

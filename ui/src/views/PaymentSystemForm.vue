@@ -1,6 +1,6 @@
 <template>
   <div class="payment-form">
-    <h2 class="form-heading">Select Payment Method</h2>
+    <h2 class="form-heading">Payment Method</h2>
     <div class="form-group">
       <div>
         <input type="radio" id="Amex" name="paymentMethod" v-model="selectedPaymentMethod" value="AMEX" :checked="selectedPaymentMethod=='AMEX'">
@@ -37,31 +37,13 @@
         <input class="form-input" type="text" id="cvv" v-model="cvv" required>
       </div>
     </div>
-    <button class="form-button" @click="processPayment()">Process Payment</button>
-    <div class="form-group">
-      <p class="cart-total-price">Total: {{ this.totalCost }} $ </p>
-      <ul>
-        <li v-for="item in cartItems" :key="item.product.id">
-          <div class="columns is-vcentered">
-            <div class="column is-3">
-              <img :src="item.product.image" :alt="item.product.name" class="cart-item-image">
-            </div>
-            <div class="column is-6">
-              <p class="cart-item-name">{{ item.product.name }}</p>
-              <p class="cart-item-price">$ {{ item.product.price }}</p>
-              <p class="cart-item-quantity">qty: {{ item.quantity }}</p>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <button class="form-button" @click="confirmPaymentSystem()">Confirm informations</button>
   </div>
 </template>
 
 
 <script>
-import {getCart} from "@/api/cart";
-import {getPaymentSystem, payCart} from "@/api/payment";
+import {addPaymentSystem, getPaymentSystem} from "@/api/payment";
 
 export default {
   data() {
@@ -78,8 +60,7 @@ export default {
     };
   },
   mounted() {
-      this.fetchCart();
-      this.fetchPaymentSystem();
+    this.fetchPaymentSystem();
   },
   methods: {
     fetchPaymentSystem() {
@@ -97,7 +78,7 @@ export default {
           console.log(this.selectedPaymentMethod, this.cardNumber, this.cvv, this.expiryMonth, this.expiryYear)
         });
     },
-      processPayment() {
+      confirmPaymentSystem() {
         const paymentMethod = this.selectedPaymentMethod;
         const cardNumber = this.cardNumber.toString().replace(/\s/g, '');
         this.expiryMonth = this.expiryMonth.length === 1 ? "0" + this.expiryMonth : this.expiryMonth;
@@ -131,14 +112,10 @@ export default {
             return;
           }
          const expiryDateFormatted = `20${this.expiryYear}-${this.expiryMonth}-01`
-         payCart(paymentMethod, cardNumber, expiryDateFormatted, cvv);
-      },
-
-    fetchCart() {
-          getCart().then((response) => {
-            this.cartItems = response.data.cart;
-            this.totalCost = response.data.total_cost;
-          });
+         addPaymentSystem(paymentMethod, cardNumber, expiryDateFormatted, cvv)
+           .then(response => {
+             alert('Payment system added successfully.');
+           })
       },
   },
 };
