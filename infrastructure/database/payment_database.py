@@ -127,10 +127,12 @@ class PaymentDatabase(Database):
         query: str = f"SELECT * FROM invoice_contains_products WHERE invoice_id = {invoice_id}"
         products: list = self.select_all_query(query)
 
-        query: str = f"SELECT (total_cost, date) FROM invoices WHERE id = %s"
+        query: str = f"SELECT total_cost, date FROM invoices WHERE id = %s"
         values: tuple = (invoice_id,)
         invoice_data = self.select_one_query(query, values)
 
+        print("invoice_data")
+        print(invoice_data)
         if products is None:
             return None
 
