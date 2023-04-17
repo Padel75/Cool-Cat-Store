@@ -5,7 +5,7 @@ class Config:
     MYSQL_USER: str = 'root'
     MYSQL_PASSWORD: str = 'LOL'
     MYSQL_DB: str = 'GLO2005_TP'
-    MYSQL_PORT: int = 1433
+    # MYSQL_PORT: int = 1433
     DATABASE_COMMANDS_FILE: str = 'infrastructure/commandes.sql'
     TOKEN_DB: str = 'GLO2005_TP_TOKENS'
 
