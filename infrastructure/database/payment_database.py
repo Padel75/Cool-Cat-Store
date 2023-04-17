@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import Any, List, Dict
 
+import bcrypt
+
 from domain.models.payment_system import PaymentSystem
 from infrastructure.database.database import Database
 
@@ -8,13 +10,13 @@ from infrastructure.database.database import Database
 class PaymentDatabase(Database):
     def create_payment_system(self, payment_system: PaymentSystem) -> int:
         customer_id: int = payment_system.get_customer_id()
-        number: int = payment_system.get_number()
+        number: str = payment_system.get_number()
         date: str = payment_system.get_expiration_date()
-        cvv: int = payment_system.get_cvv()
-        type_system: str = payment_system.get_type()
+        cvv: str = payment_system.get_cvv()
+        type_system: str = payment_system.get_payment_type()
 
         payment_id: int = self.__add_payment_system(
-            customer_id, type_system, number, date, cvv
+            customer_id, number, date, cvv, type_system
         )
 
         return payment_id
@@ -33,14 +35,16 @@ class PaymentDatabase(Database):
         return payment_systems_dto
 
     def __add_payment_system(
-        self, customer_id: int, number: int, date: str, cvv: int, payment_type: str
+        self, customer_id: int, number: str, date: str, cvv: str, payment_type: str
     ) -> int:
         query: str = "INSERT INTO payment_systems (payment_type, number, expiration_date, cvv) VALUES (%s, %s, %s, %s)"
         values: tuple = (payment_type, number, date, cvv)
         payment_id: int = self.insert_query(query, values)
 
-        query: str = "INSERT INTO customers_has_payment_systems (customer_id, payment_system_id) VALUES (%s, %s)"
+        query: str = "INSERT INTO customer_own_payment_system (customer_id, payment_system_id) VALUES (%s, %s)"
         values: tuple = (customer_id, payment_id)
+
+        self.insert_query(query, values)
 
         return payment_id
 
@@ -52,12 +56,14 @@ class PaymentDatabase(Database):
         if payment is None:
             return None
 
+        salt_object = bcrypt.gensalt()
+
         payment_dto: dict[str, Any] = {
-            "id": payment[0],
-            "type": payment[1],
-            "number": payment[2],
-            "expiration_date": payment[3],
-            "cvv": payment[4],
+            "id": bcrypt.hashpw(payment[0], salt_object),
+            "type": bcrypt.hashpw(payment[1], salt_object),
+            "number": bcrypt.hashpw(payment[2], salt_object),
+            "expiration_date": bcrypt.hashpw(payment[3], salt_object),
+            "cvv": bcrypt.hashpw(payment[4], salt_object),
         }
         return payment_dto
 

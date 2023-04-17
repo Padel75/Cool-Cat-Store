@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS carts (
 CREATE TABLE IF NOT EXISTS payment_systems (
     id INT NOT NULL AUTO_INCREMENT,
     payment_type VARCHAR(100),
-    number BIGINT UNSIGNED,
-    expiration_date DATE,
+    number VARCHAR(100),
+    expiration_date VARCHAR(100),
     cvv VARCHAR(100),
     PRIMARY KEY (id));
 

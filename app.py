@@ -18,11 +18,11 @@ from api.routes import (
     get_payment_systems_bp,
 )
 from infrastructure.database.database import Database
-from db_loader_cream import DbLoader
+from db_loader import DbLoader
 
-Database.init_db()
-db_loader = DbLoader()
-db_loader.loadDb()
+# Database.init_db()
+# db_loader = DbLoader()
+# db_loader.loadDb()
 
 app: Flask = Flask(__name__)
 token_manager: TokenManager = TokenManager(app)

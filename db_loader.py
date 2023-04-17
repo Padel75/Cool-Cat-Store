@@ -9,13 +9,16 @@ from webdriver_manager.chrome import ChromeDriverManager
 from random import randint, choice
 
 from domain.factories.product_factory import ProductFactory
+from domain.models.payment_system import PaymentSystem
 from domain.models.product import Product
 from domain.models.seller import Seller
 from infrastructure.database.database import Database
+from infrastructure.database.payment_database import PaymentDatabase
 from infrastructure.database.product_database import ProductDatabase
 from infrastructure.database.user_database import UserDatabase
 from domain.models.customer import Customer
 from domain.factories.user_factory import UserFactory
+from domain.factories.payment_system_factory import PaymentSystemFactory
 
 
 def format_phone_number(phone_number: str) -> str:
@@ -245,9 +248,10 @@ class DbLoader:
         query_id_customer: str = "SELECT id FROM customers LIMIT 1"
         first_id_customer: int = database.select_one_query(query_id_customer, ())[0]
 
-        query_payment_systems: str = "INSERT INTO payment_systems (payment_type, number, expiration_date, cvv) VALUES (%s, %s, %s, %s)"
-        customer_own_payment_system: str = "INSERT INTO customer_own_payment_system (customer_id, payment_system_id) VALUES (%s, %s)"
         payment_types: list = ["VISA", "MASTERCARD", "AMEX"]
+
+        payment_database: PaymentDatabase = PaymentDatabase()
+        factory: PaymentSystemFactory = PaymentSystemFactory()
 
         for no_customer in range(first_id_customer, nb_customers + first_id_customer):
             payment_type: str = choice(payment_types)
@@ -261,14 +265,17 @@ class DbLoader:
             )
             cvv: str = str(randint(100, 999))
 
-            values: tuple = (payment_type, number, expiration_date, cvv)
+            payment_infos: dict = {
+                "payment_type": payment_type,
+                "number": number,
+                "expiration_date": expiration_date,
+                "cvv": cvv,
+                "customer_id": no_customer,
+            }
 
-            payment_system_id: int = database.insert_query(
-                query_payment_systems, values
-            )
-            database.insert_query(
-                customer_own_payment_system, (no_customer, payment_system_id)
-            )
+            payment_system: PaymentSystem = factory.create_payment_system(payment_infos)
+
+            payment_database.create_payment_system(payment_system)
 
     def __store_invoices(self):
         database: Database = Database()
