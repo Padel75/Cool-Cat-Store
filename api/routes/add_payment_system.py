@@ -26,6 +26,10 @@ def add_payment_system() -> (Response, int):
 
     database: PaymentDatabase = PaymentDatabase()
 
+    payment_id: int = database.create_payment_system(payment_system)
+
+    return jsonify({"payment_id": payment_id}), 200
+
 
 def __validate_customer_id(user_id: int) -> None:
     database: UserDatabase = UserDatabase()

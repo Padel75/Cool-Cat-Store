@@ -68,13 +68,10 @@ class PaymentDatabase(Database):
         )
         cart: list = self.select_all_query(query)
 
-        query: str = f"Select total_cost FROM carts WHERE id = {cart_id}"
-        total_cost: float = self.select_one_query(query)[0]
-
         if cart is None:
             return False
 
-        invoice_id: int = self.__create_invoice(customer_id, total_cost)
+        invoice_id: int = self.__create_invoice(customer_id, 0)
 
         for product in cart:
             product_id: int = product[0]
@@ -106,7 +103,7 @@ class PaymentDatabase(Database):
         )
 
         date_today = datetime.now()
-        formatted_date = date_today.strftime('%Y-%m-%d')
+        formatted_date = date_today.strftime("%Y-%m-%d")
 
         values: tuple = (customer_id, total_cost, formatted_date)
         invoice_id: int = self.insert_query(query, values)

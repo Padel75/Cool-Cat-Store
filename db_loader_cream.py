@@ -1,5 +1,7 @@
 import os
 import csv
+
+from mysql.connector.errors import IntegrityError
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -44,6 +46,7 @@ class DbLoader:
         self.__store_customers_infos()
         self.__store_products_infos()
         self.__store_payment_systems()
+        self.__store_invoices()
 
     def __scrap_products_infos(self) -> None:
         """Scrap products infos from SAQ website and save them in a csv file"""
@@ -125,7 +128,7 @@ class DbLoader:
         Data generated with https://generatedata.com/generator, saved as csv file products.csv
         """
 
-        self.__scrap_products_infos()
+        # self.__scrap_products_infos() # Uncomment to scrap new products infos from SAQ website
 
         productDatabase: ProductDatabase = ProductDatabase()
         database: Database = Database()
@@ -266,3 +269,57 @@ class DbLoader:
             database.insert_query(
                 customer_own_payment_system, (no_customer, payment_system_id)
             )
+
+    def __store_invoices(self):
+        database: Database = Database()
+
+        query_id_customer: str = "SELECT id FROM customers LIMIT 1"
+        first_id_customer: int = database.select_one_query(query_id_customer, ())[0]
+
+        query_nb_customer: str = "SELECT COUNT(*) FROM customers"
+        nb_customers: int = database.select_one_query(query_nb_customer, ())[0]
+
+        query_get_nb_products: str = "SELECT COUNT(*) FROM products"
+        nb_products: int = database.select_one_query(query_get_nb_products, ())[0]
+
+        query_store_invoices: str = (
+            "INSERT INTO invoices (customer_id, total_cost, date) VALUES (%s, %s, %s)"
+        )
+        query_store_invoice_contains_products: str = "INSERT INTO invoice_contains_products (invoice_id, product_id, quantity) VALUES (%s, %s, %s)"
+        query_get_product_price: str = "SELECT price FROM products WHERE id = %s"
+
+        for no_customer in range(first_id_customer, nb_customers + first_id_customer):
+            payment_system_id: int = database.select_one_query(
+                "SELECT payment_system_id FROM customer_own_payment_system WHERE customer_id = %s LIMIT 1",
+                (no_customer,),
+            )[0]
+
+            date: str = (
+                str(randint(2020, 2023))
+                + "-"
+                + str(randint(1, 12))
+                + "-"
+                + str(randint(1, 28))
+            )
+
+            for i in range(randint(1, 10)):
+                invoice_id: int = database.insert_query(
+                    query_store_invoices, (no_customer, 0, date)
+                )
+
+                total_price: float = 0
+
+                for j in range(randint(1, 10)):
+                    product_id: int = randint(1, nb_products)
+                    quantity: int = randint(1, 10)
+
+                    product_price: float = database.select_one_query(
+                        query_get_product_price, (product_id,)
+                    )[0]
+                    try:
+                        database.insert_query(
+                            query_store_invoice_contains_products,
+                            (invoice_id, product_id, quantity),
+                        )
+                    except IntegrityError:
+                        continue
