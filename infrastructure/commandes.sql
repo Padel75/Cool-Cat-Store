@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS carts_contains_products (
 CREATE TABLE IF NOT EXISTS customer_own_payment_system (
     customer_id INT,
     payment_system_id INT,
-    PRIMARY KEY (customer_id, payment_system_id),
+    PRIMARY KEY (customer_id),
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (payment_system_id) REFERENCES payment_systems(id) ON DELETE CASCADE ON UPDATE CASCADE);
 
@@ -150,6 +150,12 @@ CREATE TRIGGER create_cart_for_customer
         INSERT INTO customers_own_carts (customer_id, cart_id) VALUES (NEW.id, LAST_INSERT_ID());
     END;
 
+CREATE TRIGGER delete_last_payment_system
+    BEFORE UPDATE ON customer_own_payment_system
+    FOR EACH ROW
+    BEGIN
+        DELETE FROM payment_systems WHERE id = OLD.payment_system_id;
+    END;
 /*------------------------------ INSÉRER CI-DESSOUS LE CODE À SUPPRIMER AVANT LA REMISE ------------------------------*/
 
 # DROP DATABASE IF EXISTS GLO2005_TP;
