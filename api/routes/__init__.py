@@ -16,7 +16,7 @@ get_payment_systems_bp = Blueprint("get_payment_systems", __name__)
 pay_bp = Blueprint("pay", __name__)
 get_invoices_bp = Blueprint("get_invoices", __name__)
 
-from . import (
+from api.routes import (
     login,
     signup,
     signout,

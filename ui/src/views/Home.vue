@@ -8,14 +8,16 @@
       </select>
     </div>
     <ul class="product-list">
-      <li v-for="product in filteredProducts" :key="product.id" class="product-list-item">
+      <li v-for="product in displayedProducts" :key="product.id" class="product-list-item">
         <product-page :product="product" />
       </li>
     </ul>
+    <div class="pagination">
+      <button class="pagination-button" :disabled="currentPage === 1" @click="currentPage--">Previous Page</button>
+      <button class="pagination-button" :disabled="currentPage === totalPages" @click="currentPage++">Next Page</button>
+    </div>
   </div>
 </template>
-
-
 
 <script>
 import ProductPage from './ProductPage.vue';
@@ -31,7 +33,12 @@ export default {
       searchQuery: '',
       products: getProducts().then(products => {
         this.products = products.data;
+        this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
       }),
+      currentPage: 1,
+      productsPerPage: 10,
+      totalPages: 1,
+      selectedCategory: ''
     };
   },
   computed: {
@@ -50,6 +57,12 @@ export default {
       }
 
       return filtered;
+    },
+    displayedProducts() {
+      const startIndex = (this.currentPage - 1) * this.productsPerPage;
+      const endIndex = startIndex + this.productsPerPage;
+
+      return this.filteredProducts.slice(startIndex, endIndex);
     },
     uniqueCategories() {
       const categories = this.products.map(product => product.category);
@@ -86,5 +99,13 @@ export default {
 
 .product-list-item {
   margin-bottom: 20px;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin-right: 10px;
 }
 </style>
