@@ -7,6 +7,7 @@ import ProductDetailedPage from "@/views/ProductDetailedPage.vue";
 import SellerForm from "@/views/SellerForm";
 import SellerPage from "@/views/SellerPage";
 import UserPage from "@/views/UserPage";
+import Invoice from "@/views/Invoice.vue";
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: "/payment",
     name: "PaymentForm",
     component: PaymentForm,
+  },
+    {
+    path: "/invoices",
+    name: "Invoice",
+    component: Invoice,
   },
 
   {

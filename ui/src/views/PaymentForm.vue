@@ -110,11 +110,11 @@ export default {
         let isValid = true;
         console.log(paymentMethod, cardNumber, expiryDate, cvv)
 
-        if (paymentMethod === 'Amex') {
+        if (paymentMethod === 'AMEX') {
           isValid = /^3\d{15}$/.test(cardNumber);
-        } else if (paymentMethod === 'Mastercard') {
+        } else if (paymentMethod === 'MASTERCARD') {
           isValid = /^5\d{15}$/.test(cardNumber);
-        } else if (paymentMethod === 'Visa') {
+        } else if (paymentMethod === 'VISA') {
           isValid = /^4\d{15}$/.test(cardNumber);
         }
         if (!isValid) {

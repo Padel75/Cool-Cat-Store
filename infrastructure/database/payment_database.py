@@ -63,7 +63,6 @@ class PaymentDatabase(Database):
             "expiration_date": payment[4],
             "cvv": payment[1],
         }
-        print(payment_dto)
         return payment_dto
 
     def pay(self, cart_id: int, customer_id: int) -> bool:
@@ -128,7 +127,7 @@ class PaymentDatabase(Database):
         query: str = f"SELECT * FROM invoice_contains_products WHERE invoice_id = {invoice_id}"
         products: list = self.select_all_query(query)
 
-        query: str = f"SELECT total_cost, date FROM invoices WHERE id = %s"
+        query: str = f"SELECT (total_cost, date) FROM invoices WHERE id = %s"
         values: tuple = (invoice_id,)
         invoice_data = self.select_one_query(query, values)
 
@@ -141,7 +140,8 @@ class PaymentDatabase(Database):
             "date": invoice_data[1],
             "products": [],
         }
-
+        print("invoice_dto")
+        print(invoice_dto)
         for product in products:
             query: str = f"SELECT name, price FROM products WHERE id = %s"
             values: tuple = (product[1],)
