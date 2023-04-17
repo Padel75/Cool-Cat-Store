@@ -22,14 +22,19 @@
         <p class="user-infos-item">Address: {{ user.address }}</p>
       </div>
     </div>
+    <payment-system-form> </payment-system-form>
   </div>
 </template>
 
 <script>
 import { getUser } from '@/api/user';
+import PaymentSystemForm from './PaymentSystemForm.vue';
 
 export default {
   name: 'User',
+  components: {
+    PaymentSystemForm
+  },
   data() {
     return {
       user: getUser().then(response => {

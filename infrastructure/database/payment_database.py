@@ -56,15 +56,14 @@ class PaymentDatabase(Database):
         if payment is None:
             return None
 
-        salt_object = bcrypt.gensalt()
-
         payment_dto: dict[str, Any] = {
-            "id": bcrypt.hashpw(payment[0], salt_object),
-            "type": bcrypt.hashpw(payment[1], salt_object),
-            "number": bcrypt.hashpw(payment[2], salt_object),
-            "expiration_date": bcrypt.hashpw(payment[3], salt_object),
-            "cvv": bcrypt.hashpw(payment[4], salt_object),
+            "id": payment[0],
+            "type": payment[2],
+            "number": payment[3],
+            "expiration_date": payment[4],
+            "cvv": payment[1],
         }
+        print(payment_dto)
         return payment_dto
 
     def pay(self, cart_id: int, customer_id: int) -> bool:

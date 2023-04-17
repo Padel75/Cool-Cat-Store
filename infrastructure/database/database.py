@@ -21,7 +21,7 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
-            # port=Config.MYSQL_PORT,
+            port=Config.MYSQL_PORT,
         )
         cursor: MySQLCursor = connection.cursor(dictionary=True)
         file = open(Config.DATABASE_COMMANDS_FILE, "r")
@@ -59,7 +59,7 @@ class Database:
 
         return cursor.lastrowid
 
-    def select_one_query(self, query: str, values: tuple) -> tuple:
+    def select_one_query(self, query: str, values: tuple = None) -> tuple:
         cursor = self.connection.cursor()
         cursor.execute(query, values)
 

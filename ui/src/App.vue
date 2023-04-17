@@ -14,8 +14,6 @@ export default {
   },
    metaInfo() {
         return {
-            title: 'My',
-            titleTemplate: '%s | Titulo',
             meta: [
                 { charset: 'utf-8' },
                 { equiv: 'Content-Type', content: 'text/html' },

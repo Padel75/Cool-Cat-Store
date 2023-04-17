@@ -9,7 +9,7 @@ export function payCart(type, number, expiration, cvv) {
     });
 }
 
-function addPaymentSystem(type, number, expiration, cvv) {
+export function addPaymentSystem(type, number, expiration, cvv) {
   const url = `${axios.defaults.baseURL}/add_payment_system`;
   const data = {
     type: type,
@@ -31,6 +31,17 @@ function addPaymentSystem(type, number, expiration, cvv) {
         alert("Error processing your payment information");
       }
     })
+}
+
+export function getPaymentSystem() {
+  const url = `${axios.defaults.baseURL}/get_payment_systems`;
+  const access_token_cookie = document.cookie.split('; ').find(row => row.startsWith('access_token'));
+  if (access_token_cookie === undefined) {
+    alert("You need to be logged in");
+  }
+  const access_token = access_token_cookie.split('=')[1];
+  axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+  return axios.get(url)
 }
 
 function pay() {

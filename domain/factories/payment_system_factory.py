@@ -16,24 +16,15 @@ class PaymentSystemFactory:
 
         self.__validate(payment_type, number, expiration_date, cvv)
 
-        encrypted_number: str = self.__encrypt_data(number)
-        encrypted_expiration_date: str = self.__encrypt_data(number)
-        encrypted_cvv: str = self.__encrypt_data(number)
-
         payment_system: PaymentSystem = PaymentSystem(
             customer_id,
             payment_type,
-            encrypted_number,
-            encrypted_expiration_date,
-            encrypted_cvv,
+            number,
+            expiration_date,
+            cvv,
         )
 
         return payment_system
-
-    def __encrypt_data(self, data: str) -> str:
-        salt = bcrypt.gensalt()
-        encrypted_data = bcrypt.hashpw(data.encode("utf-8"), salt)
-        return str(encrypted_data)
 
     def __validate_payment_type(self, payment_type: str) -> None:
         if payment_type not in ["VISA", "MASTERCARD", "AMEX"]:
