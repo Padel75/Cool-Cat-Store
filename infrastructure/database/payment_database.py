@@ -49,7 +49,7 @@ class PaymentDatabase(Database):
         return payment_id
 
     def get_payment_system(self, payment_id: int) -> dict[str, Any] | None:
-        query: str = "SELECT * FROM payment_systems WHERE id VALUES (%s)"
+        query: str = "SELECT * FROM payment_systems WHERE id = (%s)"
         values: tuple = (payment_id,)
         payment: tuple = self.select_one_query(query, values)
 
