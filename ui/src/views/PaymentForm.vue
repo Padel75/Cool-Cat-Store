@@ -3,19 +3,19 @@
     <h2 class="form-heading">Select Payment Method</h2>
     <div class="form-group">
       <div>
-        <input type="radio" id="Amex" name="paymentMethod" v-model="selectedPaymentMethod" value="Amex">
+        <input type="radio" id="Amex" name="paymentMethod" v-model="selectedPaymentMethod" value="AMEX" :checked="selectedPaymentMethod=='AMEX'">
         <label class="form-label" for="Amex" style="display: inline-block; margin-left: 5px;">American Express</label>
       </div>
     </div>
     <div class="form-group">
       <div>
-        <input type="radio" id="Mastercard" name="paymentMethod" v-model="selectedPaymentMethod" value="Mastercard">
+        <input type="radio" id="Mastercard" name="paymentMethod" v-model="selectedPaymentMethod" value="MASTERCARD" :checked="selectedPaymentMethod=='MASTERCARD'">
         <label class="form-label" for="Mastercard" style="display: inline-block; margin-left: 5px;">Master Card</label>
       </div>
     </div>
     <div class="form-group">
       <div>
-        <input type="radio" id="Visa" name="paymentMethod" v-model="selectedPaymentMethod" value="Visa">
+        <input type="radio" id="Visa" name="paymentMethod" v-model="selectedPaymentMethod" value="VISA" :checked="selectedPaymentMethod=='VISA'">
         <label class="form-label" for="Visa" style="display: inline-block; margin-left: 5px;">Visa</label>
       </div>
     </div>
@@ -61,7 +61,7 @@
 
 <script>
 import {getCart} from "@/api/cart";
-import {payCart} from "@/api/payment";
+import {getPaymentSystem, payCart} from "@/api/payment";
 
 export default {
   data() {
@@ -79,11 +79,28 @@ export default {
   },
   mounted() {
       this.fetchCart();
+      this.fetchPaymentSystem();
   },
   methods: {
+    fetchPaymentSystem() {
+        getPaymentSystem().then(response => {
+          const paymentSystem = response.data[0];
+          console.log(paymentSystem)
+          this.selectedPaymentMethod = paymentSystem.type;
+          this.cardNumber = paymentSystem.number;
+          this.cvv = paymentSystem.cvv;
+          const expiryDate = new Date(paymentSystem.expiration_date);
+          console.log(expiryDate)
+          this.expiryYear = expiryDate.getFullYear().toString().slice(-2);
+          const expMonth = expiryDate.getMonth() + 1;
+          this.expiryMonth = expMonth.toString().length === 1 ? "0" + expMonth.toString() : expMonth.toString();
+          console.log(this.selectedPaymentMethod, this.cardNumber, this.cvv, this.expiryMonth, this.expiryYear)
+        });
+    },
       processPayment() {
         const paymentMethod = this.selectedPaymentMethod;
-        const cardNumber = this.cardNumber.replace(/\s/g, '');
+        const cardNumber = this.cardNumber.toString().replace(/\s/g, '');
+        this.expiryMonth = this.expiryMonth.length === 1 ? "0" + this.expiryMonth : this.expiryMonth;
         const yearPrefix = this.expiryYear.length === 2 ? "20" : "";
         const expiryDate = new Date(yearPrefix + this.expiryYear, this.expiryMonth - 1, 1);
         const currentDate = new Date();

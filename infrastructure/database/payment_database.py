@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import Any, List, Dict
 
+import bcrypt
+
 from domain.models.payment_system import PaymentSystem
 from infrastructure.database.database import Database
 
@@ -8,13 +10,13 @@ from infrastructure.database.database import Database
 class PaymentDatabase(Database):
     def create_payment_system(self, payment_system: PaymentSystem) -> int:
         customer_id: int = payment_system.get_customer_id()
-        number: int = payment_system.get_number()
+        number: str = payment_system.get_number()
         date: str = payment_system.get_expiration_date()
-        cvv: int = payment_system.get_cvv()
+        cvv: str = payment_system.get_cvv()
         type_system: str = payment_system.get_payment_type()
 
         payment_id: int = self.__add_payment_system(
-            customer_id, number, date, cvv, type_system
+            customer_id, type_system, number, date, cvv
         )
 
         return payment_id
@@ -33,20 +35,21 @@ class PaymentDatabase(Database):
         return payment_systems_dto
 
     def __add_payment_system(
-        self, customer_id: int, number: int, date: str, cvv: int, payment_type: str
+        self, customer_id: int, number: str, date: str, cvv: str, payment_type: str
     ) -> int:
         query: str = "INSERT INTO payment_systems (payment_type, number, expiration_date, cvv) VALUES (%s, %s, %s, %s)"
         values: tuple = (payment_type, number, date, cvv)
         payment_id: int = self.insert_query(query, values)
 
-        query: str = "INSERT INTO customers_has_payment_systems (customer_id, payment_system_id) VALUES (%s, %s)"
+        query: str = "INSERT INTO customer_own_payment_system (customer_id, payment_system_id) VALUES (%s, %s)"
         values: tuple = (customer_id, payment_id)
+
         self.insert_query(query, values)
 
         return payment_id
 
     def get_payment_system(self, payment_id: int) -> dict[str, Any] | None:
-        query: str = "SELECT * FROM payment_systems WHERE id = %s"
+        query: str = "SELECT * FROM payment_systems WHERE id = (%s)"
         values: tuple = (payment_id,)
         payment: tuple = self.select_one_query(query, values)
 
@@ -55,11 +58,12 @@ class PaymentDatabase(Database):
 
         payment_dto: dict[str, Any] = {
             "id": payment[0],
-            "type": payment[1],
-            "number": payment[2],
-            "expiration_date": payment[3],
-            "cvv": payment[4],
+            "type": payment[2],
+            "number": payment[3],
+            "expiration_date": payment[4],
+            "cvv": payment[1],
         }
+        print(payment_dto)
         return payment_dto
 
     def pay(self, cart_id: int, customer_id: int) -> bool:
@@ -121,12 +125,12 @@ class PaymentDatabase(Database):
         return invoices_dto
 
     def get_invoice(self, invoice_id: int) -> dict[str, Any] | None:
-        query: str = f"SELECT * FROM invoice_contains_products WHERE id = {invoice_id}"
+        query: str = f"SELECT * FROM invoice_contains_products WHERE invoice_id = {invoice_id}"
         products: list = self.select_all_query(query)
 
         query: str = f"SELECT total_cost, date FROM invoices WHERE id = %s"
         values: tuple = (invoice_id,)
-        invoice_data: float = self.select_one_query(query, values)[0]
+        invoice_data = self.select_one_query(query, values)
 
         if products is None:
             return None
@@ -139,9 +143,9 @@ class PaymentDatabase(Database):
         }
 
         for product in products:
-            query: str = f"SELECT name, price FROM products WHERE id = {product[1]}"
+            query: str = f"SELECT name, price FROM products WHERE id = %s"
             values: tuple = (product[1],)
-            product_data: str = self.select_one_query(query, values)[0]
+            product_data = self.select_one_query(query, values)
 
             product_dto: dict[str, Any] = {
                 "id": product[1],

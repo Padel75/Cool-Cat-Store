@@ -3,19 +3,19 @@
     <h2 class="form-heading">Payment Method</h2>
     <div class="form-group">
       <div>
-        <input type="radio" id="Amex" name="paymentMethod" v-model="selectedPaymentMethod" value="Amex" :checked="selectedPaymentMethod=='AMEX'">
+        <input type="radio" id="Amex" name="paymentMethod" v-model="selectedPaymentMethod" value="AMEX" :checked="selectedPaymentMethod=='AMEX'">
         <label class="form-label" for="Amex" style="display: inline-block; margin-left: 5px;">American Express</label>
       </div>
     </div>
     <div class="form-group">
       <div>
-        <input type="radio" id="Mastercard" name="paymentMethod" v-model="selectedPaymentMethod" value="Mastercard" :checked="selectedPaymentMethod=='MASTERCARD'">
+        <input type="radio" id="Mastercard" name="paymentMethod" v-model="selectedPaymentMethod" value="MASTERCARD" :checked="selectedPaymentMethod=='MASTERCARD'">
         <label class="form-label" for="Mastercard" style="display: inline-block; margin-left: 5px;">Master Card</label>
       </div>
     </div>
     <div class="form-group">
       <div>
-        <input type="radio" id="Visa" name="paymentMethod" v-model="selectedPaymentMethod" value="Visa" :checked="selectedPaymentMethod=='VISA'">
+        <input type="radio" id="Visa" name="paymentMethod" v-model="selectedPaymentMethod" value="VISA" :checked="selectedPaymentMethod=='VISA'">
         <label class="form-label" for="Visa" style="display: inline-block; margin-left: 5px;">Visa</label>
       </div>
     </div>

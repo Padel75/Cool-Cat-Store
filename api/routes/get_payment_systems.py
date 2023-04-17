@@ -1,8 +1,8 @@
 from flask import request, jsonify, Response
-from flask_jwt_extended import get_current_user, jwt_required
-from . import get_payment_systems_bp
+from flask_jwt_extended import get_jwt_identity, jwt_required, get_current_user
 
 from infrastructure.database.payment_database import PaymentDatabase
+from . import get_payment_systems_bp
 from infrastructure.database.user_database import UserDatabase
 from exceptions.invalidParameterException import InvalidParameterException
 
