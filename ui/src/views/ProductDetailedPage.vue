@@ -1,33 +1,38 @@
 <template>
   <div class="product-page">
-    <router-link :to="{ name: 'Product', params: { id: product.id } }">
     <div class="product-header">
       <h1 class="product-name">{{ product.name }}</h1>
       <span class="product-price">{{ product.price }} CAD</span>
     </div>
     <div class="product-body">
       <img :src="product.image" class="product-image" alt="Product Image" />
+      <div class="product-details">
+        <p class="product-category">{{ product.category }}</p>
+        <p class="product-size">{{ product.size }}</p>
+        <router-link :to="{ name: 'Seller', params: { id: product.sellerId } }">
+          <p class="product-seller">Sold by <span class="product-seller-name">{{ product.sellerName }}</span></p>
+        </router-link>
+      </div>
     </div>
-    </router-link>
     <div class="product-footer">
       <button class="add-to-cart-button" @click="addToCart">Add to Cart</button>
       <input class="form-input" type="number" step="1" id="quantity" v-model="quantity" required>
     </div>
   </div>
+
 </template>
 
 <script>
+import { getProduct } from '@/api/products';
 import { addToCart } from "@/api/cart";
+
 export default {
-  name: 'ProductPage',
-  props: {
-    product: {
-      type: Object,
-      required: true
-    }
-  },
+  name: 'Product',
   data() {
     return {
+      product: getProduct(this.$route.params.id).then(product => {
+        this.product = product.data;
+      }),
       quantity: 1
     };
   },
