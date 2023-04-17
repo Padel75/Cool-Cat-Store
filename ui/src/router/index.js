@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "@/views/Home";
 import CustomerForm from "@/views/CustomerForm";
+import PaymentForm from "@/views/PaymentForm.vue";
 import ProductForm from "@/views/ProductForm";
 import ProductPage from "@/views/ProductPage";
 import SellerForm from "@/views/SellerForm";
@@ -43,6 +44,11 @@ const routes = [
     path: "/user",
     name: "User",
     component: UserPage,
+  },
+    {
+    path: "/payment",
+    name: "PaymentForm",
+    component: PaymentForm,
   },
 
   {
