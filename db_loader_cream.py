@@ -125,7 +125,7 @@ class DbLoader:
         Data generated with https://generatedata.com/generator, saved as csv file products.csv
         """
 
-        self.__scrap_products_infos()
+        #self.__scrap_products_infos()
 
         productDatabase: ProductDatabase = ProductDatabase()
         database: Database = Database()
