@@ -20,8 +20,4 @@ def get_user_infos() -> (Response, int):
     if seller is not None:
         return jsonify(seller), 200
 
-    admin: dict = user_database.get_user("admins", user_id)
-    if admin is not None:
-        return jsonify(admin), 200
-
     raise InvalidParameterException("Le ID de l'utilisateur est invalide")
