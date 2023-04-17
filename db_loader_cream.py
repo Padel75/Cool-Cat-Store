@@ -323,6 +323,3 @@ class DbLoader:
                         )
                     except IntegrityError:
                         continue
-
-loader = DbLoader()
-loader.loadDb()

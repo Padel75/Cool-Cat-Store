@@ -21,8 +21,8 @@ from infrastructure.database.database import Database
 from db_loader_cream import DbLoader
 
 Database.init_db()
-# db_loader = DbLoader()
-# db_loader.loadDb()
+db_loader = DbLoader()
+db_loader.loadDb()
 
 app: Flask = Flask(__name__)
 token_manager: TokenManager = TokenManager(app)
