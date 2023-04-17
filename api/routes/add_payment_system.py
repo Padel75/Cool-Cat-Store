@@ -1,18 +1,19 @@
 from flask import request, jsonify, Response
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_current_user, jwt_required
+from . import add_payment_system_bp
 
 from domain.models.payment_system import PaymentSystem
 from infrastructure.database.payment_database import PaymentDatabase
-from . import add_payment_system_bp
 from infrastructure.database.user_database import UserDatabase
 from exceptions.invalidParameterException import InvalidParameterException
 
 
 @add_payment_system_bp.route("/add_payment_system", methods=["POST"])
+@jwt_required()
 def add_payment_system() -> (Response, int):
     payment_infos = request.get_json()
 
-    customer_id: int = get_jwt_identity()
+    customer_id: int = get_current_user()
     __validate_customer_id(customer_id)
 
     type: str = payment_infos["type"]
@@ -25,6 +26,8 @@ def add_payment_system() -> (Response, int):
     )
 
     database: PaymentDatabase = PaymentDatabase()
+    payment_id: int = database.create_payment_system(payment_system)
+    return jsonify({"payment_id": payment_id}), 201
 
 
 def __validate_customer_id(user_id: int) -> None:

@@ -11,10 +11,10 @@ class PaymentDatabase(Database):
         number: int = payment_system.get_number()
         date: str = payment_system.get_expiration_date()
         cvv: int = payment_system.get_cvv()
-        type_system: str = payment_system.get_type()
+        type_system: str = payment_system.get_payment_type()
 
         payment_id: int = self.__add_payment_system(
-            customer_id, type_system, number, date, cvv
+            customer_id, number, date, cvv, type_system
         )
 
         return payment_id
@@ -68,8 +68,9 @@ class PaymentDatabase(Database):
         )
         cart: list = self.select_all_query(query)
 
-        query: str = f"Select total_cost FROM carts WHERE id = {cart_id}"
-        total_cost: float = self.select_one_query(query)[0]
+        query: str = f"Select total_cost FROM carts WHERE id = %s"
+        values: tuple = (cart_id,)
+        total_cost: float = self.select_one_query(query, values)[0]
 
         if cart is None:
             return False
@@ -129,8 +130,9 @@ class PaymentDatabase(Database):
         query: str = f"SELECT * FROM invoice_contains_products WHERE id = {invoice_id}"
         products: list = self.select_all_query(query)
 
-        query: str = f"SELECT total_cost, date FROM invoices WHERE id = {invoice_id}"
-        invoice_data: float = self.select_one_query(query)[0]
+        query: str = f"SELECT total_cost, date FROM invoices WHERE id = %s"
+        values: tuple = (invoice_id,)
+        invoice_data: float = self.select_one_query(query, values)[0]
 
         if products is None:
             return None

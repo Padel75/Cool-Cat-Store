@@ -61,6 +61,7 @@
 
 <script>
 import {getCart} from "@/api/cart";
+import {payCart} from "@/api/payment";
 
 export default {
   data() {
@@ -90,9 +91,10 @@ export default {
         const cvvRegex = /^\d{3}$/;
 
         let isValid = true;
+        console.log(paymentMethod, cardNumber, expiryDate, cvv)
 
         if (paymentMethod === 'Amex') {
-          isValid = /^3\d{14}$/.test(cardNumber);
+          isValid = /^3\d{15}$/.test(cardNumber);
         } else if (paymentMethod === 'Mastercard') {
           isValid = /^5\d{15}$/.test(cardNumber);
         } else if (paymentMethod === 'Visa') {
@@ -111,7 +113,7 @@ export default {
             alert('Invalid CVV.');
             return;
           }
-
+         payCart(paymentMethod, cardNumber, "2023-11-28", cvv);
       },
 
     fetchCart() {
