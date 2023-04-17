@@ -48,7 +48,7 @@ import {addPaymentSystem, getPaymentSystem} from "@/api/payment";
 export default {
   data() {
     return {
-      selectedPaymentMethod: 'creditCard',
+      selectedPaymentMethod: '',
       paypalEmail: '',
       paypalPassword: '',
       cardNumber: '',
@@ -65,17 +65,14 @@ export default {
   methods: {
     fetchPaymentSystem() {
         getPaymentSystem().then(response => {
-          const paymentSystem = response.data[0];
-          console.log(paymentSystem)
+          const paymentSystem = response.data;
           this.selectedPaymentMethod = paymentSystem.type;
           this.cardNumber = paymentSystem.number;
           this.cvv = paymentSystem.cvv;
-          const expiryDate = new Date(paymentSystem.expiration_date);
-          console.log(expiryDate)
-          this.expiryYear = expiryDate.getFullYear().toString().slice(-2);
-          const expMonth = expiryDate.getMonth() + 1;
+          const expiryDate = paymentSystem.expiration_date.split('-');
+          this.expiryYear = expiryDate[0].slice(-2);
+          const expMonth = expiryDate[1];
           this.expiryMonth = expMonth.toString().length === 1 ? "0" + expMonth.toString() : expMonth.toString();
-          console.log(this.selectedPaymentMethod, this.cardNumber, this.cvv, this.expiryMonth, this.expiryYear)
         });
     },
       confirmPaymentSystem() {
@@ -89,13 +86,16 @@ export default {
         const cvvRegex = /^\d{3}$/;
 
         let isValid = true;
-        console.log(paymentMethod, cardNumber, expiryDate, cvv)
 
-        if (paymentMethod === 'Amex') {
+        console.log(paymentMethod);
+        if (paymentMethod === '') {
+          alert('Please select a payment method.');
+          return;
+        } else if (paymentMethod === 'AMEX') {
           isValid = /^3\d{15}$/.test(cardNumber);
-        } else if (paymentMethod === 'Mastercard') {
+        } else if (paymentMethod === 'MASTERCARD') {
           isValid = /^5\d{15}$/.test(cardNumber);
-        } else if (paymentMethod === 'Visa') {
+        } else if (paymentMethod === 'VISA') {
           isValid = /^4\d{15}$/.test(cardNumber);
         }
         if (!isValid) {

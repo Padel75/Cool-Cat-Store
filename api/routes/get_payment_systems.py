@@ -16,7 +16,7 @@ def get_payment_system() -> (Response, int):
     database: PaymentDatabase = PaymentDatabase()
     payment_systems: list = database.get_payment_systems(customer_id)
 
-    return jsonify(payment_systems), 200
+    return jsonify(payment_systems[0]), 200
 
 
 def __validate_customer_id(user_id: int) -> None:

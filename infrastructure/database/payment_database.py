@@ -41,7 +41,7 @@ class PaymentDatabase(Database):
         values: tuple = (payment_type, number, date, cvv)
         payment_id: int = self.insert_query(query, values)
 
-        query: str = "INSERT INTO customer_own_payment_system (customer_id, payment_system_id) VALUES (%s, %s)"
+        query: str = "REPLACE INTO customer_own_payment_system (customer_id, payment_system_id) VALUES (%s, %s)"
         values: tuple = (customer_id, payment_id)
 
         self.insert_query(query, values)
@@ -58,10 +58,10 @@ class PaymentDatabase(Database):
 
         payment_dto: dict[str, Any] = {
             "id": payment[0],
-            "type": payment[2],
-            "number": payment[3],
-            "expiration_date": payment[4],
-            "cvv": payment[1],
+            "type": payment[1],
+            "number": payment[2],
+            "expiration_date": payment[3],
+            "cvv": payment[4],
         }
         return payment_dto
 
