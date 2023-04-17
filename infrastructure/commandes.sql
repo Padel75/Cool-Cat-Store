@@ -12,12 +12,6 @@ CREATE TABLE IF NOT EXISTS humans (
     password VARCHAR(100),
     PRIMARY KEY (id));
 
-CREATE TABLE IF NOT EXISTS admins (
-    id INT UNIQUE NOT NULL,
-    name VARCHAR(100),
-    PRIMARY KEY (id),
-    FOREIGN KEY (id) REFERENCES humans(id) ON DELETE CASCADE ON UPDATE CASCADE);
-
 CREATE TABLE IF NOT EXISTS sellers (
     id INT UNIQUE NOT NULL,
     name VARCHAR(100),
@@ -137,6 +131,15 @@ CREATE TRIGGER update_total_cost_after_update
         UPDATE carts
         SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
         WHERE id = NEW.cart_id;
+    END;
+
+CREATE TRIGGER update_total_cost_after_insert_invoice
+    AFTER INSERT ON invoice_contains_products
+    FOR EACH ROW
+    BEGIN
+        UPDATE invoices
+        SET total_cost = total_cost + (SELECT price FROM products WHERE id = NEW.product_id) * NEW.quantity
+        WHERE id = NEW.invoice_id;
     END;
 
 CREATE TRIGGER create_cart_for_customer

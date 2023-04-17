@@ -12,7 +12,7 @@ class PaymentSystem:
         expiration_date: str,
         cvv: int,
     ):
-        self.__validate(type, number, expiration_date, cvv)
+        self.__validate(payment_type, number, expiration_date, cvv)
         self.customer_id: int = customer_id
         self.payment_type: str = payment_type
         self.number: int = number
