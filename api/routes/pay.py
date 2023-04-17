@@ -1,14 +1,14 @@
 from flask import request, jsonify, Response
 from flask_jwt_extended import jwt_required, get_current_user
+from . import pay_bp
 
 from infrastructure.database.payment_database import PaymentDatabase
 from infrastructure.database.product_database import ProductDatabase
-from . import pay_bp
 from infrastructure.database.user_database import UserDatabase
 from exceptions.invalidParameterException import InvalidParameterException
 
 
-@pay_bp.route("/pay/", methods=["POST"])
+@pay_bp.route("/pay", methods=["POST"])
 @jwt_required()
 def pay() -> (Response, int):
     product_database: ProductDatabase = ProductDatabase()

@@ -11,10 +11,10 @@ class PaymentDatabase(Database):
         number: int = payment_system.get_number()
         date: str = payment_system.get_expiration_date()
         cvv: int = payment_system.get_cvv()
-        type_system: str = payment_system.get_type()
+        type_system: str = payment_system.get_payment_type()
 
         payment_id: int = self.__add_payment_system(
-            customer_id, type_system, number, date, cvv
+            customer_id, number, date, cvv, type_system
         )
 
         return payment_id
@@ -45,7 +45,7 @@ class PaymentDatabase(Database):
         return payment_id
 
     def get_payment_system(self, payment_id: int) -> dict[str, Any] | None:
-        query: str = "SELECT * FROM payment_systems WHERE id = %s"
+        query: str = "SELECT * FROM payment_systems WHERE id VALUES (%s)"
         values: tuple = (payment_id,)
         payment: tuple = self.select_one_query(query, values)
 
@@ -77,14 +77,11 @@ class PaymentDatabase(Database):
             product_id: int = product[0]
             quantity: int = product[1]
 
-            query: str = f"SELECT price FROM products WHERE id = (%s)"
-            price: float = self.select_one_query(query, (product_id,))[0]
-
             query: str = (
-                "INSERT INTO invoices_contains_products (invoice_id, product_id, quantity, price)"
-                " VALUES (%s, %s, %s, %s)"
+                "INSERT INTO invoice_contains_products (invoice_id, product_id, quantity)"
+                " VALUES (%s, %s, %s)"
             )
-            values: tuple = (invoice_id, product_id, quantity, price)
+            values: tuple = (invoice_id, product_id, quantity)
             self.insert_query(query, values)
 
         query: str = "DELETE FROM carts_contains_products WHERE cart_id = %s"
@@ -126,8 +123,9 @@ class PaymentDatabase(Database):
         query: str = f"SELECT * FROM invoice_contains_products WHERE id = {invoice_id}"
         products: list = self.select_all_query(query)
 
-        query: str = f"SELECT total_cost, date FROM invoices WHERE id = {invoice_id}"
-        invoice_data: float = self.select_one_query(query)[0]
+        query: str = f"SELECT total_cost, date FROM invoices WHERE id = %s"
+        values: tuple = (invoice_id,)
+        invoice_data: float = self.select_one_query(query, values)[0]
 
         if products is None:
             return None

@@ -9,7 +9,7 @@ Assurez-vous d'installer les librairies python à l'aide de la commande suivante
 
 ### Lancement
 
-Pour lancer le serveur en **https**, il suffit d'exécuter le fichier `main.py` :
+Pour lancer le serveur en **https**, il suffit d'exécuter le fichier `app.py` :
 
     python app.py
 

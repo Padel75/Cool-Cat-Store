@@ -27,7 +27,7 @@
           <p class="cart-total-price">Total: {{ this.totalCost }} $ </p>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-danger">Checkout</button>
+          <router-link class="form-button" to="/payment" @click.native="$emit('close')">Checkout</router-link>
         </footer>
       </div>
     </div>
@@ -37,6 +37,9 @@
   import { getCart } from "@/api/cart";
   import { removeFromCart } from "@/api/cart";
   import { useUserStore} from "@/stores/user";
+  import { useRouter } from "vue-router";
+const router = useRouter();
+
 
   export default {
     name: "CartModal",
@@ -118,18 +121,18 @@
     background-color: #ff1e43;
   }
 
-  .button.is-danger {
-    background-color: #ff3860;
-    color: white;
-    border: none;
+.form-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
   }
 
-  .button.is-danger:hover {
-    background-color: #ff1e43;
+  .form-button:hover {
+  background-color: #3e8e41;
   }
-  .cart-total {
-  font-size: 1.2rem;
-  color: #999;
-  margin-right: 1rem;
-}
   </style>

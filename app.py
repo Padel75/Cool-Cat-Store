@@ -16,6 +16,7 @@ from api.routes import (
     get_public_seller_bp,
     add_payment_system_bp,
     get_payment_systems_bp,
+    pay_bp,
 )
 from infrastructure.database.database import Database
 from db_loader_cream import DbLoader
@@ -27,7 +28,7 @@ db_loader.loadDb()
 app: Flask = Flask(__name__)
 token_manager: TokenManager = TokenManager(app)
 app.config["TOKEN_MANAGER"] = token_manager
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "http://localhost:8080"}})
 
 app.register_blueprint(errors_bp)
 app.register_blueprint(login_bp)
@@ -43,6 +44,7 @@ app.register_blueprint(products_filtered_bp)
 app.register_blueprint(get_public_seller_bp)
 app.register_blueprint(add_payment_system_bp)
 app.register_blueprint(get_payment_systems_bp)
+app.register_blueprint(pay_bp)
 print(app.url_map)
 
 
