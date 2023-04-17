@@ -3,7 +3,7 @@ import Home from "@/views/Home";
 import CustomerForm from "@/views/CustomerForm";
 import PaymentForm from "@/views/PaymentForm.vue";
 import ProductForm from "@/views/ProductForm";
-import ProductPage from "@/views/ProductPage";
+import ProductDetailedPage from "@/views/ProductDetailedPage.vue";
 import SellerForm from "@/views/SellerForm";
 import SellerPage from "@/views/SellerPage";
 import UserPage from "@/views/UserPage";
@@ -27,8 +27,7 @@ const routes = [
   {
     path: "/product/:id",
     name: "Product",
-    component: ProductPage,
-    props: true
+    component: ProductDetailedPage,
   },
   {
     path: "/signup/seller",

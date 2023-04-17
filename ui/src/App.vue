@@ -12,6 +12,18 @@ export default {
   components: {
     "nav-menu": Navigation,
   },
+   metaInfo() {
+        return {
+            title: 'My',
+            titleTemplate: '%s | Titulo',
+            meta: [
+                { charset: 'utf-8' },
+                { equiv: 'Content-Type', content: 'text/html' },
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+
+            ]
+        }
+    },
 };
 </script>
 

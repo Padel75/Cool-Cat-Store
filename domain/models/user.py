@@ -6,5 +6,5 @@ class User:
     def get_username(self) -> str:
         return self.username
 
-    def get_password(self) -> str:
+    def get_password(self) -> bytes:
         return self.password

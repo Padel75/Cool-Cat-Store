@@ -8,6 +8,14 @@ export function getProducts() {
   });
 }
 
+export function getProduct(id) {
+  const url = `${axios.defaults.baseURL}/products/${id}`;
+  return axios.get(url).catch(error => {
+    console.log(error);
+    alert("Error fetching product");
+  });
+}
+
 export function getSellerProducts(id) {
   const path = `${axios.defaults.baseURL}/seller/${id}/products`;
   return axios.get(path)

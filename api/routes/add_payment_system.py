@@ -3,6 +3,8 @@ from flask_jwt_extended import get_current_user, jwt_required
 from . import add_payment_system_bp
 
 from domain.models.payment_system import PaymentSystem
+from domain.factories.payment_system_factory import PaymentSystemFactory
+
 from infrastructure.database.payment_database import PaymentDatabase
 from infrastructure.database.user_database import UserDatabase
 from exceptions.invalidParameterException import InvalidParameterException
@@ -15,15 +17,10 @@ def add_payment_system() -> (Response, int):
 
     customer_id: int = get_current_user()
     __validate_customer_id(customer_id)
+    payment_infos["customer_id"] = customer_id
 
-    type: str = payment_infos["type"]
-    number: int = payment_infos["number"]
-    expiration_date: str = payment_infos["expiration_date"]
-    cvv: int = payment_infos["cvv"]
-
-    payment_system: PaymentSystem = PaymentSystem(
-        customer_id, type, number, expiration_date, cvv
-    )
+    factory: PaymentSystemFactory = PaymentSystemFactory()
+    payment_system: PaymentSystem = factory.create_payment_system(payment_infos)
 
     database: PaymentDatabase = PaymentDatabase()
     payment_id: int = database.create_payment_system(payment_system)

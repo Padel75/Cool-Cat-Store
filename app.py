@@ -16,14 +16,14 @@ from api.routes import (
     get_public_seller_bp,
     add_payment_system_bp,
     get_payment_systems_bp,
-    pay_bp,
+    pay_bp, get_invoices_bp,
 )
 from infrastructure.database.database import Database
-from db_loader_cream import DbLoader
+from db_loader import DbLoader
 
-Database.init_db()
-db_loader = DbLoader()
-db_loader.loadDb()
+# Database.init_db()
+# db_loader = DbLoader()
+# db_loader.loadDb()
 
 app: Flask = Flask(__name__)
 token_manager: TokenManager = TokenManager(app)
@@ -45,6 +45,7 @@ app.register_blueprint(get_public_seller_bp)
 app.register_blueprint(add_payment_system_bp)
 app.register_blueprint(get_payment_systems_bp)
 app.register_blueprint(pay_bp)
+app.register_blueprint(get_invoices_bp)
 print(app.url_map)
 
 
