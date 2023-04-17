@@ -62,7 +62,7 @@ class DbLoader:
         prices_list: list = []
         image_list: list = []
 
-        for no_page in range(100):
+        for no_page in range(10):
             try:
                 driver.get(f"https://www.saq.com/fr/produits?p={no_page}")
 
