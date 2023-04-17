@@ -113,7 +113,8 @@ export default {
             alert('Invalid CVV.');
             return;
           }
-         payCart(paymentMethod, cardNumber, "2023-11-28", cvv);
+         const expiryDateFormatted = `20${this.expiryYear}-${this.expiryMonth}-01`
+         payCart(paymentMethod, cardNumber, expiryDateFormatted, cvv);
       },
 
     fetchCart() {

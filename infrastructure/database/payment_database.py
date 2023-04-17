@@ -45,7 +45,7 @@ class PaymentDatabase(Database):
         return payment_id
 
     def get_payment_system(self, payment_id: int) -> dict[str, Any] | None:
-        query: str = "SELECT * FROM payment_systems WHERE id = %s"
+        query: str = "SELECT * FROM payment_systems WHERE id VALUES (%s)"
         values: tuple = (payment_id,)
         payment: tuple = self.select_one_query(query, values)
 
@@ -68,27 +68,20 @@ class PaymentDatabase(Database):
         )
         cart: list = self.select_all_query(query)
 
-        query: str = f"Select total_cost FROM carts WHERE id = %s"
-        values: tuple = (cart_id,)
-        total_cost: float = self.select_one_query(query, values)[0]
-
         if cart is None:
             return False
 
-        invoice_id: int = self.__create_invoice(customer_id, total_cost)
+        invoice_id: int = self.__create_invoice(customer_id, 0)
 
         for product in cart:
             product_id: int = product[0]
             quantity: int = product[1]
 
-            query: str = f"SELECT price FROM products WHERE id = (%s)"
-            price: float = self.select_one_query(query, (product_id,))[0]
-
             query: str = (
-                "INSERT INTO invoices_contains_products (invoice_id, product_id, quantity, price)"
-                " VALUES (%s, %s, %s, %s)"
+                "INSERT INTO invoice_contains_products (invoice_id, product_id, quantity)"
+                " VALUES (%s, %s, %s)"
             )
-            values: tuple = (invoice_id, product_id, quantity, price)
+            values: tuple = (invoice_id, product_id, quantity)
             self.insert_query(query, values)
 
         query: str = "DELETE FROM carts_contains_products WHERE cart_id = %s"
@@ -107,7 +100,7 @@ class PaymentDatabase(Database):
         )
 
         date_today = datetime.now()
-        formatted_date = date_today.strftime('%Y-%m-%d')
+        formatted_date = date_today.strftime("%Y-%m-%d")
 
         values: tuple = (customer_id, total_cost, formatted_date)
         invoice_id: int = self.insert_query(query, values)

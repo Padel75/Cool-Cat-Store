@@ -51,7 +51,7 @@ function pay() {
     })
     .then(response => {
       if (response.status === 201) {
-        alert("Paiement successful");
+        alert("Payment successful");
       }
     });
 }

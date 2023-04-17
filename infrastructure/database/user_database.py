@@ -86,11 +86,6 @@ class UserDatabase(Database):
                 "phone_number": user[4],
                 "email": user[5],
             }
-        elif type == "admins":
-            user_dto: dict[str, str] = {
-                "id": user[0],
-                "name": user[1],
-            }
         return user_dto
 
     def __add_human(self, username: str, password: str) -> None:
@@ -149,20 +144,12 @@ class UserDatabase(Database):
         self.insert_query(query, values)
 
     def get_user_role(self, user_id: int) -> str | None:
-        if self.__is_admin(user_id):
-            return "admin"
-        elif self.__is_seller(user_id):
+        if self.__is_seller(user_id):
             return "seller"
         elif self.__is_customer(user_id):
             return "customer"
         else:
             return None
-
-    def __is_admin(self, user_id: int) -> bool:
-        query: str = "SELECT id FROM admins WHERE id = %s"
-        values: tuple = (user_id,)
-        result: tuple = self.select_one_query(query, values)
-        return result is not None
 
     def __is_seller(self, user_id: int) -> bool:
         query: str = "SELECT id FROM sellers WHERE id = %s"
