@@ -1,5 +1,5 @@
 from flask import request, jsonify, Response
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, jwt_required, get_current_user
 
 from infrastructure.database.payment_database import PaymentDatabase
 from . import get_payment_systems_bp
@@ -8,8 +8,9 @@ from exceptions.invalidParameterException import InvalidParameterException
 
 
 @get_payment_systems_bp.route("/get_payment_systems/", methods=["GET"])
+@jwt_required()
 def get_payment_system() -> (Response, int):
-    customer_id: int = get_jwt_identity()
+    customer_id: int = get_current_user()
     __validate_customer_id(customer_id)
 
     database: PaymentDatabase = PaymentDatabase()
