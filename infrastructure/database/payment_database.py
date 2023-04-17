@@ -16,7 +16,7 @@ class PaymentDatabase(Database):
         type_system: str = payment_system.get_payment_type()
 
         payment_id: int = self.__add_payment_system(
-            customer_id, type_system, number, date, cvv
+            customer_id, number, date, cvv, type_system,
         )
 
         return payment_id
