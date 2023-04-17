@@ -12,8 +12,6 @@ CREATE TABLE IF NOT EXISTS humans (
     password VARCHAR(100),
     PRIMARY KEY (id));
 
-ALTER TABLE humans AUTO_INCREMENT = 1;
-
 CREATE TABLE IF NOT EXISTS admins (
     id INT UNIQUE NOT NULL,
     name VARCHAR(100),
