@@ -11,7 +11,7 @@ class Database:
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
             database=Config.MYSQL_DB,
-            port=Config.MYSQL_PORT,
+            # port=Config.MYSQL_PORT,
         )
         self.commands_file: str = Config.DATABASE_COMMANDS_FILE
 
@@ -21,7 +21,7 @@ class Database:
             user=Config.MYSQL_USER,
             password=Config.MYSQL_PASSWORD,
             host=Config.MYSQL_HOST,
-            port=Config.MYSQL_PORT,
+            # port=Config.MYSQL_PORT,
         )
         cursor: MySQLCursor = connection.cursor(dictionary=True)
         file = open(Config.DATABASE_COMMANDS_FILE, "r")
