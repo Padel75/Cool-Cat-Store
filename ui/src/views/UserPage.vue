@@ -22,6 +22,9 @@
         <p class="user-infos-item">Address: {{ user.address }}</p>
       </div>
     </div>
+    <div style="margin-top: 10px; margin-bottom: 10px;" >
+        <router-link class="form-button" to="/purchases" >View Purchase History</router-link>
+      </div>
     <payment-system-form> </payment-system-form>
   </div>
 </template>
@@ -46,6 +49,17 @@ export default {
 </script>
 
 <style scoped>
+.form-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+
+  }
 
 .user-page {
   max-width: 960px;
