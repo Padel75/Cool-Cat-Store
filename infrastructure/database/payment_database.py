@@ -126,12 +126,12 @@ class PaymentDatabase(Database):
         return invoices_dto
 
     def get_invoice(self, invoice_id: int) -> dict[str, Any] | None:
-        query: str = f"SELECT * FROM invoice_contains_products WHERE id = {invoice_id}"
+        query: str = f"SELECT * FROM invoice_contains_products WHERE invoice_id = {invoice_id}"
         products: list = self.select_all_query(query)
 
         query: str = f"SELECT total_cost, date FROM invoices WHERE id = %s"
         values: tuple = (invoice_id,)
-        invoice_data: float = self.select_one_query(query, values)[0]
+        invoice_data = self.select_one_query(query, values)
 
         if products is None:
             return None
@@ -144,9 +144,9 @@ class PaymentDatabase(Database):
         }
 
         for product in products:
-            query: str = f"SELECT name, price FROM products WHERE id = {product[1]}"
+            query: str = f"SELECT name, price FROM products WHERE id = %s"
             values: tuple = (product[1],)
-            product_data: str = self.select_one_query(query, values)[0]
+            product_data = self.select_one_query(query, values)
 
             product_dto: dict[str, Any] = {
                 "id": product[1],
