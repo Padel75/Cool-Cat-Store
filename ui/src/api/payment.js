@@ -65,7 +65,6 @@ function pay() {
       if (response.status === 201) {
         alert("Payment successful");
         router.push({ name: "Invoice"});
-        console.log("INVOICES")
       }
     });
 }
