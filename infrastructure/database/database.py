@@ -59,7 +59,7 @@ class Database:
 
         return cursor.lastrowid
 
-    def select_one_query(self, query: str, values: tuple) -> tuple:
+    def select_one_query(self, query: str, values: tuple = None) -> tuple:
         cursor = self.connection.cursor()
         cursor.execute(query, values)
 
