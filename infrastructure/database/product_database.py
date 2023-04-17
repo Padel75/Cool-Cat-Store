@@ -85,12 +85,6 @@ class ProductDatabase(Database):
 
         return product_list
 
-    def get_products_filtered(self, search_filter: str) -> list:
-        query: str = f"SELECT * FROM products WHERE name LIKE %{search_filter}% OR description LIKE %{search_filter}%"
-        product_list: list = self.__create_products_dto(query)
-
-        return product_list
-
     def __create_products_dto(self, query: str) -> list:
         products: list = self.select_all_query(query)
         product_list: list = []
