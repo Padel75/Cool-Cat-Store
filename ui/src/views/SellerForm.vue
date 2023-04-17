@@ -1,39 +1,39 @@
 <template>
-    <div class="seller-form">
-      <h2 class="form-heading">Sign up as a Seller</h2>
-      <form @submit.prevent="signUp">
-        <div class="form-group">
-          <label for="sellerUserName">User Name:</label>
-          <input type="text" id="sellerUserName" v-model="username" required>
-        </div>
-        <div class="form-group">
-          <label for="sellerName">Password :</label>
-          <input type="text" id="sellerPassword" v-model="password" required>
-        </div>
-        <div class="form-group">
-          <label for="sellerName">Seller Name:</label>
-          <input type="text" id="sellerName" v-model="name" required>
-        </div>
-        <div class="form-group">
-          <label for="sellerDesc">Seller Description:</label>
-          <textarea id="sellerDesc" v-model="description" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="sellerAddress">Seller Adress:</label>
-          <input type="text" id="sellerAddress" v-model="address" required>
-        </div>
-        <div class="form-group">
-          <label for="sellerPhoneNumber">Phone Number:</label>
-          <input type="text" id="sellerPhoneNumber" v-model="phone_number" required>
-        </div>
-        <div class="form-group">
-          <label for="sellerEmail">Email:</label>
-          <input type="email" id="sellerEmail" v-model="email" required>
-        </div>
-        <button type="submit">Create Seller</button>
-      </form>
-    </div>
-  </template>
+  <div class="seller-form">
+    <h2 class="form-heading">Sign up as a Seller</h2>
+    <form @submit.prevent="signUp">
+      <div class="form-group">
+        <label for="sellerUserName">User Name:</label>
+        <input type="text" id="sellerUserName" v-model="username" required>
+      </div>
+      <div class="form-group">
+        <label for="sellerName">Password :</label>
+        <input type="text" id="sellerPassword" v-model="password" required>
+      </div>
+      <div class="form-group">
+        <label for="sellerName">Seller Name:</label>
+        <input type="text" id="sellerName" v-model="name" required>
+      </div>
+      <div class="form-group">
+        <label for="sellerDesc">Seller Description:</label>
+        <textarea id="sellerDesc" v-model="description" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="sellerAddress">Seller Adress:</label>
+        <input type="text" id="sellerAddress" v-model="address" required>
+      </div>
+      <div class="form-group">
+        <label for="sellerPhoneNumber">Phone Number:</label>
+        <input type="tel" id="sellerPhoneNumber" v-model="phone_number" required>
+      </div>
+      <div class="form-group">
+        <label for="sellerEmail">Email:</label>
+        <input type="email" id="sellerEmail" v-model="email" required>
+      </div>
+      <button type="submit">Create Seller</button>
+    </form>
+  </div>
+</template>
 
 <script>
 import {signUpSeller} from "@/api/signup";
@@ -55,12 +55,13 @@ export default {
     signUp: async function() {
       // create a new customer object using form data
       const response = await signUpSeller(
+
         this.username,
         this.password,
         this.name,
         this.description,
         this.address,
-        this.phone_number,
+        this.formatPhoneNumber(this.phone_number),
         this.email
     );
         console.log("response");
@@ -72,7 +73,21 @@ export default {
         } else {
           this.$router.push("/signup/seller");
         }
+      },
+    formatPhoneNumber(phone_number){
+      let phone_number_without_space = phone_number.replace(/\s/g, '')
+      phone_number_without_space = phone_number_without_space.replace(/-/g, '');
+      const is_valid_phone_number = /^\d+$/.test(phone_number_without_space);
+      if(is_valid_phone_number){
+        phone_number_without_space = phone_number_without_space.substr(0, 3) + '-' +
+        phone_number_without_space.substr(3, 1) +
+        phone_number_without_space.substr(4, 2) + '-' +
+        phone_number_without_space.substr(6, 1) +
+        phone_number_without_space.substr(7, 3);
+
       }
+       return  phone_number_without_space;
+    }
     }
   }
 </script>
