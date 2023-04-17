@@ -16,10 +16,12 @@ from api.routes import (
     get_public_seller_bp,
     add_payment_system_bp,
     get_payment_systems_bp,
-    pay_bp, get_invoices_bp,
+    pay_bp,
+    get_invoices_bp,
 )
 from infrastructure.database.database import Database
 from db_loader import DbLoader
+
 
 # Database.init_db()
 # db_loader = DbLoader()
