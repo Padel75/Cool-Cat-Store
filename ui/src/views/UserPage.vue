@@ -22,10 +22,10 @@
         <p class="user-infos-item">Address: {{ user.address }}</p>
       </div>
     </div>
-    <div style="margin-top: 10px; margin-bottom: 10px;" >
+    <div style="margin-top: 10px; margin-bottom: 10px;" v-if="!user.description">
         <router-link class="form-button" to="/purchases" >View Purchase History</router-link>
       </div>
-    <payment-system-form> </payment-system-form>
+    <payment-system-form v-if="!user.description"> </payment-system-form>
   </div>
 </template>
 

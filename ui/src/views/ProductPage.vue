@@ -9,7 +9,7 @@
       <img :src="product.image" class="product-image" alt="Product Image" />
     </div>
     </router-link>
-    <div class="product-footer">
+    <div class="product-footer" v-if="!user.description">
       <button class="add-to-cart-button" @click="addToCart">Add to Cart</button>
       <input class="form-input" type="number" step="1" id="quantity" v-model="quantity" required>
     </div>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { getUser } from '@/api/user';
 import { addToCart } from "@/api/cart";
 export default {
   name: 'ProductPage',
@@ -28,7 +29,10 @@ export default {
   },
   data() {
     return {
-      quantity: 1
+      quantity: 1,
+      user: getUser().then(response => {
+        this.user = response.data;
+      }),
     };
   },
   methods: {
