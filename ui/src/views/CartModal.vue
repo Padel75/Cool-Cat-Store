@@ -27,7 +27,10 @@
           <p class="cart-total-price">Total: {{ this.totalCost }} $ </p>
         </section>
         <footer class="modal-card-foot">
-          <router-link class="form-button" to="/payment" @click.native="$emit('close')">Checkout</router-link>
+          <router-link class="form-button"
+             v-bind:class="{ 'inactive-button': this.totalCost === 0 }"
+             to="/payment"
+             @click.native="$emit('close')">Checkout</router-link>
         </footer>
       </div>
     </div>
@@ -135,4 +138,9 @@ const router = useRouter();
   .form-button:hover {
   background-color: #3e8e41;
   }
+  .inactive-button {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
   </style>
