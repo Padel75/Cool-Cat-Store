@@ -27,7 +27,7 @@ export default {
               title = 'ID'
               break;
             case 'date':
-              entry = invoice.date;
+              entry = invoice.date.slice(0, -13);
               title = 'DATE'
               break;
             case 'name':
@@ -80,11 +80,19 @@ export default {
 
       for (const invoice of invoices.invoices) {
         for (const [index, product] of invoice.products.entries()) {
-          let totalCost='';
-            if(index == invoice.products.length-1){
+            let id='';
+            let date='';
+            let totalCost='';
+          if(index == 0){
+              id = invoice.id.toString()
+            }
+          if(index == 0){
+              date = invoice.date.slice(0, -13)
+            }
+          if(index == invoice.products.length-1){
               totalCost = invoice.total_cost.toFixed(2)
             }
-            table += `| ${invoice.id.toString().padEnd(lstr_id)} | ${invoice.date.padEnd(lstr_date)} | ${product.name.padEnd(lstr_name)} | ${product.price.toFixed(2).padEnd(lstr_price)} | ${product.quantity.toString().padEnd(lstr_qty)} | ${totalCost.padEnd(lstr_tcost)} |\n`;
+            table += `| ${id.padEnd(lstr_id)} | ${date.padEnd(lstr_date)} | ${product.name.padEnd(lstr_name)} | ${product.price.toFixed(2).padEnd(lstr_price)} | ${product.quantity.toString().padEnd(lstr_qty)} | ${totalCost.padEnd(lstr_tcost)} |\n`;
           }
         table +=`+${'-'.repeat(c_id.length)}+${'-'.repeat(c_date.length)}+${'-'.repeat(c_name.length)}+${'-'.repeat(c_price.length)}+${'-'.repeat(c_qty.length)}+${'-'.repeat(c_tcost.length)}+\n`;
       }
