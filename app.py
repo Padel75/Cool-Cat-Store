@@ -10,7 +10,6 @@ from api.routes import (
     add_to_cart_bp,
     get_user_infos_bp,
     products_bp,
-    products_filtered_bp,
     seller_products_bp,
     get_cart_bp,
     get_public_seller_bp,
@@ -23,9 +22,9 @@ from infrastructure.database.database import Database
 from db_loader import DbLoader
 
 
-# Database.init_db()
-# db_loader = DbLoader()
-# db_loader.loadDb()
+Database.init_db()
+db_loader = DbLoader()
+db_loader.loadDb()
 
 app: Flask = Flask(__name__)
 token_manager: TokenManager = TokenManager(app)

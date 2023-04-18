@@ -9,7 +9,7 @@
       <img :src="product.image" class="product-image" alt="Product Image" />
     </div>
     </router-link>
-    <div class="product-footer" v-if="!user.description">
+    <div class="product-footer" v-if="user.first_name">
       <button class="add-to-cart-button" @click="addToCart">Add to Cart</button>
       <input class="form-input" type="number" step="1" id="quantity" v-model="quantity" required>
     </div>

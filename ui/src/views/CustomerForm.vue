@@ -8,7 +8,7 @@
       </div>
       <div class="form-group">
         <label for="password">Password :</label>
-        <input type="text" id="password" v-model="password" required>
+        <input type="password" id="password" v-model="password" required>
       </div>
       <div class="form-group">
         <label for="firstName">First Name:</label>
@@ -30,7 +30,7 @@
         <label for="email">Email:</label>
         <input class="form-input" type="email" id="email" v-model="email" required>
       </div>
-      <button type="submit">Create Customer</button>
+      <button type="submit">Sign up</button>
     </form>
   </div>
 </template>

@@ -26,7 +26,7 @@ const isNotHome = computed(() => {
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/home"
-          >> Home</router-link
+          >Home</router-link
         >
         <div class="navbar-item" v-if="userStore.isLoggedIn && userStore.isCustomer">
           <button class="button" @click="showCartModal = true">
