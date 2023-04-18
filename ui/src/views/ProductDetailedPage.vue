@@ -14,8 +14,8 @@
         </router-link>
       </div>
     </div>
-    <div class="product-footer">
-      <button class="add-to-cart-button" @click="addToCart">Add to Cart</button>
+    <div class="product-footer" v-if="user.first_name">
+      <button class="add-to-cart-button" @click="addToCart" >Add to Cart</button>
       <input class="form-input" type="number" step="1" id="quantity" v-model="quantity" required>
     </div>
   </div>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { getUser } from '@/api/user';
 import { getProduct } from '@/api/products';
 import { addToCart } from "@/api/cart";
 
@@ -33,7 +34,10 @@ export default {
       product: getProduct(this.$route.params.id).then(product => {
         this.product = product.data;
       }),
-      quantity: 1
+      quantity: 1,
+      user: getUser().then(response => {
+        this.user = response.data;
+      }),
     };
   },
   methods: {
